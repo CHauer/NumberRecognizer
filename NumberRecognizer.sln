@@ -13,9 +13,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FH-Vorlage", "FH-Vorlage", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharacterRecognition", "CharacterRecognition\CharacterRecognition.csproj", "{C604A732-A85B-456C-9FB5-201A3AAADCF9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcrTestApp", "OcrTestApp\OcrTestApp.csproj", "{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 3
+		SccNumberOfProjects = 4
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://hauersoftwarenet.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -27,6 +29,10 @@ Global
 		SccProjectTopLevelParentUniqueName2 = NumberRecognizer.sln
 		SccProjectName2 = NumberRecognizer.Lib
 		SccLocalPath2 = NumberRecognizer.Lib
+		SccProjectUniqueName3 = OcrTestApp\\OcrTestApp.csproj
+		SccProjectTopLevelParentUniqueName3 = NumberRecognizer.sln
+		SccProjectName3 = OcrTestApp
+		SccLocalPath3 = OcrTestApp
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +47,10 @@ Global
 		{C604A732-A85B-456C-9FB5-201A3AAADCF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C604A732-A85B-456C-9FB5-201A3AAADCF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C604A732-A85B-456C-9FB5-201A3AAADCF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,5 +58,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{F32D5FD5-757D-461E-B825-44D47B357A60} = {D4C723FC-550D-4777-8559-165FFC379049}
 		{C604A732-A85B-456C-9FB5-201A3AAADCF9} = {969730AA-C677-4112-9893-CA1C1A4E8895}
+		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D} = {A87BC855-C41E-43F9-9A89-8EF3C8BB938D}
 	EndGlobalSection
 EndGlobal
