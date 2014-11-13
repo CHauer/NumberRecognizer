@@ -1,0 +1,94 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.30723.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Lib", "NumberRecognizer.Lib\NumberRecognizer.Lib.csproj", "{F32D5FD5-757D-461E-B825-44D47B357A60}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{A87BC855-C41E-43F9-9A89-8EF3C8BB938D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{D4C723FC-550D-4777-8559-165FFC379049}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FH-Vorlage", "FH-Vorlage", "{969730AA-C677-4112-9893-CA1C1A4E8895}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharacterRecognition", "CharacterRecognition\CharacterRecognition.csproj", "{C604A732-A85B-456C-9FB5-201A3AAADCF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcrTestApp", "OcrTestApp\OcrTestApp.csproj", "{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}"
+EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "NumberRecognizer.Cloud", "NumberRecognizer.Cloud\NumberRecognizer.Cloud.ccproj", "{7FC4CA72-75E7-499A-897A-D6A2D9037408}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Service", "NumberRecognizer.Cloud.Service\NumberRecognizer.Cloud.Service.csproj", "{12913BFF-6BBF-484E-864B-C44FF698BF8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Contract", "NumberRecognizer.Cloud.Contract\NumberRecognizer.Cloud.Contract.csproj", "{75663FB2-975A-4D29-816B-5750E61891DC}"
+EndProject
+Global
+	GlobalSection(TeamFoundationVersionControl) = preSolution
+		SccNumberOfProjects = 7
+		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
+		SccTeamFoundationServer = https://hauersoftwarenet.visualstudio.com/defaultcollection
+		SccLocalPath0 = .
+		SccProjectUniqueName1 = CharacterRecognition\\CharacterRecognition.csproj
+		SccProjectTopLevelParentUniqueName1 = NumberRecognizer.sln
+		SccProjectName1 = CharacterRecognition
+		SccLocalPath1 = CharacterRecognition
+		SccProjectUniqueName2 = NumberRecognizer.Cloud.Contract\\NumberRecognizer.Cloud.Contract.csproj
+		SccProjectTopLevelParentUniqueName2 = NumberRecognizer.sln
+		SccProjectName2 = NumberRecognizer.Cloud.Contract
+		SccLocalPath2 = NumberRecognizer.Cloud.Contract
+		SccProjectUniqueName3 = NumberRecognizer.Cloud.Service\\NumberRecognizer.Cloud.Service.csproj
+		SccProjectTopLevelParentUniqueName3 = NumberRecognizer.sln
+		SccProjectName3 = NumberRecognizer.Cloud.Service
+		SccLocalPath3 = NumberRecognizer.Cloud.Service
+		SccProjectUniqueName4 = NumberRecognizer.Cloud\\NumberRecognizer.Cloud.ccproj
+		SccProjectTopLevelParentUniqueName4 = NumberRecognizer.sln
+		SccProjectName4 = NumberRecognizer.Cloud
+		SccLocalPath4 = NumberRecognizer.Cloud
+		SccProjectUniqueName5 = NumberRecognizer.Lib\\NumberRecognizer.Lib.csproj
+		SccProjectName5 = NumberRecognizer.Lib
+		SccLocalPath5 = NumberRecognizer.Lib
+		SccProjectUniqueName6 = OcrTestApp\\OcrTestApp.csproj
+		SccProjectTopLevelParentUniqueName6 = NumberRecognizer.sln
+		SccProjectName6 = OcrTestApp
+		SccLocalPath6 = OcrTestApp
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F32D5FD5-757D-461E-B825-44D47B357A60}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F32D5FD5-757D-461E-B825-44D47B357A60}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F32D5FD5-757D-461E-B825-44D47B357A60}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F32D5FD5-757D-461E-B825-44D47B357A60}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C604A732-A85B-456C-9FB5-201A3AAADCF9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C604A732-A85B-456C-9FB5-201A3AAADCF9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C604A732-A85B-456C-9FB5-201A3AAADCF9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C604A732-A85B-456C-9FB5-201A3AAADCF9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FC4CA72-75E7-499A-897A-D6A2D9037408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FC4CA72-75E7-499A-897A-D6A2D9037408}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FC4CA72-75E7-499A-897A-D6A2D9037408}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FC4CA72-75E7-499A-897A-D6A2D9037408}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12913BFF-6BBF-484E-864B-C44FF698BF8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12913BFF-6BBF-484E-864B-C44FF698BF8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12913BFF-6BBF-484E-864B-C44FF698BF8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12913BFF-6BBF-484E-864B-C44FF698BF8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75663FB2-975A-4D29-816B-5750E61891DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75663FB2-975A-4D29-816B-5750E61891DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75663FB2-975A-4D29-816B-5750E61891DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75663FB2-975A-4D29-816B-5750E61891DC}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C604A732-A85B-456C-9FB5-201A3AAADCF9} = {969730AA-C677-4112-9893-CA1C1A4E8895}
+		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D} = {A87BC855-C41E-43F9-9A89-8EF3C8BB938D}
+		{7FC4CA72-75E7-499A-897A-D6A2D9037408} = {D4C723FC-550D-4777-8559-165FFC379049}
+		{12913BFF-6BBF-484E-864B-C44FF698BF8A} = {D4C723FC-550D-4777-8559-165FFC379049}
+		{75663FB2-975A-4D29-816B-5750E61891DC} = {D4C723FC-550D-4777-8559-165FFC379049}
+	EndGlobalSection
+EndGlobal
