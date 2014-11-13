@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="NumberRecoginzer.Cloud.Service.NumberRecognizerService" CodeBehind="NumberRecoginzerService.svc.cs" %>
