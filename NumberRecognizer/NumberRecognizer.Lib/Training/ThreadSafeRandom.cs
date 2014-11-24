@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace CharacterRecognition
+namespace NumberRecognizer.Lib.Training
 {
 
 	public class ThreadSafeRandom
