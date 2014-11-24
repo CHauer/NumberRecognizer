@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="NumberRecognizer.Lib.Network.InputNeuron" BaseTypeListCollapsed="true">
-    <Position X="6.5" Y="2.25" Width="1.5" />
+    <Position X="6.5" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>Network\InputNeuron.cs</FileName>
@@ -9,7 +9,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.OutputNeuron" BaseTypeListCollapsed="true">
-    <Position X="8.25" Y="2.25" Width="1.5" />
+    <Position X="10" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
       <FileName>Network\OutputNeuron.cs</FileName>
@@ -17,42 +17,64 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.PatternRecognitionNetwork">
-    <Position X="3.5" Y="0.75" Width="2.25" />
+    <Position X="3.75" Y="0.75" Width="2.25" />
+    <NestedTypes>
+      <Enum Name="NumberRecognizer.Lib.Network.PatternRecognitionNetwork.HiddenLayerType" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Network\PatternRecognitionNetwork.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Enum>
+    </NestedTypes>
     <TypeIdentifier>
-      <HashCode>AAAgAAAAAAABgAAAABAAAAAAAACAQkAAAAAAgAAAAAA=</HashCode>
+      <HashCode>AAAgACAQAAABAAAAAAAAAAAAAACAAEAAAAAAgAAAAAA=</HashCode>
       <FileName>Network\PatternRecognitionNetwork.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.RecognitionResult">
-    <Position X="10.75" Y="2.25" Width="1.5" />
+    <Position X="12" Y="2.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAIAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Network\RecognitionResult.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.TrainingImage">
-    <Position X="10.75" Y="0.75" Width="1.5" />
+    <Position X="0.75" Y="4.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAACAAAAAAA=</HashCode>
       <FileName>Network\TrainingImage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.WeightedLink">
-    <Position X="6.5" Y="4.25" Width="1.5" />
+    <Position X="8.25" Y="4.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAAQAAAAAAAAAAA=</HashCode>
       <FileName>Network\WeightedLink.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NumberRecognizer.Lib.NetworkTrainer">
+  <Class Name="NumberRecognizer.Lib.Training.NetworkTrainer">
     <Position X="0.75" Y="0.75" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>NetworkTrainer.cs</FileName>
+      <HashCode>AAAAIAAAACAABgAAAAAIABAAAAgAAggABAAAAQAAAAA=</HashCode>
+      <FileName>Training\NetworkTrainer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NumberRecognizer.Lib.Network.HiddenNeuron">
+    <Position X="8.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Network\HiddenNeuron.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NumberRecognizer.Lib.Training.ThreadSafeRandom">
+    <Position X="3.75" Y="4.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AgEAAAAAAAAAAAAAAAAAAAAAEAAAAAAAQAAAAAAACAA=</HashCode>
+      <FileName>Training\ThreadSafeRandom.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="NumberRecognizer.Lib.Network.INeuron">
-    <Position X="6.5" Y="0.75" Width="1.5" />
+    <Position X="8.25" Y="0.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Network\INeuron.cs</FileName>

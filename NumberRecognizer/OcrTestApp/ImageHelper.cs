@@ -1,35 +1,28 @@
-﻿namespace CharacterRecognition
+﻿using System;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.IO;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using NumberRecognizer.Lib.Network;
+
+namespace OcrTestApp
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Drawing;
-	using System.Drawing.Drawing2D;
-	using System.IO;
-	using System.Linq;
-	using System.Windows;
-	using System.Windows.Controls;
-	using System.Windows.Media;
-	using System.Windows.Media.Imaging;
-	using NumberRecognizer.Lib.Network;
 
 	public class ImageHelper
 	{
-        public static BitmapSource PreviewBitmap { get; set; }
-
 		public static double[,] GetPixelsFromCanvas(InkCanvas canvas, int width, int height)
 		{
 			double[,] pixelValues;
 
-            Bitmap bitmap = SaveInkCanvasToMemoryStream(canvas, width, height);
-			
-                //PreviewBitmap = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                //               bitmap.GetHbitmap(),
-                //               IntPtr.Zero,
-                //               System.Windows.Int32Rect.Empty,
-                //               BitmapSizeOptions.FromWidthAndHeight(bitmap.Width, bitmap.Height));
-
+			using (Bitmap bitmap = SaveInkCanvasToMemoryStream(canvas, width, height))
+			{
 				pixelValues = GetPixelsFromBitmap(bitmap);
-			
+			}
 
 			return pixelValues;
 		}
@@ -97,7 +90,7 @@
 			return pixelValues;
 		}
 
-		public static Bitmap SaveInkCanvasToMemoryStream(InkCanvas canvas, int width, int height)
+		private static Bitmap SaveInkCanvasToMemoryStream(InkCanvas canvas, int width, int height)
 		{
 			// Save canvas with original size to memory stream
 			VisualBrush sourceBrush = new VisualBrush(canvas);

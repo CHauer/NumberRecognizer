@@ -1,138 +1,279 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+using System.Windows.Threading;
+using NumberRecognizer.Lib.Network;
+using NumberRecognizer.Lib.Training;
 
 namespace OcrTestApp
 {
-    /// <summary>
-    /// Interaktionslogik für MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
-    {
-        public MainWindow()
-        {
-            InitializeComponent();
-        }
+	// TODO: Refactor
+	public partial class MainWindow : Window
+	{
+		private const int ImageHeight = 16;
 
-        private void ProcessImage_ButtonClick(object sender, RoutedEventArgs e)
-        {
-            Bitmap bitmap = new Bitmap(txtBitmapPath.Text);
+		private const int ImageWidth = 16;
 
-            Bitmap bitmapleft = ImageToBlackWhite(bitmap);
-           // Bitmap bitmapright = ImageToBlackWhite(bitmap);
+		private const string TrainingDataPath = @".\TrainingData";
 
-            BitmapSource grayScale = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-               bitmapleft.GetHbitmap(),
-               IntPtr.Zero,
-               System.Windows.Int32Rect.Empty,
-               BitmapSizeOptions.FromWidthAndHeight(bitmapleft.Width, bitmapleft.Height));
+        private NetworkTrainer trainer;
 
-            BitmapViewerLeft.Source = grayScale;
+		public MainWindow()
+		{
+			InitializeComponent();
+		}
 
+		private PatternRecognitionNetwork ResultNetwork { get; set; }
 
-            var pixels = GetPixelsFromBitmap(bitmapleft);
-        }
+        
 
-        private static double[,] GetPixelsFromBitmap(Bitmap bitmap)
-        {
-            double[,] pixelValues = new double[bitmap.Width, bitmap.Height];
+		private void ClearButton_Click(object sender, RoutedEventArgs e)
+		{
+			this.DrawCanvas.Strokes.Clear();
+		}
 
-            for (int i = 0; i < bitmap.Width; i++)
-            {
-                for (int j = 0; j < bitmap.Height; j++)
-                {
-                    System.Drawing.Color pixel = bitmap.GetPixel(i, j);
+		private T FindChild<T>(DependencyObject parent, string childName) where T : DependencyObject
+		{
+			// Confirm parent and childName are valid.
+			if (parent == null)
+			{
+				return null;
+			}
 
-                    if (pixel == System.Drawing.Color.FromArgb(255, 0, 0, 0))
-                    {
-                        pixelValues[i, j] = 1.0;
-                    }
-                    else
-                    {
-                        pixelValues[i, j] = 0;
-                    }
-                }
-            }
+			T foundChild = null;
 
-            return pixelValues;
-        }
+			int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+			for (int i = 0; i < childrenCount; i++)
+			{
+				DependencyObject child = VisualTreeHelper.GetChild(parent, i);
 
-        private static double[,] GetPixelsFromImagePath(string path)
-        {
-            double[,] pixelValues;
+				// If the child is not of the request child type child
+				T childType = child as T;
+				if (childType == null)
+				{
+					// recursively drill down the tree
+					foundChild = FindChild<T>(child, childName);
 
-            using (Bitmap bitmap = new Bitmap(path))
-            {
-                pixelValues = GetPixelsFromBitmap(bitmap);
-            }
+					// If the child is found, break so we do not overwrite the found child.
+					if (foundChild != null)
+					{
+						break;
+					}
+				}
+				else if (!string.IsNullOrEmpty(childName))
+				{
+					FrameworkElement frameworkElement = child as FrameworkElement;
 
-            return pixelValues;
-        }
+					// If the child's name is set for search
+					if (frameworkElement != null && frameworkElement.Name == childName)
+					{
+						// if the child's name is of the request name
+						foundChild = (T)child;
+						break;
+					}
+				}
+				else
+				{
+					// child element found.
+					foundChild = (T)child;
+					break;
+				}
+			}
 
+			return foundChild;
+		}
 
-        private Bitmap ImageToBlackWhite(Bitmap SourceImage)
-        {
-            using (Graphics gr = Graphics.FromImage(SourceImage)) // SourceImage is a Bitmap object
-            {
-                var gray_matrix = new float[][] { 
-                new float[] { 0.299f, 0.299f, 0.299f, 0, 0 }, 
-                new float[] { 0.587f, 0.587f, 0.587f, 0, 0 }, 
-                new float[] { 0.114f, 0.114f, 0.114f, 0, 0 }, 
-                new float[] { 0,      0,      0,      1, 0 }, 
-                new float[] { 0,      0,      0,      0, 1 } 
-            };
+		private void RecognizeButton_Click(object sender, RoutedEventArgs e)
+		{
+			double[,] pixelsFromCanvas = ImageHelper.GetPixelsFromCanvas(this.DrawCanvas, ImageWidth, ImageHeight);
 
+			List<RecognitionResult> recognizeCharacters =
+				ResultNetwork.RecognizeCharacter(pixelsFromCanvas).OrderByDescending(x => x.Propability).ToList();
+
+			this.RecognizedFirstPatternLabel.Content = recognizeCharacters[0].RecognizedCharacter;
+			this.RecognizedFirstPropabilityLabel.Content = recognizeCharacters[0].Propability.ToString("F8");
+
+			this.RecognizedSecondPatternLabel.Content = recognizeCharacters[1].RecognizedCharacter;
+			this.RecognizedSecondPropabilityLabel.Content = recognizeCharacters[1].Propability.ToString("F8");
+
+			this.RecognizedThirdPatternLabel.Content = recognizeCharacters[2].RecognizedCharacter;
+			this.RecognizedThirdPropabilityLabel.Content = recognizeCharacters[2].Propability.ToString("F8");
+		}
+
+		private void SaveButton_Click(object sender, RoutedEventArgs e)
+		{
+			int index = 0;
+
+			string path = Path.Combine(TrainingDataPath, (string)this.SaveAsComboBox.SelectedValue,
+				string.Format("{0}{1}.png", this.SaveAsComboBox.SelectedValue, index));
+
+			while (File.Exists(path))
+			{
+				index++;
+				path = Path.Combine(TrainingDataPath, (string)this.SaveAsComboBox.SelectedValue,
+					string.Format("{0}{1}.png", this.SaveAsComboBox.SelectedValue, index));
+			}
+
+			ImageHelper.SaveInkCanvasToPng(this.DrawCanvas, path, ImageWidth, ImageHeight);
+		}
+
+		private IEnumerable<PatternRecognitionNetwork> TrainNetwork()
+		{
+            trainer = new NetworkTrainer(ImageHelper.ReadTrainingData(TrainingDataPath));
+
+            trainer.GenerationChanged += NetworkTrainer_HandleGenerationChanged;
             
-                var ia = new System.Drawing.Imaging.ImageAttributes();
-                ia.SetColorMatrix(new System.Drawing.Imaging.ColorMatrix(gray_matrix));
-                ia.SetThreshold((float) 0.8); // Change this threshold as needed
-                var rc = new Rectangle(0, 0, SourceImage.Width, SourceImage.Height);
-                gr.DrawImage(SourceImage, rc, 0, 0, SourceImage.Width, SourceImage.Height, GraphicsUnit.Pixel, ia);
-            }
+            return trainer.TrainNetwork();
 
-            return SourceImage;
+            #region Not Used
+            //// Parameters
+            //const int populationSize = 100;
+            //const int maxGenerations = 100;
+
+            //const double truncationSelectionPercentage = 0.1;
+            //const int truncationSelectionAbsolute = (int)(populationSize * truncationSelectionPercentage);
+
+            //// Read Imagedata
+            //TrainingData = new ConcurrentBag<TrainingImage>(ImageHelper.ReadTrainingData(TrainingDataPath));
+
+            //// Create initial population
+            //ConcurrentBag<PatternRecognitionNetwork> currentGeneration =
+            //    new ConcurrentBag<PatternRecognitionNetwork>(new List<PatternRecognitionNetwork>());
+
+            //if (currentGeneration.Count == 0)
+            //{
+            //    Parallel.For(0, populationSize, i =>
+            //    {
+            //        ThreadSafeRandom random = new ThreadSafeRandom();
+
+            //        PatternRecognitionNetwork patternRecognitionNetwork = CreateNetwork();
+            //        patternRecognitionNetwork.Genomes.ForEach(x => x.Weight = (2 * random.NextDouble()) - 1);
+
+            //        currentGeneration.Add(patternRecognitionNetwork);
+            //    });
+            //}
+
+            //List<PatternRecognitionNetwork> networks = currentGeneration.ToList();
+
+            //for (int i = 0; i < maxGenerations; i++)
+            //{
+            //    // Calculate Fitness
+            //    Parallel.ForEach(currentGeneration, individual => individual.CalculateFitness(TrainingData.ToList()));
+
+            //    PatternRecognitionNetwork bestNetwork = currentGeneration.OrderByDescending(x => x.Fitness).First();
+
+            //    
+
+            //    ConcurrentBag<PatternRecognitionNetwork> newGeneration = new ConcurrentBag<PatternRecognitionNetwork>();
+
+            //    // Specify individuals for recombination (truncation selection)
+            //    IEnumerable<PatternRecognitionNetwork> patternRecognitionNetworks =
+            //        currentGeneration.OrderByDescending(x => x.Fitness).Take(truncationSelectionAbsolute);
+
+            //    // TODO: Add recombination / crossover
+            //    Parallel.For(0, populationSize, x =>
+            //    {
+            //        ThreadSafeRandom random = new ThreadSafeRandom();
+
+            //        PatternRecognitionNetwork patternRecognitionNetwork =
+            //            patternRecognitionNetworks.ToList().OrderBy(individual => Guid.NewGuid()).First();
+
+            //        // Create children
+            //        PatternRecognitionNetwork firstChild = CreateNetwork();
+
+            //        // Copy weights
+            //        for (int j = 0; j < patternRecognitionNetwork.Genomes.Count; j++)
+            //        {
+            //            firstChild.Genomes[j].Weight = patternRecognitionNetwork.Genomes[j].Weight;
+            //        }
+
+            //        // Simple random mutation
+            //        firstChild.Genomes.ForEach(genome =>
+            //        {
+            //            if (random.NextDouble() > 0.95)
+            //            {
+            //                genome.Weight += (random.NextDouble() * 2) - 1;
+            //            }
+            //        });
+
+            //        // Add new children
+            //        newGeneration.Add(firstChild);
+            //    });
+
+            //    currentGeneration = newGeneration;
+            //}
+
+            //// Calculate Fitness
+            //Parallel.ForEach(currentGeneration, individual => individual.CalculateFitness(TrainingData.ToList()));
+
+            //return currentGeneration.ToList();
+
+            #endregion
         }
 
+        private void NetworkTrainer_HandleGenerationChanged(int currentGeneration, PatternRecognitionNetwork bestNetwork)
+        {
+            // GUI Update
+            Dictionary<string, double> fitnessDetail = bestNetwork.GetFitnessDetail(trainer.TrainingData.ToList());
 
-        //public Bitmap ImageToBlackWhite(Bitmap original)
-        //{
+            Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+            {
+                this.CurrentGenerationLabel.Content = currentGeneration;
+                this.CurrentFitnessLabel.Content = bestNetwork.Fitness.ToString("F8");
 
-        //    Bitmap output = new Bitmap(original.Width, original.Height);
+                for (int j = 0; j < fitnessDetail.Count; j++)
+                {
+                    Label patternLabel = FindChild<Label>(this, string.Format("CurrentPattern{0}", j));
+                    patternLabel.Content = fitnessDetail.ToList()[j].Key;
 
-        //    for (int i = 0; i < original.Width; i++)
-        //    {
+                    Label patternScoreLabel = FindChild<Label>(this, string.Format("CurrentPatternScore{0}", j));
+                    patternScoreLabel.Content = fitnessDetail.ToList()[j].Value.ToString("F8");
+                }
+            }));
+        }
 
-        //        for (int j = 0; j < original.Height; j++)
-        //        {
+        private void TrainNetworkButton_Click(object sender, RoutedEventArgs e)
+        {
+            Task.Factory.StartNew(() =>
+            {
+                ResultNetwork = TrainNetwork().OrderBy(x => x.Fitness).First();
 
-        //            System.Drawing.Color c = original.GetPixel(i, j);
+                Dictionary<string, double> fitnessDetail = ResultNetwork.GetFitnessDetail(trainer.TrainingData.ToList());
 
-        //            int average = ((c.R + c.B + c.G) / 3);
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                {
+                    //this.CurrentGenerationLabel.Content = currentGeneration;
+                    this.CurrentFitnessLabel.Content = ResultNetwork.Fitness.ToString("F8");
 
-        //            if (average > 127)
-        //                output.SetPixel(i, j, System.Drawing.Color.Black);
+                    for (int j = 0; j < fitnessDetail.Count; j++)
+                    {
+                        Label patternLabel = FindChild<Label>(this, string.Format("CurrentPattern{0}", j));
+                        patternLabel.Content = fitnessDetail.ToList()[j].Key;
 
-        //            else
-        //                output.SetPixel(i, j, System.Drawing.Color.White);
+                        Label patternScoreLabel = FindChild<Label>(this, string.Format("CurrentPatternScore{0}", j));
+                        patternScoreLabel.Content = fitnessDetail.ToList()[j].Value.ToString("F8");
+                    }
+                }));
 
-        //        }
-        //    }
+            });
+        }
 
-        //    return output;
+		private void Window_Loaded(object sender, RoutedEventArgs e)
+		{
+			DirectoryInfo directoryInfo = new DirectoryInfo(TrainingDataPath);
 
-        //}
+			foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
+			{
+				this.SaveAsComboBox.Items.Add(directory.Name);
+			}
 
-    }
+			this.SaveAsComboBox.SelectedIndex = 0;
+		}
+	}
 }

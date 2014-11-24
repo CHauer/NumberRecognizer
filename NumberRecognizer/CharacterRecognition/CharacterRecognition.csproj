@@ -69,13 +69,13 @@
     <Compile Include="Network\OutputNeuron.cs" />
     <Compile Include="Network\PatternRecognitionNetwork.cs" />
     <Compile Include="Network\RecognitionResult.cs" />
-    <Compile Include="ThreadSafeRandom.cs" />
     <Compile Include="Network\WeightedLink.cs" />
     <Compile Include="Network\TrainingImage.cs" />
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ThreadSafeRandom.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

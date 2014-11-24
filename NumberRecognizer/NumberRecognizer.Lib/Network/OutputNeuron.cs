@@ -17,6 +17,7 @@
 			{
 				double sum = InputLayer.Sum(x => x.Neuron.ActivationValue * x.Weight);
 
+                //Sigmoid
 				return ((1 / (1 + Math.Pow(Math.E, sum * -1))) * 2) - 1;
 			}
 		}

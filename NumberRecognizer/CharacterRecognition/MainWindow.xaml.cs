@@ -1,4 +1,7 @@
-﻿namespace CharacterRecognition
+﻿using System.Drawing;
+using System.Windows.Media.Imaging;
+
+namespace CharacterRecognition
 {
 	using System;
 	using System.Collections.Concurrent;
@@ -94,7 +97,24 @@
 
 		private void RecognizeButton_Click(object sender, RoutedEventArgs e)
 		{
-			double[,] pixelsFromCanvas = ImageHelper.GetPixelsFromCanvas(this.DrawCanvas, ImageWidth, ImageHeight);
+            Bitmap bitmap = ImageHelper.SaveInkCanvasToMemoryStream(this.DrawCanvas, ImageWidth, ImageHeight);
+
+            bitmap.Save("test.jpeg");
+
+            MemoryStream ms = new MemoryStream();
+            bitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            ms.Seek(0, SeekOrigin.Begin);
+            image.StreamSource = ms;
+            image.EndInit();
+
+            ImagePreview.Source = image;
+            
+
+
+            double[,] pixelsFromCanvas = ImageHelper.GetPixelsFromCanvas(this.DrawCanvas, ImageWidth, ImageHeight);
+
 
 			List<RecognitionResult> recognizeCharacters =
 				ResultNetwork.RecognizeCharacter(pixelsFromCanvas).OrderByDescending(x => x.Propability).ToList();
