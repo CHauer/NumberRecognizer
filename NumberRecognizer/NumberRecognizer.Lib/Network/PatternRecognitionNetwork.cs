@@ -1,14 +1,23 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NumberRecognizer.Lib.Network
 {
     /// <summary>
     /// The neuronal network class with input, middle/hidden and output layer.
     /// </summary>
+    [Serializable]
 	public class PatternRecognitionNetwork
     {
+        /// <summary>
+        /// The synchronize lock
+        /// </summary>
+        [NonSerialized]
+        private object syncLock = new object();
+
         #region Constructor
 
         /// <summary>
@@ -19,7 +28,7 @@ namespace NumberRecognizer.Lib.Network
         /// <param name="patterns">The patterns.</param>
         /// <param name="hiddenLayerType">Type of the hidden layer.</param>
         public PatternRecognitionNetwork(int width, int height, IEnumerable<string> patterns,
-                                            HiddenLayerType hiddenLayerType = HiddenLayerType.Lining)
+                                            HiddenLayerType hiddenLayerType = HiddenLayerType.Lining | HiddenLayerType.Boxing)
 		{
             InitializeNetworkParameters(width, height, patterns, hiddenLayerType);
 
@@ -60,6 +69,100 @@ namespace NumberRecognizer.Lib.Network
 
         #endregion
 
+        #region Properties
+
+        /// <summary>
+        /// Gets the fitness.
+        /// </summary>
+        /// <value>
+        /// The fitness.
+        /// </value>
+        public double Fitness { get; private set; }
+
+        /// <summary>
+        /// Gets or sets the genomes.
+        /// </summary>
+        /// <value>
+        /// The genomes.
+        /// </value>
+        public List<WeightedLink> Genomes { get; set; }
+
+        /// <summary>
+        /// Gets or sets the input neurons.
+        /// </summary>
+        /// <value>
+        /// The input neurons.
+        /// </value>
+		public InputNeuron[,] InputNeurons { get; set; }
+
+        /// <summary>
+        /// Gets or sets the output neurons.
+        /// </summary>
+        /// <value>
+        /// The output neurons.
+        /// </value>
+		public Dictionary<string, OutputNeuron> OutputNeurons { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [Flags]
+        public enum HiddenLayerType
+        {
+            Lining = 1,
+            Boxing = 2,
+        }
+
+        /// <summary>
+        /// Gets the hidden layer mode.
+        /// </summary>
+        /// <value>
+        /// The hidden layer mode.
+        /// </value>
+        public HiddenLayerType HiddenLayerMode{get; private set;}
+
+        /// <summary>
+        /// Gets the width of the input.
+        /// </summary>
+        /// <value>
+        /// The width of the input.
+        /// </value>
+        public int InputWidth
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the height of the input.
+        /// </summary>
+        /// <value>
+        /// The height of the input.
+        /// </value>
+        public int InputHeight
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets or sets the hidden neurons.
+        /// </summary>
+        /// <value>
+        /// The hidden neurons.
+        /// </value>
+        public HashSet<HiddenNeuron> HiddenNeurons { get; set; }
+
+        /// <summary>
+        /// Gets or sets the patterns.
+        /// </summary>
+        /// <value>
+        /// The patterns.
+        /// </value>
+        public List<string> Patterns { get; set; }
+
+        #endregion
+
         #region Create
 
         /// <summary>
@@ -80,6 +183,9 @@ namespace NumberRecognizer.Lib.Network
             CreateOutputLayer();
         }
 
+        /// <summary>
+        /// Creates the input layer.
+        /// </summary>
         private void CreateInputLayer()
         {
             // Input Neurons
@@ -94,65 +200,93 @@ namespace NumberRecognizer.Lib.Network
             }
         }
 
+        /// <summary>
+        /// Creates the hidden layer.
+        /// </summary>
         private void CreateHiddenLayer()
         {
             //Hidden/Middle Neurons
-            HiddenNeurons = new List<HiddenNeuron>();
+            HiddenNeurons = new HashSet<HiddenNeuron>();
 
-            if(HiddenLayerMode == HiddenLayerType.Lining)
+            if (HiddenLayerMode.HasFlag(HiddenLayerType.Lining))
             {
                 //Divide the input matrix in horizontal and vertical lines with height or width of 2 InputNeurons
 
                 //top down lines and "height" of 2
                 for (int y = 0; y < InputHeight; y += 2)
                 {
+                    HiddenNeuron hiddenNeuron = new HiddenNeuron();
+
                     for (int x = 0; x < InputWidth; x++)
                     {
-                        
+                        WeightedLink weightedLinkA = new WeightedLink() { Neuron = InputNeurons[x, y] };
+                        WeightedLink weightedLinkB = new WeightedLink() { Neuron = InputNeurons[x, y + 1] };
+
+                        hiddenNeuron.InputLayer.Add(weightedLinkA);
+                        hiddenNeuron.InputLayer.Add(weightedLinkB);
+
+                        // Add to Genomes
+                        Genomes.Add(weightedLinkA);
+                        Genomes.Add(weightedLinkB);
                     }
+
+                    HiddenNeurons.Add(hiddenNeuron);
                 }
 
-                //left right lines and "width" of
+                //left right lines and "width" of 2
                 for (int x = 0; x < InputWidth; x += 2)
                 {
+                    HiddenNeuron hiddenNeuron = new HiddenNeuron();
+
                     for (int y = 0; y < InputHeight; y++)
                     {
+                        WeightedLink weightedLinkA = new WeightedLink() { Neuron = InputNeurons[x, y] };
+                        WeightedLink weightedLinkB = new WeightedLink() { Neuron = InputNeurons[x + 1, y] };
 
+                        hiddenNeuron.InputLayer.Add(weightedLinkA);
+                        hiddenNeuron.InputLayer.Add(weightedLinkB);
+
+                        // Add to Genomes
+                        Genomes.Add(weightedLinkA);
+                        Genomes.Add(weightedLinkB);
                     }
+
+                    HiddenNeurons.Add(hiddenNeuron);
                 }
+
             }
-            else //Boxing
+
+            if (HiddenLayerMode.HasFlag(HiddenLayerType.Boxing))
             {
                 //Divide the input matrix into boxes of 4 InputNeurons
-                for (int i = 0; i < InputWidth; i++)
+                for (int x = 0; x < InputWidth; x += 2)
                 {
-                    for (int j = 0; j < InputHeight; j++)
+                    for (int y = 0; y < InputHeight; y += 2)
                     {
+                        HiddenNeuron hiddenNeuron = new HiddenNeuron();
 
+                        WeightedLink weightedLinkLo = new WeightedLink() { Neuron = InputNeurons[x, y] };
+                        WeightedLink weightedLinkLu = new WeightedLink() { Neuron = InputNeurons[x, y + 1] };
+                        WeightedLink weightedLinkRo = new WeightedLink() { Neuron = InputNeurons[x + 1, y] };
+                        WeightedLink weightedLinkRu = new WeightedLink() { Neuron = InputNeurons[x + 1, y + 1] };
+
+                        hiddenNeuron.InputLayer.AddRange(new List<WeightedLink>() { weightedLinkLo, weightedLinkLu,
+                                                                                    weightedLinkRo, weightedLinkRu});
+
+                        Genomes.Add(weightedLinkLo); 
+                        Genomes.Add(weightedLinkLu);
+                        Genomes.Add(weightedLinkRo);
+                        Genomes.Add(weightedLinkRu);
+
+                        HiddenNeurons.Add(hiddenNeuron);
                     }
                 }
-
             }
-
-            //TODO Change for InputNeurons to HiddenNeurons
-            Patterns.ForEach(x =>
-            {
-                OutputNeuron outputNeuron = new OutputNeuron();
-
-                foreach (InputNeuron inputNeuron in InputNeurons)
-                {
-                    WeightedLink weightedLink = new WeightedLink() { Neuron = inputNeuron };
-
-                    outputNeuron.InputLayer.Add(weightedLink);
-
-                    // Add to Genomes
-                    Genomes.Add(weightedLink);
-                }
-
-                OutputNeurons.Add(x, outputNeuron);
-            });
         }
 
+        /// <summary>
+        /// Creates the output layer.
+        /// </summary>
         private void CreateOutputLayer()
         {
             // Create Output Neurons
@@ -178,42 +312,6 @@ namespace NumberRecognizer.Lib.Network
 
         #endregion
 
-        #region Properties
-
-        public double Fitness { get; private set; }
-
-		public List<WeightedLink> Genomes { get; set; }
-
-		public InputNeuron[,] InputNeurons { get; set; }
-
-		public Dictionary<string, OutputNeuron> OutputNeurons { get; set; }
-
-        public enum HiddenLayerType
-        {
-            Lining,
-            Boxing,
-        }
-
-        public HiddenLayerType HiddenLayerMode{get; private set;}
-
-        public int InputWidth
-        {
-            get;
-            private set;
-        }
-
-        public int InputHeight
-        {
-            get;
-            private set;
-        }
-
-        public List<HiddenNeuron> HiddenNeurons { get; set; }
-
-        public List<string> Patterns { get; set; }
-
-        #endregion
-
         /// <summary>
         /// Calculates the fitness.
         /// </summary>
@@ -226,8 +324,11 @@ namespace NumberRecognizer.Lib.Network
 			{
 				SetInputData(image.PixelValues);
 
+                //solve to: access to foreach variable in closure / function
+                var pattern = image.RepresentingInformation;
+
 				IEnumerable<double> values =
-					OutputNeurons.Where(x => x.Key != image.RepresentingInformation).Select(x => x.Value.ActivationValue);
+                    OutputNeurons.Where(x => x.Key != pattern).Select(x => x.Value.ActivationValue);
 
 				sum += 1 - values.Average();
 
@@ -255,8 +356,11 @@ namespace NumberRecognizer.Lib.Network
 				{
 					SetInputData(image.PixelValues);
 
+                    //solve to: access to foreach variable in closure / function
+                    var pattern = image.RepresentingInformation;
+
 					IEnumerable<double> values =
-						OutputNeurons.Where(x => x.Key != image.RepresentingInformation).Select(x => x.Value.ActivationValue);
+						OutputNeurons.Where(x => x.Key != pattern).Select(x => x.Value.ActivationValue);
 
 					results[representingInformation.Key] += 1 - values.Average();
 					results[representingInformation.Key] += 1 + OutputNeurons[image.RepresentingInformation].ActivationValue;

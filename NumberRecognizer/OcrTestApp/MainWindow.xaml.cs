@@ -111,13 +111,13 @@ namespace OcrTestApp
 			int index = 0;
 
 			string path = Path.Combine(TrainingDataPath, (string)this.SaveAsComboBox.SelectedValue,
-				string.Format("{0}{1}.png", this.SaveAsComboBox.SelectedValue, index));
+				string.Format("{0}_{1}.png", this.SaveAsComboBox.SelectedValue, index));
 
 			while (File.Exists(path))
 			{
 				index++;
 				path = Path.Combine(TrainingDataPath, (string)this.SaveAsComboBox.SelectedValue,
-					string.Format("{0}{1}.png", this.SaveAsComboBox.SelectedValue, index));
+					string.Format("{0}_{1}.png", this.SaveAsComboBox.SelectedValue, index));
 			}
 
 			ImageHelper.SaveInkCanvasToPng(this.DrawCanvas, path, ImageWidth, ImageHeight);

@@ -111,6 +111,12 @@ namespace NumberRecognizer.Lib.Training
             private set;
         }
 
+        /// <summary>
+        /// Gets the training data.
+        /// </summary>
+        /// <value>
+        /// The training data.
+        /// </value>
         public ConcurrentBag<TrainingImage> TrainingData { get; private set; }
 
         /// <summary>
@@ -134,20 +140,41 @@ namespace NumberRecognizer.Lib.Training
 
         #region Manage Training Data
 
+        /// <summary>
+        /// Adds the training data.
+        /// </summary>
+        /// <param name="trainingImage">The training image.</param>
         public void AddTrainingData(TrainingImage trainingImage)
         {
-            throw new System.NotImplementedException();
+            TrainingData.Add(trainingImage);
+
+            ResultNetwork = null;
         }
 
+        /// <summary>
+        /// Adds the training data.
+        /// </summary>
+        /// <param name="trainingData">The training data.</param>
         public void AddTrainingData(ICollection<TrainingImage> trainingData)
         {
-            throw new System.NotImplementedException();
+            foreach (TrainingImage item in trainingData)
+            {
+                TrainingData.Add(item);
+            }
+
+            ResultNetwork = null;
         }
 
         #endregion
 
+        /// <summary>
+        /// Trains the network.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<PatternRecognitionNetwork> TrainNetwork()
         {
+            IEnumerable<string> patterns = TrainingData.Select(x => x.RepresentingInformation).Distinct();
+
             // Create initial population
             ConcurrentBag<PatternRecognitionNetwork> currentGeneration =
                 new ConcurrentBag<PatternRecognitionNetwork>(new List<PatternRecognitionNetwork>());
@@ -158,7 +185,7 @@ namespace NumberRecognizer.Lib.Training
                 {
                     ThreadSafeRandom random = new ThreadSafeRandom();
 
-                    PatternRecognitionNetwork patternRecognitionNetwork = CreateNetwork();
+                    PatternRecognitionNetwork patternRecognitionNetwork = new PatternRecognitionNetwork(ImageWidth, ImageHeight, patterns);
                     patternRecognitionNetwork.Genomes.ForEach(x => x.Weight = (2 * random.NextDouble()) - 1);
 
                     currentGeneration.Add(patternRecognitionNetwork);
@@ -207,6 +234,8 @@ namespace NumberRecognizer.Lib.Training
                     currentGeneration.OrderByDescending(x => x.Fitness).Take(TruncationSelectionAbsolute);
 
                 // TODO: Add recombination / crossover
+
+
                 Parallel.For(0, PopulationSize, (int x) =>
                 {
                     ThreadSafeRandom random = new ThreadSafeRandom();
@@ -215,7 +244,7 @@ namespace NumberRecognizer.Lib.Training
                         patternRecognitionNetworks.ToList().OrderBy(individual => Guid.NewGuid()).First();
 
                     // Create children
-                    PatternRecognitionNetwork firstChild = CreateNetwork();
+                    PatternRecognitionNetwork firstChild = new PatternRecognitionNetwork(ImageWidth, ImageHeight, patterns);
 
                     // Copy weights
                     for (int j = 0; j < patternRecognitionNetwork.Genomes.Count; j++)
@@ -245,12 +274,6 @@ namespace NumberRecognizer.Lib.Training
             ResultNetwork = currentGeneration.OrderBy(x => x.Fitness).First();
 
             return currentGeneration.ToList();
-        }
-
-        private PatternRecognitionNetwork CreateNetwork()
-        {
-            return new PatternRecognitionNetwork(ImageWidth, ImageHeight,
-                TrainingData.Select(x => x.RepresentingInformation).Distinct());
         }
 
     }

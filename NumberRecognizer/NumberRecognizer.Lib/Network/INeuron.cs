@@ -1,4 +1,6 @@
-﻿namespace NumberRecognizer.Lib.Network
+﻿using System;
+
+namespace NumberRecognizer.Lib.Network
 {
 	public interface INeuron
 	{

@@ -1,32 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 
 namespace NumberRecognizer.Cloud.Contract.Data
 {
+    [DataContract]
     public class RecognitionResultItem
     {
-        public Char NumericCharacter
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
+        [DataMember]
+        public Char NumericCharacter { get; set; }
 
-        public Dictionary<char, decimal> Probabilities
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-            set
-            {
-            }
-        }
+        [DataMember]
+        public Dictionary<char, decimal> Probabilities { get; set; }
     }
 }
