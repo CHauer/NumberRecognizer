@@ -1,16 +1,27 @@
-﻿namespace NumberRecognizer.Lib.Network
-{
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
+namespace NumberRecognizer.Lib.Network
+{
+
+    [Serializable]
 	public class OutputNeuron : INeuron
 	{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OutputNeuron"/> class.
+        /// </summary>
 		public OutputNeuron()
 		{
 			InputLayer = new List<WeightedLink>();
 		}
 
+        /// <summary>
+        /// Gets the activation value.
+        /// </summary>
+        /// <value>
+        /// The activation value.
+        /// </value>
 		public double ActivationValue
 		{
 			get
@@ -22,6 +33,12 @@
 			}
 		}
 
+        /// <summary>
+        /// Gets or sets the input layer.
+        /// </summary>
+        /// <value>
+        /// The input layer.
+        /// </value>
 		public List<WeightedLink> InputLayer { get; set; }
 	}
 }

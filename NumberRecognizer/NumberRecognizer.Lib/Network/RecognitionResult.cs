@@ -1,5 +1,8 @@
-﻿namespace NumberRecognizer.Lib.Network
+﻿using System;
+
+namespace NumberRecognizer.Lib.Network
 {
+    [Serializable] 
 	public class RecognitionResult
 	{
 		public double Propability { get; set; }

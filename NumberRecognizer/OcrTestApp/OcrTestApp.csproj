@@ -125,6 +125,10 @@
     <Content Include="TrainingData\0\0_4.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="TrainingData\9\9_1.png" />
+    <Resource Include="TrainingData\9\9_2.png" />
+    <Resource Include="TrainingData\9\9_3.png" />
+    <Resource Include="TrainingData\0\0_5.png" />
     <Content Include="TrainingData\1\1_0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -140,6 +144,7 @@
     <Content Include="TrainingData\1\1_4.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="TrainingData\1\1_5.png" />
     <Content Include="TrainingData\2\2_0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -155,7 +160,51 @@
     <Content Include="TrainingData\2\2_4.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Resource Include="TrainingData\3\3_1.png" />
+    <Resource Include="TrainingData\3\3_2.png" />
+    <Resource Include="TrainingData\4\4_1.png" />
+    <Resource Include="TrainingData\4\4_2.png" />
+    <Resource Include="TrainingData\4\4_3.png" />
+    <Resource Include="TrainingData\5\5_1.png" />
+    <Resource Include="TrainingData\7\7_1.png" />
+    <Resource Include="TrainingData\8\8_1.png" />
+    <Resource Include="TrainingData\4\4_4.png" />
+    <Resource Include="TrainingData\2\2_5.png" />
+    <Resource Include="TrainingData\3\3_3.png" />
+    <Resource Include="TrainingData\3\3_4.png" />
+    <Resource Include="TrainingData\5\5_2.png" />
+    <Resource Include="TrainingData\6\6_1.png" />
+    <Resource Include="TrainingData\6\6_2.png" />
+    <Resource Include="TrainingData\6\6_3.png" />
+    <Resource Include="TrainingData\7\7_2.png" />
+    <Resource Include="TrainingData\7\7_3.png" />
+    <Resource Include="TrainingData\7\7_4.png" />
+    <Resource Include="TrainingData\8\8_2.png" />
+    <Resource Include="TrainingData\8\8_3.png" />
+    <Resource Include="TrainingData\8\8_4.png" />
+    <Content Include="TrainingData\9\9_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TrainingData\8\8_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TrainingData\7\7_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TrainingData\6\6_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TrainingData\5\5_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TrainingData\4\4_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="TrainingData\3\3_0.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
