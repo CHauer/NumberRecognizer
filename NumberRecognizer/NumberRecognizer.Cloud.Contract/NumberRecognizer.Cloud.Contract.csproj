@@ -45,6 +45,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Data\NetworkInfo.cs" />
+    <Compile Include="Data\FitnessLog.cs" />
     <Compile Include="INumberRecognizerService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Data\RecognitionResult.cs" />

@@ -8,10 +8,27 @@
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Cloud.Contract.Data.RecognitionResultItem">
-    <Position X="3" Y="1" Width="1.75" />
+    <Position X="1.25" Y="2.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Data\RecognitionResultItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NumberRecognizer.Cloud.Contract.Data.NetworkInfo">
+    <Position X="5.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAABAIAA=</HashCode>
+      <FileName>Data\NetworkInfo.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="FitnessLog" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="NumberRecognizer.Cloud.Contract.Data.FitnessLog">
+    <Position X="8" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAEAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Data\FitnessLog.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

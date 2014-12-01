@@ -28,7 +28,9 @@
 			<Button x:Name="SaveButton" Margin="4 10 4 0" Padding="8 4" Content="Save Image" Click="SaveButton_Click" />
 			<ComboBox x:Name="SaveAsComboBox" Margin="4 10 4 0" Padding="8 4" />
 			<Button x:Name="RecognizeButton" Margin="4 10 4 0" Padding="8 4" Content="Recognize Image" Click="RecognizeButton_Click" />
-		</StackPanel>
+            <Button x:Name="SaveNetwork" Margin="4 10 4 0" Padding="8 4" Content="Save Network" Click="SaveNetwork_Click"  />
+            <Button x:Name="LoadNetwork" Margin="4 10 4 0" Padding="8 4" Content="Load Network" Click="LoadNetwork_Click" />
+        </StackPanel>
 		<DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" >
 			<StackPanel Orientation="Horizontal" DockPanel.Dock="Right">
 				<Label>Propability:</Label>

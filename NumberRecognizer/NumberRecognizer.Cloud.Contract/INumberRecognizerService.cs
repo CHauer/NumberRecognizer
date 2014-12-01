@@ -14,16 +14,25 @@ namespace NumberRecognizer.Cloud.Contract
     {
 
         [OperationContract]
-        RecognitionResultItem RecognizeOneNumber(double[,] pixelValues);
+        IList<NetworkInfo> GetNetworks();
 
         [OperationContract]
-        RecognitionResult RecognizePhoneNumber(double[,] pixelValues);
+        Dictionary<int, string> GetBaseTraningSets();
 
         [OperationContract]
-        RecognitionResultItem RecognizeOneNumberFromImage(Byte[] imageData);
+        bool CreateNetwork(string name, int baseTrainingsSetId, Dictionary<string, IEnumerable<double[,]>> individualTrainingsData);
 
         [OperationContract]
-        RecognitionResult RecognizePhoneNumberFromImage(Byte[] imageData);
+        RecognitionResultItem RecognizeOneNumber(int networkId, double[,] pixelValues);
+
+        [OperationContract]
+        RecognitionResult RecognizePhoneNumber(int networkId, double[,] pixelValues);
+
+        [OperationContract]
+        RecognitionResultItem RecognizeOneNumberFromImage(int networkId, Byte[] imageData);
+
+        [OperationContract]
+        RecognitionResult RecognizePhoneNumberFromImage(int networkId, Byte[] imageData);
 
     }
 }
