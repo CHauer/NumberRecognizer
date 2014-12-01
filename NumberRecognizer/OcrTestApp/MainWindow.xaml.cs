@@ -275,5 +275,15 @@ namespace OcrTestApp
 
 			this.SaveAsComboBox.SelectedIndex = 0;
 		}
+
+        private void SaveNetwork_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void LoadNetwork_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
 	}
 }

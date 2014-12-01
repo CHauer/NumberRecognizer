@@ -18,6 +18,21 @@ namespace NumberRecognizer.Lib.Network
         [NonSerialized]
         private object syncLock = new object();
 
+        /// <summary>
+        /// The fitness of the network
+        /// </summary>
+        private double fitness;
+
+        /// <summary>
+        /// The input width
+        /// </summary>
+        private int inputWidth;
+
+        /// <summary>
+        /// The input height
+        /// </summary>
+        private int inputHeight;
+
         #region Constructor
 
         /// <summary>
@@ -28,7 +43,7 @@ namespace NumberRecognizer.Lib.Network
         /// <param name="patterns">The patterns.</param>
         /// <param name="hiddenLayerType">Type of the hidden layer.</param>
         public PatternRecognitionNetwork(int width, int height, IEnumerable<string> patterns,
-                                            HiddenLayerType hiddenLayerType = HiddenLayerType.Lining | HiddenLayerType.Boxing)
+                                            HiddenLayerType hiddenLayerType = HiddenLayerType.OverlayedLining | HiddenLayerType.OverlayedBoxing)
 		{
             InitializeNetworkParameters(width, height, patterns, hiddenLayerType);
 
@@ -77,7 +92,11 @@ namespace NumberRecognizer.Lib.Network
         /// <value>
         /// The fitness.
         /// </value>
-        public double Fitness { get; private set; }
+        public double Fitness
+        {
+            get { return fitness; }
+            private set { fitness = value; }
+        }
 
         /// <summary>
         /// Gets or sets the genomes.
@@ -104,16 +123,6 @@ namespace NumberRecognizer.Lib.Network
 		public Dictionary<string, OutputNeuron> OutputNeurons { get; set; }
 
         /// <summary>
-        /// 
-        /// </summary>
-        [Flags]
-        public enum HiddenLayerType
-        {
-            Lining = 1,
-            Boxing = 2,
-        }
-
-        /// <summary>
         /// Gets the hidden layer mode.
         /// </summary>
         /// <value>
@@ -129,8 +138,8 @@ namespace NumberRecognizer.Lib.Network
         /// </value>
         public int InputWidth
         {
-            get;
-            private set;
+            get { return inputWidth; }
+            private set { inputWidth = value; }
         }
 
         /// <summary>
@@ -141,8 +150,8 @@ namespace NumberRecognizer.Lib.Network
         /// </value>
         public int InputHeight
         {
-            get;
-            private set;
+            get { return inputHeight; }
+            private set { inputHeight = value; }
         }
 
         /// <summary>
@@ -208,12 +217,24 @@ namespace NumberRecognizer.Lib.Network
             //Hidden/Middle Neurons
             HiddenNeurons = new HashSet<HiddenNeuron>();
 
-            if (HiddenLayerMode.HasFlag(HiddenLayerType.Lining))
+            if (HiddenLayerMode.HasFlag(HiddenLayerType.Lining) ||
+                HiddenLayerMode.HasFlag(HiddenLayerType.OverlayedLining))
             {
+                int moveIncrementer = 1;
+
+                if (HiddenLayerMode.HasFlag(HiddenLayerType.Lining))
+                {
+                    moveIncrementer = 2;
+                }
+                else if (HiddenLayerMode.HasFlag(HiddenLayerType.OverlayedLining))
+                {
+                    moveIncrementer = 1;
+                }
+
                 //Divide the input matrix in horizontal and vertical lines with height or width of 2 InputNeurons
 
                 //top down lines and "height" of 2
-                for (int y = 0; y < InputHeight; y += 2)
+                for (int y = 0; y < InputHeight; y += moveIncrementer)
                 {
                     HiddenNeuron hiddenNeuron = new HiddenNeuron();
 
@@ -234,7 +255,7 @@ namespace NumberRecognizer.Lib.Network
                 }
 
                 //left right lines and "width" of 2
-                for (int x = 0; x < InputWidth; x += 2)
+                for (int x = 0; x < InputWidth; x += moveIncrementer)
                 {
                     HiddenNeuron hiddenNeuron = new HiddenNeuron();
 
@@ -253,15 +274,27 @@ namespace NumberRecognizer.Lib.Network
 
                     HiddenNeurons.Add(hiddenNeuron);
                 }
-
             }
 
-            if (HiddenLayerMode.HasFlag(HiddenLayerType.Boxing))
+
+            if (HiddenLayerMode.HasFlag(HiddenLayerType.Boxing) ||
+                HiddenLayerMode.HasFlag(HiddenLayerType.OverlayedBoxing))
             {
-                //Divide the input matrix into boxes of 4 InputNeurons
-                for (int x = 0; x < InputWidth; x += 2)
+                int moveIncrementer = 1;
+
+                if (HiddenLayerMode.HasFlag(HiddenLayerType.Boxing))
                 {
-                    for (int y = 0; y < InputHeight; y += 2)
+                    moveIncrementer = 2;
+                }
+                else if (HiddenLayerMode.HasFlag(HiddenLayerType.OverlayedBoxing))
+                {
+                    moveIncrementer = 1;
+                }
+
+                //Divide the input matrix into boxes of 4 InputNeurons
+                for (int x = 0; x < InputWidth; x += moveIncrementer)
+                {
+                    for (int y = 0; y < InputHeight; y += moveIncrementer)
                     {
                         HiddenNeuron hiddenNeuron = new HiddenNeuron();
 
@@ -273,7 +306,7 @@ namespace NumberRecognizer.Lib.Network
                         hiddenNeuron.InputLayer.AddRange(new List<WeightedLink>() { weightedLinkLo, weightedLinkLu,
                                                                                     weightedLinkRo, weightedLinkRu});
 
-                        Genomes.Add(weightedLinkLo); 
+                        Genomes.Add(weightedLinkLo);
                         Genomes.Add(weightedLinkLu);
                         Genomes.Add(weightedLinkRo);
                         Genomes.Add(weightedLinkRu);
@@ -406,5 +439,5 @@ namespace NumberRecognizer.Lib.Network
 			}
 		}
 
-	}
+    }
 }

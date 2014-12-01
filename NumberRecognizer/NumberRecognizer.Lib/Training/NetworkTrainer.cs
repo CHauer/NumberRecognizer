@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NumberRecognizer.Lib.Network;
+using NumberRecognizer.Lib.Training.Contract;
 
 namespace NumberRecognizer.Lib.Training
 {
@@ -40,7 +41,6 @@ namespace NumberRecognizer.Lib.Training
         {
             PopulationSize = 100;
             MaxGenerations = 100;
-            TruncationSelectionPercentage = 0.1;
             ImageHeight = 16;
             ImageWidth = 16;
         }
@@ -48,6 +48,30 @@ namespace NumberRecognizer.Lib.Training
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the mutation instance.
+        /// </summary>
+        /// <value>
+        /// The mutation instance.
+        /// </value>
+        public IMutation MutationInstance { get; set; }
+
+        /// <summary>
+        /// Gets or sets the selection instance.
+        /// </summary>
+        /// <value>
+        /// The selection instance.
+        /// </value>
+        public ISelection SelectionInstance { get; set; }
+
+        /// <summary>
+        /// Gets or sets the crossover instance.
+        /// </summary>
+        /// <value>
+        /// The crossover instance.
+        /// </value>
+        public ICrossover CrossoverInstance { get; set; }
 
         /// <summary>
         /// Gets or sets the size of the population.
@@ -64,28 +88,6 @@ namespace NumberRecognizer.Lib.Training
         /// The maximum generations.
         /// </value>
         public int MaxGenerations { get; set; }
-
-        /// <summary>
-        /// Gets or sets the truncation selection percentage.
-        /// </summary>
-        /// <value>
-        /// The truncation selection percentage.
-        /// </value>
-        public double TruncationSelectionPercentage { get; set; }
-
-        /// <summary>
-        /// Gets the truncation selection absolute.
-        /// </summary>
-        /// <value>
-        /// The truncation selection absolute.
-        /// </value>
-        public int TruncationSelectionAbsolute
-        {
-            get
-            {
-                return (int)(PopulationSize * TruncationSelectionPercentage);
-            }
-        }
 
         /// <summary>
         /// Gets the width of the image.
@@ -132,7 +134,7 @@ namespace NumberRecognizer.Lib.Training
         #region Events
 
         /// <summary>
-        /// Occurs when [generation changed].
+        /// Occurs when the generation has changed.
         /// </summary>
         public event Action<int, PatternRecognitionNetwork> GenerationChanged;
 
@@ -173,25 +175,16 @@ namespace NumberRecognizer.Lib.Training
         /// <returns></returns>
         public IEnumerable<PatternRecognitionNetwork> TrainNetwork()
         {
-            IEnumerable<string> patterns = TrainingData.Select(x => x.RepresentingInformation).Distinct();
-
-            // Create initial population
-            ConcurrentBag<PatternRecognitionNetwork> currentGeneration =
-                new ConcurrentBag<PatternRecognitionNetwork>(new List<PatternRecognitionNetwork>());
-
-            if (currentGeneration.Count == 0)
+            if (MutationInstance == null || CrossoverInstance == null || SelectionInstance == null)
             {
-                Parallel.For(0, PopulationSize, (int i) =>
-                {
-                    ThreadSafeRandom random = new ThreadSafeRandom();
-
-                    PatternRecognitionNetwork patternRecognitionNetwork = new PatternRecognitionNetwork(ImageWidth, ImageHeight, patterns);
-                    patternRecognitionNetwork.Genomes.ForEach(x => x.Weight = (2 * random.NextDouble()) - 1);
-
-                    currentGeneration.Add(patternRecognitionNetwork);
-                });
+                throw new InvalidOperationException("The Genetic algorithm parts (selection, mutation, crossover) " +
+                                                    "are not correct initialized.");
             }
 
+            SelectionInstance.PopulationSize = PopulationSize;
+
+            IList<string> patterns = TrainingData.Select(x => x.RepresentingInformation).Distinct().ToList();
+            ConcurrentBag<PatternRecognitionNetwork> currentGeneration = CreateInitialPopulation(patterns);
             List<PatternRecognitionNetwork> networks = currentGeneration.ToList();
 
             for (int i = 0; i < MaxGenerations; i++)
@@ -230,37 +223,28 @@ namespace NumberRecognizer.Lib.Training
                 ConcurrentBag<PatternRecognitionNetwork> newGeneration = new ConcurrentBag<PatternRecognitionNetwork>();
 
                 // Specify individuals for recombination (truncation selection)
-                IEnumerable<PatternRecognitionNetwork> patternRecognitionNetworks =
-                    currentGeneration.OrderByDescending(x => x.Fitness).Take(TruncationSelectionAbsolute);
+                IEnumerable<PatternRecognitionNetwork> selectionNetworks = SelectionInstance.ExecuteSelection(currentGeneration);
 
-                // TODO: Add recombination / crossover
-
+                // recombination / crossover - one point crossover
+                IEnumerable<PatternRecognitionNetwork> recombinedNetworks = CrossoverInstance.ExecuteCrossover(selectionNetworks.ToList());
 
                 Parallel.For(0, PopulationSize, (int x) =>
                 {
-                    ThreadSafeRandom random = new ThreadSafeRandom();
-
-                    PatternRecognitionNetwork patternRecognitionNetwork =
-                        patternRecognitionNetworks.ToList().OrderBy(individual => Guid.NewGuid()).First();
+                    PatternRecognitionNetwork parentNetwork =
+                        recombinedNetworks.ToList().OrderBy(individual => Guid.NewGuid()).First();
 
                     // Create children
                     PatternRecognitionNetwork firstChild = new PatternRecognitionNetwork(ImageWidth, ImageHeight, patterns);
 
                     // Copy weights
-                    for (int j = 0; j < patternRecognitionNetwork.Genomes.Count; j++)
+                    for (int j = 0; j < parentNetwork.Genomes.Count; j++)
                     {
-                        firstChild.Genomes[j].Weight = patternRecognitionNetwork.Genomes[j].Weight;
+                        firstChild.Genomes[j].Weight = parentNetwork.Genomes[j].Weight;
                     }
 
-                    // Simple random mutation
-                    firstChild.Genomes.ForEach(genome =>
-                    {
-                        if (random.NextDouble() > 0.95)
-                        {
-                            genome.Weight += (random.NextDouble() * 2) - 1;
-                        }
-                    });
-
+                    //Uniform Mutation
+                    firstChild = MutationInstance.ExecuteMutation(firstChild);
+                    
                     // Add new children
                     newGeneration.Add(firstChild);
                 });
@@ -276,5 +260,32 @@ namespace NumberRecognizer.Lib.Training
             return currentGeneration.ToList();
         }
 
+        /// <summary>
+        /// Creates the initial population.
+        /// </summary>
+        /// <param name="patterns">The patterns.</param>
+        /// <returns></returns>
+        private ConcurrentBag<PatternRecognitionNetwork> CreateInitialPopulation(IEnumerable<string> patterns)
+        {
+            ConcurrentBag<PatternRecognitionNetwork> currentGeneration =
+                new ConcurrentBag<PatternRecognitionNetwork>(new List<PatternRecognitionNetwork>());
+
+            if (currentGeneration.Count == 0)
+            {
+                Parallel.For(0, PopulationSize, (int i) =>
+                {
+                    ThreadSafeRandom random = new ThreadSafeRandom();
+
+                    PatternRecognitionNetwork patternRecognitionNetwork = new PatternRecognitionNetwork(ImageWidth, ImageHeight,
+                        patterns);
+                    patternRecognitionNetwork.Genomes.ForEach(x => x.Weight = (2*random.NextDouble()) - 1);
+
+                    // ReSharper disable once AccessToModifiedClosure
+                    currentGeneration.Add(patternRecognitionNetwork);
+                });
+            }
+
+            return currentGeneration;
+        }
     }
 }
