@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -64,14 +65,9 @@ namespace NumberRecognizer.Lib.Network
         /// <exception cref="System.ArgumentException">The Height or Width parameters of the Network are invalid.</exception>
         private void InitializeNetworkParameters(int width, int height, IEnumerable<string> patterns, HiddenLayerType hiddenLayerType)
 	    {
-	        int divChecker = 2;
+	        const int divChecker = 2;
 
-	        if (hiddenLayerType == HiddenLayerType.Boxing)
-	        {
-	            divChecker = 4;
-	        }
-
-	        if (height%divChecker != 0 || width%divChecker != 0)
+	        if (height % divChecker != 0 || width % divChecker != 0)
 	        {
 	            throw new ArgumentException("The Height or Width parameters of the Network are invalid.");
 	        }
@@ -234,11 +230,11 @@ namespace NumberRecognizer.Lib.Network
                 //Divide the input matrix in horizontal and vertical lines with height or width of 2 InputNeurons
 
                 //top down lines and "height" of 2
-                for (int y = 0; y < InputHeight; y += moveIncrementer)
+                for (int y = 0; y < InputHeight - 1; y += moveIncrementer)
                 {
                     HiddenNeuron hiddenNeuron = new HiddenNeuron();
 
-                    for (int x = 0; x < InputWidth; x++)
+                    for (int x = 0; x < InputWidth - 1; x++)
                     {
                         WeightedLink weightedLinkA = new WeightedLink() { Neuron = InputNeurons[x, y] };
                         WeightedLink weightedLinkB = new WeightedLink() { Neuron = InputNeurons[x, y + 1] };
@@ -255,11 +251,11 @@ namespace NumberRecognizer.Lib.Network
                 }
 
                 //left right lines and "width" of 2
-                for (int x = 0; x < InputWidth; x += moveIncrementer)
+                for (int x = 0; x < InputWidth - 1; x += moveIncrementer)
                 {
                     HiddenNeuron hiddenNeuron = new HiddenNeuron();
 
-                    for (int y = 0; y < InputHeight; y++)
+                    for (int y = 0; y < InputHeight - 1; y++)
                     {
                         WeightedLink weightedLinkA = new WeightedLink() { Neuron = InputNeurons[x, y] };
                         WeightedLink weightedLinkB = new WeightedLink() { Neuron = InputNeurons[x + 1, y] };
@@ -292,9 +288,9 @@ namespace NumberRecognizer.Lib.Network
                 }
 
                 //Divide the input matrix into boxes of 4 InputNeurons
-                for (int x = 0; x < InputWidth; x += moveIncrementer)
+                for (int x = 0; x < InputWidth - 1; x += moveIncrementer)
                 {
-                    for (int y = 0; y < InputHeight; y += moveIncrementer)
+                    for (int y = 0; y < InputHeight - 1; y += moveIncrementer)
                     {
                         HiddenNeuron hiddenNeuron = new HiddenNeuron();
 

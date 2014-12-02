@@ -15,15 +15,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CharacterRecognition", "Cha
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcrTestApp", "OcrTestApp\OcrTestApp.csproj", "{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}"
 EndProject
-Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "NumberRecognizer.Cloud", "NumberRecognizer.Cloud\NumberRecognizer.Cloud.ccproj", "{7FC4CA72-75E7-499A-897A-D6A2D9037408}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Service", "NumberRecognizer.Cloud.Service\NumberRecognizer.Cloud.Service.csproj", "{12913BFF-6BBF-484E-864B-C44FF698BF8A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Contract", "NumberRecognizer.Cloud.Contract\NumberRecognizer.Cloud.Contract.csproj", "{75663FB2-975A-4D29-816B-5750E61891DC}"
 EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 7
+		SccNumberOfProjects = 5
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://hauersoftwarenet.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -35,21 +31,13 @@ Global
 		SccProjectTopLevelParentUniqueName2 = NumberRecognizer.sln
 		SccProjectName2 = NumberRecognizer.Cloud.Contract
 		SccLocalPath2 = NumberRecognizer.Cloud.Contract
-		SccProjectUniqueName3 = NumberRecognizer.Cloud.Service\\NumberRecognizer.Cloud.Service.csproj
-		SccProjectTopLevelParentUniqueName3 = NumberRecognizer.sln
-		SccProjectName3 = NumberRecognizer.Cloud.Service
-		SccLocalPath3 = NumberRecognizer.Cloud.Service
-		SccProjectUniqueName4 = NumberRecognizer.Cloud\\NumberRecognizer.Cloud.ccproj
+		SccProjectUniqueName3 = NumberRecognizer.Lib\\NumberRecognizer.Lib.csproj
+		SccProjectName3 = NumberRecognizer.Lib
+		SccLocalPath3 = NumberRecognizer.Lib
+		SccProjectUniqueName4 = OcrTestApp\\OcrTestApp.csproj
 		SccProjectTopLevelParentUniqueName4 = NumberRecognizer.sln
-		SccProjectName4 = NumberRecognizer.Cloud
-		SccLocalPath4 = NumberRecognizer.Cloud
-		SccProjectUniqueName5 = NumberRecognizer.Lib\\NumberRecognizer.Lib.csproj
-		SccProjectName5 = NumberRecognizer.Lib
-		SccLocalPath5 = NumberRecognizer.Lib
-		SccProjectUniqueName6 = OcrTestApp\\OcrTestApp.csproj
-		SccProjectTopLevelParentUniqueName6 = NumberRecognizer.sln
-		SccProjectName6 = OcrTestApp
-		SccLocalPath6 = OcrTestApp
+		SccProjectName4 = OcrTestApp
+		SccLocalPath4 = OcrTestApp
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -68,14 +56,6 @@ Global
 		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7FC4CA72-75E7-499A-897A-D6A2D9037408}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7FC4CA72-75E7-499A-897A-D6A2D9037408}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7FC4CA72-75E7-499A-897A-D6A2D9037408}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7FC4CA72-75E7-499A-897A-D6A2D9037408}.Release|Any CPU.Build.0 = Release|Any CPU
-		{12913BFF-6BBF-484E-864B-C44FF698BF8A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{12913BFF-6BBF-484E-864B-C44FF698BF8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{12913BFF-6BBF-484E-864B-C44FF698BF8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{12913BFF-6BBF-484E-864B-C44FF698BF8A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75663FB2-975A-4D29-816B-5750E61891DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{75663FB2-975A-4D29-816B-5750E61891DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75663FB2-975A-4D29-816B-5750E61891DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -85,10 +65,9 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{969730AA-C677-4112-9893-CA1C1A4E8895} = {A87BC855-C41E-43F9-9A89-8EF3C8BB938D}
 		{C604A732-A85B-456C-9FB5-201A3AAADCF9} = {969730AA-C677-4112-9893-CA1C1A4E8895}
 		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D} = {A87BC855-C41E-43F9-9A89-8EF3C8BB938D}
-		{7FC4CA72-75E7-499A-897A-D6A2D9037408} = {D4C723FC-550D-4777-8559-165FFC379049}
-		{12913BFF-6BBF-484E-864B-C44FF698BF8A} = {D4C723FC-550D-4777-8559-165FFC379049}
 		{75663FB2-975A-4D29-816B-5750E61891DC} = {D4C723FC-550D-4777-8559-165FFC379049}
 	EndGlobalSection
 EndGlobal
