@@ -3,13 +3,17 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Microsoft.Win32;
+using NumberRecognizer.Lib.DataManagement;
 using NumberRecognizer.Lib.Network;
 using NumberRecognizer.Lib.Training;
+using NumberRecognizer.Lib.Training.GeneticOperator;
 
 namespace OcrTestApp
 {
@@ -126,6 +130,12 @@ namespace OcrTestApp
 		private IEnumerable<PatternRecognitionNetwork> TrainNetwork()
 		{
             trainer = new NetworkTrainer(ImageHelper.ReadTrainingData(TrainingDataPath));
+            trainer.CrossoverInstance = new OnePointCrossover();
+            trainer.MutationInstance = new UniformMutation();
+            trainer.SelectionInstance = new TruncationSelection()
+            {
+                TruncationSelectionPercentage = 0.1
+            };
 
             trainer.GenerationChanged += NetworkTrainer_HandleGenerationChanged;
             
@@ -278,12 +288,51 @@ namespace OcrTestApp
 
         private void SaveNetwork_Click(object sender, RoutedEventArgs e)
         {
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Netzwerk(*.network)|*.network",
+                InitialDirectory = Directory.GetCurrentDirectory()
+            };
 
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                NetworkDataManager dataManager = new NetworkDataManager();
+
+                dataManager.SaveNetworkToFile(saveFileDialog.FileName, ResultNetwork);
+            }
         }
 
         private void LoadNetwork_Click(object sender, RoutedEventArgs e)
         {
+            OpenFileDialog openFileDialog = new OpenFileDialog
+            {
+                Filter = "Netzwerk(*.network)|*.network",
+                InitialDirectory = Directory.GetCurrentDirectory()
+            };
 
+            if (openFileDialog.ShowDialog() == true)
+            {
+                NetworkDataManager dataManager = new NetworkDataManager();
+
+                ResultNetwork = dataManager.LoadNetworkFromFile(openFileDialog.FileName);
+
+                Dictionary<string, double> fitnessDetail = ResultNetwork.GetFitnessDetail(trainer.TrainingData.ToList());
+
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                {
+                    //this.CurrentGenerationLabel.Content = currentGeneration;
+                    this.CurrentFitnessLabel.Content = ResultNetwork.Fitness.ToString("F8");
+
+                    for (int j = 0; j < fitnessDetail.Count; j++)
+                    {
+                        Label patternLabel = FindChild<Label>(this, string.Format("CurrentPattern{0}", j));
+                        patternLabel.Content = fitnessDetail.ToList()[j].Key;
+
+                        Label patternScoreLabel = FindChild<Label>(this, string.Format("CurrentPatternScore{0}", j));
+                        patternScoreLabel.Content = fitnessDetail.ToList()[j].Value.ToString("F8");
+                    }
+                }));
+            }
         }
 	}
 }
