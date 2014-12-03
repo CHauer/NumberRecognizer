@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Lib", "Num
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{A87BC855-C41E-43F9-9A89-8EF3C8BB938D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Service", "Service", "{D4C723FC-550D-4777-8559-165FFC379049}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Cloud", "Cloud", "{D4C723FC-550D-4777-8559-165FFC379049}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FH-Vorlage", "FH-Vorlage", "{969730AA-C677-4112-9893-CA1C1A4E8895}"
 EndProject
@@ -17,9 +17,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OcrTestApp", "OcrTestApp\Oc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Contract", "NumberRecognizer.Cloud.Contract\NumberRecognizer.Cloud.Contract.csproj", "{75663FB2-975A-4D29-816B-5750E61891DC}"
 EndProject
+Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "NumberRecognizer.Cloud", "NumberRecognizer.Cloud\NumberRecognizer.Cloud.ccproj", "{8A392933-8119-4F02-80FA-CFAFD9F155D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Service", "NumberRecognizer.Cloud.Service\NumberRecognizer.Cloud.Service.csproj", "{A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Worker", "NumberRecognizer.Cloud.Worker\NumberRecognizer.Cloud.Worker.csproj", "{A30B1F52-719D-4F66-BB4A-0D0E38002EC9}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 5
+		SccNumberOfProjects = 8
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://hauersoftwarenet.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -38,6 +44,18 @@ Global
 		SccProjectTopLevelParentUniqueName4 = NumberRecognizer.sln
 		SccProjectName4 = OcrTestApp
 		SccLocalPath4 = OcrTestApp
+		SccProjectUniqueName5 = NumberRecognizer.Cloud\\NumberRecognizer.Cloud.ccproj
+		SccProjectTopLevelParentUniqueName5 = NumberRecognizer.sln
+		SccProjectName5 = NumberRecognizer.Cloud
+		SccLocalPath5 = NumberRecognizer.Cloud
+		SccProjectUniqueName6 = NumberRecognizer.Cloud.Service\\NumberRecognizer.Cloud.Service.csproj
+		SccProjectTopLevelParentUniqueName6 = NumberRecognizer.sln
+		SccProjectName6 = NumberRecognizer.Cloud.Service
+		SccLocalPath6 = NumberRecognizer.Cloud.Service
+		SccProjectUniqueName7 = NumberRecognizer.Cloud.Worker\\NumberRecognizer.Cloud.Worker.csproj
+		SccProjectTopLevelParentUniqueName7 = NumberRecognizer.sln
+		SccProjectName7 = NumberRecognizer.Cloud.Worker
+		SccLocalPath7 = NumberRecognizer.Cloud.Worker
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -60,6 +78,18 @@ Global
 		{75663FB2-975A-4D29-816B-5750E61891DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75663FB2-975A-4D29-816B-5750E61891DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75663FB2-975A-4D29-816B-5750E61891DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8A392933-8119-4F02-80FA-CFAFD9F155D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8A392933-8119-4F02-80FA-CFAFD9F155D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8A392933-8119-4F02-80FA-CFAFD9F155D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8A392933-8119-4F02-80FA-CFAFD9F155D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,5 +99,8 @@ Global
 		{C604A732-A85B-456C-9FB5-201A3AAADCF9} = {969730AA-C677-4112-9893-CA1C1A4E8895}
 		{F5CB89FB-337B-4F42-AAD5-A9DF8FED1E4D} = {A87BC855-C41E-43F9-9A89-8EF3C8BB938D}
 		{75663FB2-975A-4D29-816B-5750E61891DC} = {D4C723FC-550D-4777-8559-165FFC379049}
+		{8A392933-8119-4F02-80FA-CFAFD9F155D2} = {D4C723FC-550D-4777-8559-165FFC379049}
+		{A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279} = {D4C723FC-550D-4777-8559-165FFC379049}
+		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9} = {D4C723FC-550D-4777-8559-165FFC379049}
 	EndGlobalSection
 EndGlobal
