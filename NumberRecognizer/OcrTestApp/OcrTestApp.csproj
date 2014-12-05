@@ -113,22 +113,9 @@
     <Content Include="TrainingData\0\0_0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="TrainingData\0\0_1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TrainingData\0\0_2.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TrainingData\0\0_3.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="TrainingData\0\0_4.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Resource Include="TrainingData\9\9_1.png" />
     <Resource Include="TrainingData\9\9_2.png" />
     <Resource Include="TrainingData\9\9_3.png" />
-    <Resource Include="TrainingData\0\0_5.png" />
     <Content Include="TrainingData\1\1_0.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

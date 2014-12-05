@@ -35,6 +35,8 @@ namespace NumberRecognizer.Lib.Network
                 if (!cachedActivationValue.HasValue)
                 {
                     //double sum = InputLayer.Sum(x => x.Neuron.ActivationValue * x.Weight);
+                    
+                    //performance better than LINQ Sum
                     double sum = 0.0;
 
                     foreach (WeightedLink link in InputLayer)
