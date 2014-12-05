@@ -8,7 +8,7 @@ using NumberRecognizer.Lib.Training.Contract;
 
 namespace NumberRecognizer.Lib.Training.GeneticOperator
 {
-    public class OnePointCrossover : ICrossover 
+    public class UniformCrossover : ICrossover 
     {
         /// <summary>
         /// Executes the one point crossover.
@@ -31,19 +31,18 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
                 PatternRecognitionNetwork childTwo = new PatternRecognitionNetwork(parentA.InputWidth, parentA.InputHeight, parentA.Patterns);
 
                 int genomeCount = parentA.Genomes.Count;
-                int crossoverPoint = random.Next(genomeCount - 1);
 
                 for (int j = 0; j < genomeCount - 1; j++)
                 {
-                    if (j < crossoverPoint)
-                    {
-                        childOne.Genomes[j].Weight = parentA.Genomes[j].Weight;
-                        childTwo.Genomes[j].Weight = parentB.Genomes[j].Weight;
-                    }
-                    else
+                    if (random.NextDouble() >= 0.5)
                     {
                         childOne.Genomes[j].Weight = parentB.Genomes[j].Weight;
                         childTwo.Genomes[j].Weight = parentA.Genomes[j].Weight;
+                    }
+                    else
+                    {
+                        childOne.Genomes[j].Weight = parentA.Genomes[j].Weight;
+                        childTwo.Genomes[j].Weight = parentB.Genomes[j].Weight;
                     }
                 }
 

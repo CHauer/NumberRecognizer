@@ -50,6 +50,14 @@ namespace NumberRecognizer.Lib.Training
         #region Properties
 
         /// <summary>
+        /// Gets or sets the gen pool training mode.
+        /// </summary>
+        /// <value>
+        /// The gen pool training mode.
+        /// </value>
+        public GenPoolType GenPoolTrainingMode { get; set; }
+
+        /// <summary>
         /// Gets or sets the mutation instance.
         /// </summary>
         /// <value>
@@ -175,13 +183,7 @@ namespace NumberRecognizer.Lib.Training
         /// <returns></returns>
         public IEnumerable<PatternRecognitionNetwork> TrainNetwork()
         {
-            if (MutationInstance == null || CrossoverInstance == null || SelectionInstance == null)
-            {
-                throw new InvalidOperationException("The Genetic algorithm parts (selection, mutation, crossover) " +
-                                                    "are not correct initialized.");
-            }
-
-            SelectionInstance.PopulationSize = PopulationSize;
+            InitializeGeneticOperators();
 
             IList<string> patterns = TrainingData.Select(x => x.RepresentingInformation).Distinct().ToList();
             ConcurrentBag<PatternRecognitionNetwork> currentGeneration = CreateInitialPopulation(patterns);
@@ -258,6 +260,17 @@ namespace NumberRecognizer.Lib.Training
             ResultNetwork = currentGeneration.OrderBy(x => x.Fitness).First();
 
             return currentGeneration.ToList();
+        }
+
+        private void InitializeGeneticOperators()
+        {
+            if (MutationInstance == null || CrossoverInstance == null || SelectionInstance == null)
+            {
+                throw new InvalidOperationException("The Genetic algorithm parts (selection, mutation, crossover) " +
+                                                    "are not correct initialized.");
+            }
+
+            SelectionInstance.PopulationSize = PopulationSize;
         }
 
         /// <summary>
