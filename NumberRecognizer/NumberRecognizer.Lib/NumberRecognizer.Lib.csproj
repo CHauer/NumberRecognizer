@@ -46,9 +46,13 @@
     <Compile Include="DataManagement\NetworkDataManager.cs" />
     <Compile Include="Network\HiddenLayerType.cs" />
     <Compile Include="Network\HiddenNeuron.cs" />
+    <Compile Include="Network\ICacheable.cs" />
     <Compile Include="Training\Contract\ICrossover.cs" />
     <Compile Include="Training\Contract\IMutation.cs" />
     <Compile Include="Training\Contract\ISelection.cs" />
+    <Compile Include="Training\GeneticOperator\GaussMutation.cs" />
+    <Compile Include="Training\GeneticOperator\UniformCrossover.cs" />
+    <Compile Include="Training\GenPoolType.cs" />
     <Compile Include="Training\NetworkTrainer.cs" />
     <Compile Include="Network\INeuron.cs" />
     <Compile Include="Network\InputNeuron.cs" />

@@ -28,10 +28,10 @@ namespace OcrTestApp
 
         private NetworkTrainer trainer;
 
-		public MainWindow()
-		{
-			InitializeComponent();
-		}
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
 
 		private PatternRecognitionNetwork ResultNetwork { get; set; }
 
@@ -130,8 +130,8 @@ namespace OcrTestApp
 		private IEnumerable<PatternRecognitionNetwork> TrainNetwork()
 		{
             trainer = new NetworkTrainer(ImageHelper.ReadTrainingData(TrainingDataPath));
-            trainer.CrossoverInstance = new OnePointCrossover();
-            trainer.MutationInstance = new UniformMutation();
+            trainer.CrossoverInstance = new UniformCrossover();
+            trainer.MutationInstance = new GaussMutation();
             trainer.SelectionInstance = new TruncationSelection()
             {
                 TruncationSelectionPercentage = 0.1

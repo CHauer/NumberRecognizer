@@ -426,6 +426,12 @@ namespace NumberRecognizer.Lib.Network
         /// <param name="pixelValues">The pixel values.</param>
 		private void SetInputData(double[,] pixelValues)
 		{
+            //reset cached values - Hidden layer
+            ResetHiddenLayerCache();
+            //reset cached values - Output layer
+            ResetOutputLayerCache();
+
+            //set new input value to input layer
 			for (int i = 0; i < pixelValues.GetLength(0); i++)
 			{
 				for (int j = 0; j < pixelValues.GetLength(1); j++)
@@ -435,5 +441,26 @@ namespace NumberRecognizer.Lib.Network
 			}
 		}
 
+        /// <summary>
+        /// Resets the hidden layer cache.
+        /// </summary>
+        private void ResetHiddenLayerCache()
+        {
+            foreach (ICacheable neuron in HiddenNeurons)
+            {
+                neuron.ResetCachedValue();
+            }
+        }
+
+        /// <summary>
+        /// Resets the output layer cache.
+        /// </summary>
+        private void ResetOutputLayerCache()
+        {
+            foreach (ICacheable neuron in OutputNeurons.Values)
+            {
+                neuron.ResetCachedValue();
+            }
+        }
     }
 }
