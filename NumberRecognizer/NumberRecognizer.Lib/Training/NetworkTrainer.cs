@@ -9,6 +9,11 @@ using NumberRecognizer.Lib.Training.Contract;
 
 namespace NumberRecognizer.Lib.Training
 {
+    /// <summary>
+    /// The genetic algorithm trainer class.
+    /// Provides functionality to train a neuronal network with 
+    /// single or multiple generations.
+    /// </summary>
     public class NetworkTrainer
     {
         #region Constructor
@@ -25,9 +30,12 @@ namespace NumberRecognizer.Lib.Training
         /// Initializes a new instance of the <see cref="NetworkTrainer" /> class.
         /// </summary>
         /// <param name="trainingData">The training data.</param>
+        /// <exception cref="ArgumentOutOfRangeException" />
         public NetworkTrainer(IEnumerable<TrainingImage> trainingData) : this()
         {
             TrainingData = new ConcurrentBag<TrainingImage>(trainingData);
+
+            ValidateTrainingData();
         }
 
         #endregion
@@ -37,12 +45,24 @@ namespace NumberRecognizer.Lib.Training
         /// <summary>
         /// Initializes the parameters for the genetic algorithm.
         /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException">The image height or width
+        ///  values of the training images do have differnt values.</exception>
         private void InitializeParameters()
         {
             PopulationSize = 100;
             MaxGenerations = 100;
-            ImageHeight = 16;
-            ImageWidth = 16;
+            GenPoolTrainingMode = GenPoolType.MultipleGenPool;
+
+            if (TrainingData != null && TrainingData.Count > 0)
+            {
+                ImageHeight = TrainingData.Max(x => x.PixelValues.GetLength(0));
+                ImageWidth = TrainingData.Max(x => x.PixelValues.GetLength(1));
+            }
+            else
+            {
+                ImageHeight = 16;
+                ImageWidth = 16;
+            }
         }
 
         #endregion
@@ -103,11 +123,7 @@ namespace NumberRecognizer.Lib.Training
         /// <value>
         /// The width of the image.
         /// </value>
-        public int ImageWidth
-        {
-            get;
-            private set;
-        }
+        public int ImageWidth { get; set; }
 
         /// <summary>
         /// Gets the height of the image.
@@ -115,11 +131,7 @@ namespace NumberRecognizer.Lib.Training
         /// <value>
         /// The height of the image.
         /// </value>
-        public int ImageHeight
-        {
-            get;
-            private set;
-        }
+        public int ImageHeight { get; set; }
 
         /// <summary>
         /// Gets the training data.
@@ -154,9 +166,12 @@ namespace NumberRecognizer.Lib.Training
         /// Adds the training data.
         /// </summary>
         /// <param name="trainingImage">The training image.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException" />
         public void AddTrainingData(TrainingImage trainingImage)
         {
             TrainingData.Add(trainingImage);
+
+            ValidateTrainingData();
 
             ResultNetwork = null;
         }
@@ -165,6 +180,7 @@ namespace NumberRecognizer.Lib.Training
         /// Adds the training data.
         /// </summary>
         /// <param name="trainingData">The training data.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException"></exception>
         public void AddTrainingData(ICollection<TrainingImage> trainingData)
         {
             foreach (TrainingImage item in trainingData)
@@ -172,7 +188,29 @@ namespace NumberRecognizer.Lib.Training
                 TrainingData.Add(item);
             }
 
+            ValidateTrainingData();
+
             ResultNetwork = null;
+        }
+
+        /// <summary>
+        /// Validates the training data.
+        /// </summary>
+        /// <exception cref="System.ArgumentOutOfRangeException">The image height or width values of the
+        ///                                                       training images do have differnt values.</exception>
+        private void ValidateTrainingData()
+        {
+            if (TrainingData == null || TrainingData.Count == 0)
+            {
+                return;
+            }
+
+            if (TrainingData.Any(x => x.PixelValues.GetLength(0) != ImageHeight) ||
+                TrainingData.Any(x => x.PixelValues.GetLength(1) != ImageWidth))
+            {
+                throw new ArgumentOutOfRangeException("The image height or width values of the " +
+                                                      "training images do have differnt values.");
+            }
         }
 
         #endregion
@@ -183,7 +221,7 @@ namespace NumberRecognizer.Lib.Training
         /// <returns></returns>
         public IEnumerable<PatternRecognitionNetwork> TrainNetwork()
         {
-            InitializeGeneticOperators();
+            InitializeGeneticOperatorParameters();
 
             IList<string> patterns = TrainingData.Select(x => x.RepresentingInformation).Distinct().ToList();
             ConcurrentBag<PatternRecognitionNetwork> currentGeneration = CreateInitialPopulation(patterns);
@@ -262,7 +300,12 @@ namespace NumberRecognizer.Lib.Training
             return currentGeneration.ToList();
         }
 
-        private void InitializeGeneticOperators()
+        /// <summary>
+        /// Initializes the genetic operators.
+        /// </summary>
+        /// <exception cref="System.InvalidOperationException">The Genetic algorithm parts (selection, mutation, crossover)  +
+        ///                                                     are not correct initialized.</exception>
+        private void InitializeGeneticOperatorParameters()
         {
             if (MutationInstance == null || CrossoverInstance == null || SelectionInstance == null)
             {

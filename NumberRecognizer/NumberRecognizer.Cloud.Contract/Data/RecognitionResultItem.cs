@@ -10,7 +10,7 @@ namespace NumberRecognizer.Cloud.Contract.Data
     public class RecognitionResultItem
     {
         [DataMember]
-        public Char NumericCharacter { get; set; }
+        public int NumericCharacter { get; set; }
 
         [DataMember]
         public Dictionary<char, decimal> Probabilities { get; set; }

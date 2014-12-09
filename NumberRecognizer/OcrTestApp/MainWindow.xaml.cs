@@ -298,7 +298,7 @@ namespace OcrTestApp
             {
                 NetworkDataManager dataManager = new NetworkDataManager();
 
-                dataManager.SaveNetworkToFile(saveFileDialog.FileName, ResultNetwork);
+                dataManager.SaveToFile(saveFileDialog.FileName, ResultNetwork);
             }
         }
 
@@ -314,7 +314,7 @@ namespace OcrTestApp
             {
                 NetworkDataManager dataManager = new NetworkDataManager();
 
-                ResultNetwork = dataManager.LoadNetworkFromFile(openFileDialog.FileName);
+                ResultNetwork = dataManager.LoadFromFile(openFileDialog.FileName);
 
                 Dictionary<string, double> fitnessDetail = ResultNetwork.GetFitnessDetail(trainer.TrainingData.ToList());
 

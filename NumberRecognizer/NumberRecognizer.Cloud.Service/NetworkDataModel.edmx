@@ -16,7 +16,6 @@
           <EntitySet Name="NetworkSet" EntityType="NetworkDataModel.Network" />
           <EntitySet Name="TrainingImageSet" EntityType="NetworkDataModel.TrainingImage" />
           <EntitySet Name="TrainLogSet" EntityType="NetworkDataModel.TrainLog" />
-          <EntitySet Name="BaseTrainSetSet" EntityType="NetworkDataModel.BaseTrainSet" />
           <AssociationSet Name="NetworkTrainingImage" Association="NetworkDataModel.NetworkTrainingImage">
             <End Role="Network" EntitySet="NetworkSet" />
             <End Role="TrainingImage" EntitySet="TrainingImageSet" />
@@ -24,10 +23,6 @@
           <AssociationSet Name="NetworkTrainLog" Association="NetworkDataModel.NetworkTrainLog">
             <End Role="Network" EntitySet="NetworkSet" />
             <End Role="TrainLog" EntitySet="TrainLogSet" />
-          </AssociationSet>
-          <AssociationSet Name="NetworkBaseTrainSet" Association="NetworkDataModel.NetworkBaseTrainSet">
-            <End Role="Network" EntitySet="NetworkSet" />
-            <End Role="BaseTrainSet" EntitySet="BaseTrainSetSet" />
           </AssociationSet>
         </EntityContainer>
         <EntityType Name="Network">
@@ -41,7 +36,6 @@
           <Property Name="NetworkData" Type="Binary" Nullable="false" MaxLength="Max" />
           <NavigationProperty Name="TrainingImages" Relationship="NetworkDataModel.NetworkTrainingImage" FromRole="Network" ToRole="TrainingImage" />
           <NavigationProperty Name="TrainLogs" Relationship="NetworkDataModel.NetworkTrainLog" FromRole="Network" ToRole="TrainLog" />
-          <NavigationProperty Name="BaseTrainSet" Relationship="NetworkDataModel.NetworkBaseTrainSet" FromRole="Network" ToRole="BaseTrainSet" />
         </EntityType>
         <EntityType Name="TrainingImage">
           <Key>
@@ -71,15 +65,6 @@
           <Property Name="PatternFitness8" Type="Double" Nullable="false" />
           <Property Name="PatternFitness9" Type="Double" Nullable="false" />
         </EntityType>
-        <EntityType Name="BaseTrainSet">
-          <Key>
-            <PropertyRef Name="BaseTrainSetId" />
-          </Key>
-          <Property Name="BaseTrainSetId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <NavigationProperty Name="Network" Relationship="NetworkDataModel.NetworkBaseTrainSet" FromRole="BaseTrainSet" ToRole="Network" />
-          <Property Name="TrainSetData" Type="Binary" Nullable="false" MaxLength="Max" />
-          <Property Name="TrainSetName" Type="String" Nullable="false" />
-        </EntityType>
         <EnumType Name="CalculationType">
           <Member Name="NotStarted" Value="1" />
           <Member Name="Running" Value="2" />
@@ -92,10 +77,6 @@
         <Association Name="NetworkTrainLog">
           <End Type="NetworkDataModel.Network" Role="Network" Multiplicity="1" />
           <End Type="NetworkDataModel.TrainLog" Role="TrainLog" Multiplicity="*" />
-        </Association>
-        <Association Name="NetworkBaseTrainSet">
-          <End Type="NetworkDataModel.Network" Role="Network" Multiplicity="1" />
-          <End Type="NetworkDataModel.BaseTrainSet" Role="BaseTrainSet" Multiplicity="1" />
         </Association>
       </Schema>
     </edmx:ConceptualModels>

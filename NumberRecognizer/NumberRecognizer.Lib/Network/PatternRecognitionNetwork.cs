@@ -44,7 +44,8 @@ namespace NumberRecognizer.Lib.Network
         /// <param name="patterns">The patterns.</param>
         /// <param name="hiddenLayerType">Type of the hidden layer.</param>
         public PatternRecognitionNetwork(int width, int height, IEnumerable<string> patterns,
-                                            HiddenLayerType hiddenLayerType = HiddenLayerType.OverlayedLining | HiddenLayerType.OverlayedBoxing)
+                                            HiddenLayerType hiddenLayerType = HiddenLayerType.OverlayedLining |
+                                                                                HiddenLayerType.OverlayedBoxing)
 		{
             InitializeNetworkParameters(width, height, patterns, hiddenLayerType);
 

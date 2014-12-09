@@ -13,26 +13,37 @@ namespace NumberRecognizer.Cloud.Contract
     public interface INumberRecognizerService
     {
 
+        /// <summary>
+        /// Gets the networks.
+        /// </summary>
+        /// <returns></returns>
         [OperationContract]
         IList<NetworkInfo> GetNetworks();
 
+        /// <summary>
+        /// Creates the network.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="individualTrainingsData">The individual trainings data.</param>
+        /// <returns></returns>
         [OperationContract]
-        Dictionary<int, string> GetBaseTraningSets();
+        bool CreateNetwork(string name, IEnumerable<TrainingImage> individualTrainingsData);
 
-        [OperationContract]
-        bool CreateNetwork(string name, int baseTrainingsSetId, Dictionary<string, IEnumerable<double[,]>> individualTrainingsData);
+        /// <summary>
+        /// Deletes the network.
+        /// </summary>
+        /// <param name="networkId">The network identifier.</param>
+        /// <returns></returns>
+        bool DeleteNetwork(int networkId);
 
+        /// <summary>
+        /// Recognizes the phone number from image.
+        /// </summary>
+        /// <param name="networkId">The network identifier.</param>
+        /// <param name="imageData">The image data.</param>
+        /// <returns></returns>
         [OperationContract]
-        RecognitionResultItem RecognizeOneNumber(int networkId, double[,] pixelValues);
-
-        [OperationContract]
-        RecognitionResult RecognizePhoneNumber(int networkId, double[,] pixelValues);
-
-        [OperationContract]
-        RecognitionResultItem RecognizeOneNumberFromImage(int networkId, Byte[] imageData);
-
-        [OperationContract]
-        RecognitionResult RecognizePhoneNumberFromImage(int networkId, Byte[] imageData);
+        RecognitionResult RecognizePhoneNumber(int networkId, IList<RecognitionImage> imageData);
 
     }
 }
