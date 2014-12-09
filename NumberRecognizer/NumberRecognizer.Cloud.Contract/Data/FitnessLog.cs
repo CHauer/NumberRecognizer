@@ -12,5 +12,7 @@ namespace NumberRecognizer.Cloud.Contract.Data
 
         public Dictionary<string, IList<double>> PatternTrends { get; set; }
 
+        public Dictionary<string, double>  FinalPatternFittness { get; set; }
+
     }
 }

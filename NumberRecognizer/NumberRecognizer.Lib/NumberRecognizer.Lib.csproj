@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataManagement\DataManager.cs" />
     <Compile Include="DataManagement\NetworkDataManager.cs" />
     <Compile Include="Network\HiddenLayerType.cs" />
     <Compile Include="Network\HiddenNeuron.cs" />
