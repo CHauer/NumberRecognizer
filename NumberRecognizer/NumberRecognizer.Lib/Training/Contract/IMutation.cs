@@ -12,6 +12,19 @@ namespace NumberRecognizer.Lib.Training.Contract
     /// </summary>
     public interface IMutation
     {
+        /// <summary>
+        /// Gets or sets the minimum network fitness for he usage of this mutation operator.
+        /// </summary>
+        /// <value>
+        /// The minimum network fitness.
+        /// </value>
+        double MinNetworkFitness { get; set; }
+
+        /// <summary>
+        /// Executes the mutation.
+        /// </summary>
+        /// <param name="network">The network.</param>
+        /// <returns></returns>
         PatternRecognitionNetwork ExecuteMutation(PatternRecognitionNetwork network);
     }
 }

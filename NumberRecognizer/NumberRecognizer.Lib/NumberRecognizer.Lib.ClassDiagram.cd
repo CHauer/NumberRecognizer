@@ -31,7 +31,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.TrainingImage">
-    <Position X="1" Y="5.75" Width="2.5" />
+    <Position X="1" Y="6.5" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAACAAAAAAA=</HashCode>
       <FileName>Network\TrainingImage.cs</FileName>
@@ -47,7 +47,7 @@
   <Class Name="NumberRecognizer.Lib.Training.NetworkTrainer">
     <Position X="1" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAIAAAACAABgAAAIAAYBAgAAgAEgiACAAEAAAAAAA=</HashCode>
+      <HashCode>AQAAAAAAAAAAAgAAAIACRBAgAAAAEAgAAAAEAAAAgAA=</HashCode>
       <FileName>Training\NetworkTrainer.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -110,6 +110,20 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAgAAAAAAIAAAAAAAAAAAAgAAAAAAAAAAAAEAA=</HashCode>
       <FileName>DataManagement\DataManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NumberRecognizer.Lib.Training.GenPool">
+    <Position X="6.5" Y="4.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAIAAAAAAAAAAAAAAAAAAEAAAAAAAAABAAA=</HashCode>
+      <FileName>Training\GenPool.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NumberRecognizer.Lib.Training.TrainingParameter">
+    <Position X="5" Y="7.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAACAABgAAAAAAIAAAAAgAAiAQAEAAAAAAAAA=</HashCode>
+      <FileName>Training\TrainingParameter.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="NumberRecognizer.Lib.Network.INeuron">
