@@ -169,7 +169,7 @@ namespace NumberRecognizer.Lib.Network
 
         #endregion
 
-        #region Create
+        #region Create Layers
 
         /// <summary>
         /// Creates the specified width.
@@ -342,6 +342,8 @@ namespace NumberRecognizer.Lib.Network
 
         #endregion
 
+        #region Fitness Calculation
+
         /// <summary>
         /// Calculates the fitness.
         /// </summary>
@@ -403,44 +405,25 @@ namespace NumberRecognizer.Lib.Network
 		}
 
         /// <summary>
-        /// Recognizes the character.
-        /// </summary>
-        /// <param name="pixelValues">The pixel values.</param>
-        /// <returns></returns>
-		public IEnumerable<RecognitionResult> RecognizeCharacter(double[,] pixelValues)
-		{
-			SetInputData(pixelValues);
-
-			return
-				OutputNeurons.Select(
-					outputNeuron =>
-						new RecognitionResult()
-						{
-							Propability = outputNeuron.Value.ActivationValue,
-							RecognizedCharacter = outputNeuron.Key
-						});
-		}
-
-        /// <summary>
         /// Sets the input data.
         /// </summary>
         /// <param name="pixelValues">The pixel values.</param>
-		private void SetInputData(double[,] pixelValues)
-		{
+        private void SetInputData(double[,] pixelValues)
+        {
             //reset cached values - Hidden layer
             ResetHiddenLayerCache();
             //reset cached values - Output layer
             ResetOutputLayerCache();
 
             //set new input value to input layer
-			for (int i = 0; i < pixelValues.GetLength(0); i++)
-			{
-				for (int j = 0; j < pixelValues.GetLength(1); j++)
-				{
-					InputNeurons[i, j].Value = pixelValues[i, j];
-				}
-			}
-		}
+            for (int i = 0; i < pixelValues.GetLength(0); i++)
+            {
+                for (int j = 0; j < pixelValues.GetLength(1); j++)
+                {
+                    InputNeurons[i, j].Value = pixelValues[i, j];
+                }
+            }
+        }
 
         /// <summary>
         /// Resets the hidden layer cache.
@@ -463,5 +446,44 @@ namespace NumberRecognizer.Lib.Network
                 neuron.ResetCachedValue();
             }
         }
+
+        #endregion
+
+        #region Genomes
+
+        /// <summary>
+        /// Copies the genome weights from the copyFrom
+        /// network into this network instance.
+        /// </summary>
+        /// <param name="copyFrom">The copy from network.</param>
+        public void CopyGenomeWeights(PatternRecognitionNetwork copyFrom)
+        {
+            for (int j = 0; j < copyFrom.Genomes.Count; j++)
+            {
+                this.Genomes[j].Weight = copyFrom.Genomes[j].Weight;
+            }
+        }
+
+        #endregion
+
+        /// <summary>
+        /// Recognizes the character.
+        /// </summary>
+        /// <param name="pixelValues">The pixel values.</param>
+        /// <returns></returns>
+		public IEnumerable<RecognitionResult> RecognizeCharacter(double[,] pixelValues)
+		{
+			SetInputData(pixelValues);
+
+			return
+				OutputNeurons.Select(
+					outputNeuron =>
+						new RecognitionResult()
+						{
+							Propability = outputNeuron.Value.ActivationValue,
+							RecognizedCharacter = outputNeuron.Key
+						});
+        }
+
     }
 }

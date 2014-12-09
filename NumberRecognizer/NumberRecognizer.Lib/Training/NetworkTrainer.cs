@@ -21,47 +21,34 @@ namespace NumberRecognizer.Lib.Training
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkTrainer"/> class.
         /// </summary>
-        public NetworkTrainer()
+        public NetworkTrainer() : this(null, null)
         {
-            InitializeParameters();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkTrainer" /> class.
         /// </summary>
         /// <param name="trainingData">The training data.</param>
-        /// <exception cref="ArgumentOutOfRangeException" />
-        public NetworkTrainer(IEnumerable<TrainingImage> trainingData) : this()
+        /// <exception cref="System.ArgumentOutOfRangeException">Wrong ImageHeight or Width of TrainingImage</exception>
+        public NetworkTrainer(IEnumerable<TrainingImage> trainingData) : this(trainingData, null)
         {
-            TrainingData = new ConcurrentBag<TrainingImage>(trainingData);
-
-            ValidateTrainingData();
         }
 
-        #endregion
-
-        #region Initialize
-
         /// <summary>
-        /// Initializes the parameters for the genetic algorithm.
+        /// Initializes a new instance of the <see cref="NetworkTrainer" /> class.
         /// </summary>
-        /// <exception cref="System.ArgumentOutOfRangeException">The image height or width
-        ///  values of the training images do have differnt values.</exception>
-        private void InitializeParameters()
+        /// <param name="trainingData">The training data.</param>
+        /// <param name="parameter">The parameter.</param>
+        /// <exception cref="System.ArgumentOutOfRangeException">Wrong ImageHeight or Width of TrainingImage</exception>
+        public NetworkTrainer(IEnumerable<TrainingImage> trainingData, TrainingParameter parameter)
         {
-            PopulationSize = 100;
-            MaxGenerations = 100;
-            GenPoolTrainingMode = GenPoolType.MultipleGenPool;
+            //parameter != null 
+            TrainingParameter = parameter ?? new TrainingParameter();
 
-            if (TrainingData != null && TrainingData.Count > 0)
+            if (trainingData != null)
             {
-                ImageHeight = TrainingData.Max(x => x.PixelValues.GetLength(0));
-                ImageWidth = TrainingData.Max(x => x.PixelValues.GetLength(1));
-            }
-            else
-            {
-                ImageHeight = 16;
-                ImageWidth = 16;
+                TrainingData = new ConcurrentBag<TrainingImage>(trainingData);
+                ValidateTrainingData();
             }
         }
 
@@ -70,12 +57,12 @@ namespace NumberRecognizer.Lib.Training
         #region Properties
 
         /// <summary>
-        /// Gets or sets the gen pool training mode.
+        /// Gets the training parameter.
         /// </summary>
         /// <value>
-        /// The gen pool training mode.
+        /// The training parameter.
         /// </value>
-        public GenPoolType GenPoolTrainingMode { get; set; }
+        public TrainingParameter TrainingParameter { get; private set; }
 
         /// <summary>
         /// Gets or sets the mutation instance.
@@ -83,7 +70,7 @@ namespace NumberRecognizer.Lib.Training
         /// <value>
         /// The mutation instance.
         /// </value>
-        public IMutation MutationInstance { get; set; }
+        public IList<IMutation> MutationInstances { get; set; }
 
         /// <summary>
         /// Gets or sets the selection instance.
@@ -100,38 +87,6 @@ namespace NumberRecognizer.Lib.Training
         /// The crossover instance.
         /// </value>
         public ICrossover CrossoverInstance { get; set; }
-
-        /// <summary>
-        /// Gets or sets the size of the population.
-        /// </summary>
-        /// <value>
-        /// The size of the population.
-        /// </value>
-        public int PopulationSize { get; set; }
-
-        /// <summary>
-        /// Gets or sets the maximum generations.
-        /// </summary>
-        /// <value>
-        /// The maximum generations.
-        /// </value>
-        public int MaxGenerations { get; set; }
-
-        /// <summary>
-        /// Gets the width of the image.
-        /// </summary>
-        /// <value>
-        /// The width of the image.
-        /// </value>
-        public int ImageWidth { get; set; }
-
-        /// <summary>
-        /// Gets the height of the image.
-        /// </summary>
-        /// <value>
-        /// The height of the image.
-        /// </value>
-        public int ImageHeight { get; set; }
 
         /// <summary>
         /// Gets the training data.
@@ -196,17 +151,24 @@ namespace NumberRecognizer.Lib.Training
         /// <summary>
         /// Validates the training data.
         /// </summary>
+        /// <param name="checkTrainDataExists">if set to <c>true</c> [check train data exists].</param>
+        /// <exception cref="System.ArgumentException">There is no valid TrainigData for the network training process.</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">The image height or width values of the
-        ///                                                       training images do have differnt values.</exception>
-        private void ValidateTrainingData()
+        /// training images do have differnt values.</exception>
+        private void ValidateTrainingData(bool checkTrainDataExists = false)
         {
             if (TrainingData == null || TrainingData.Count == 0)
             {
+                if (checkTrainDataExists)
+                {
+                    throw new ArgumentException("There is no valid TrainigData for the network training process.");
+                }
+                //else
                 return;
             }
 
-            if (TrainingData.Any(x => x.PixelValues.GetLength(0) != ImageHeight) ||
-                TrainingData.Any(x => x.PixelValues.GetLength(1) != ImageWidth))
+            if (TrainingData.Any(x => x.PixelValues.GetLength(0) != TrainingParameter.ImageHeight) ||
+                TrainingData.Any(x => x.PixelValues.GetLength(1) != TrainingParameter.ImageWidth))
             {
                 throw new ArgumentOutOfRangeException("The image height or width values of the " +
                                                       "training images do have differnt values.");
@@ -218,16 +180,31 @@ namespace NumberRecognizer.Lib.Training
         /// <summary>
         /// Trains the network.
         /// </summary>
+        /// <exception cref="System.ArgumentException" />
+        /// <exception cref="System.ArgumentOutOfRangeException" />
         /// <returns></returns>
         public IEnumerable<PatternRecognitionNetwork> TrainNetwork()
         {
-            InitializeGeneticOperatorParameters();
+            IList<string> patterns = null;
+            ConcurrentBag<PatternRecognitionNetwork> currentGeneration = null;
 
-            IList<string> patterns = TrainingData.Select(x => x.RepresentingInformation).Distinct().ToList();
-            ConcurrentBag<PatternRecognitionNetwork> currentGeneration = CreateInitialPopulation(patterns);
-            List<PatternRecognitionNetwork> networks = currentGeneration.ToList();
+            ValidateTrainingData(checkTrainDataExists:true);
+            CheckGeneticOperators();
 
-            for (int i = 0; i < MaxGenerations; i++)
+            patterns = TrainingData.Select(x => x.RepresentingInformation).Distinct().ToList();
+
+            if (TrainingParameter.GenPoolTrainingMode == GenPoolType.SingleGenPool)
+            {
+                currentGeneration = CreateInitialPopulation(patterns);
+            }
+            else
+            {
+                //TODO Temp change to multiple
+                currentGeneration = CreateInitialPopulation(patterns);
+                //currentGeneration = CreateInitialPopulationFromMultiplePools(patterns);
+            }
+
+            for (int i = 0; i < TrainingParameter.MaxGenerations; i++)
             {
                 // Calculate Fitness
                 Parallel.ForEach(currentGeneration, individual => individual.CalculateFitness(TrainingData.ToList()));
@@ -239,51 +216,27 @@ namespace NumberRecognizer.Lib.Training
                     GenerationChanged(i, bestNetwork);
                 }
 
-                #region Obsolete  //TODO Remove
-                // GUI Update
-                //Dictionary<string, double> fitnessDetail = bestNetwork.GetFitnessDetail(TrainingData.ToList());
-
-                //Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
-                //{
-                //    this.CurrentGenerationLabel.Content = i;
-                //    this.CurrentFitnessLabel.Content = bestNetwork.Fitness.ToString("F8");
-
-                //    for (int j = 0; j < fitnessDetail.Count; j++)
-                //    {
-                //        Label patternLabel = FindChild<Label>(this, string.Format("CurrentPattern{0}", j));
-                //        patternLabel.Content = fitnessDetail.ToList()[j].Key;
-
-                //        Label patternScoreLabel = FindChild<Label>(this, string.Format("CurrentPatternScore{0}", j));
-                //        patternScoreLabel.Content = fitnessDetail.ToList()[j].Value.ToString("F8");
-                //    }
-                //}));
-
-                #endregion
-
                 ConcurrentBag<PatternRecognitionNetwork> newGeneration = new ConcurrentBag<PatternRecognitionNetwork>();
 
-                // Specify individuals for recombination (truncation selection)
+                // Specify individuals for recombination (e.g. truncation selection)
                 IEnumerable<PatternRecognitionNetwork> selectionNetworks = SelectionInstance.ExecuteSelection(currentGeneration);
 
-                // recombination / crossover - one point crossover
+                // recombination / crossover (e.g. uniform crossover)
                 IEnumerable<PatternRecognitionNetwork> recombinedNetworks = CrossoverInstance.ExecuteCrossover(selectionNetworks.ToList());
 
-                Parallel.For(0, PopulationSize, (int x) =>
+                Parallel.For(0, TrainingParameter.PopulationSize, (int x) =>
                 {
                     PatternRecognitionNetwork parentNetwork =
                         recombinedNetworks.ToList().OrderBy(individual => Guid.NewGuid()).First();
 
                     // Create children
-                    PatternRecognitionNetwork firstChild = new PatternRecognitionNetwork(ImageWidth, ImageHeight, patterns);
+                    PatternRecognitionNetwork firstChild = new PatternRecognitionNetwork(TrainingParameter.ImageWidth, TrainingParameter.ImageHeight, patterns);
 
                     // Copy weights
-                    for (int j = 0; j < parentNetwork.Genomes.Count; j++)
-                    {
-                        firstChild.Genomes[j].Weight = parentNetwork.Genomes[j].Weight;
-                    }
+                    firstChild.CopyGenomeWeights(parentNetwork);
 
                     //Uniform Mutation
-                    firstChild = MutationInstance.ExecuteMutation(firstChild);
+                    firstChild = ChooseMutation(parentNetwork.Fitness).ExecuteMutation(firstChild);
                     
                     // Add new children
                     newGeneration.Add(firstChild);
@@ -301,19 +254,32 @@ namespace NumberRecognizer.Lib.Training
         }
 
         /// <summary>
+        /// Chooses the mutation instance based on the current network fitness.
+        /// Search for the instances where the fitness is greater than the minNetworkFitness 
+        /// of the instance and take the instance with the maximun minNetworkFitness.
+        /// </summary>
+        /// <param name="networkFitness">The network fitness.</param>
+        /// <returns></returns>
+        private IMutation ChooseMutation(double networkFitness)
+        {
+            return MutationInstances.Where(mi => networkFitness > mi.MinNetworkFitness)
+                                    .OrderByDescending(mi => mi.MinNetworkFitness)
+                                    .First();
+        }
+
+        /// <summary>
         /// Initializes the genetic operators.
         /// </summary>
         /// <exception cref="System.InvalidOperationException">The Genetic algorithm parts (selection, mutation, crossover)  +
         ///                                                     are not correct initialized.</exception>
-        private void InitializeGeneticOperatorParameters()
+        private void CheckGeneticOperators()
         {
-            if (MutationInstance == null || CrossoverInstance == null || SelectionInstance == null)
+            if (MutationInstances == null || MutationInstances.Count == 0 ||
+                CrossoverInstance == null || SelectionInstance == null)
             {
                 throw new InvalidOperationException("The Genetic algorithm parts (selection, mutation, crossover) " +
                                                     "are not correct initialized.");
             }
-
-            SelectionInstance.PopulationSize = PopulationSize;
         }
 
         /// <summary>

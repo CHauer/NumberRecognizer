@@ -67,6 +67,8 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
         /// <returns></returns>
         public IEnumerable<PatternRecognitionNetwork> ExecuteSelection(ConcurrentBag<PatternRecognitionNetwork> currentGeneration)
         {
+            PopulationSize = currentGeneration.Count;
+
             IEnumerable<PatternRecognitionNetwork> selectionNetworks =
                 currentGeneration.OrderByDescending(x => x.Fitness).Take(TruncationSelectionAbsolute).ToList();
 

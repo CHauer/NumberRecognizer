@@ -13,6 +13,7 @@ using Microsoft.Win32;
 using NumberRecognizer.Lib.DataManagement;
 using NumberRecognizer.Lib.Network;
 using NumberRecognizer.Lib.Training;
+using NumberRecognizer.Lib.Training.Contract;
 using NumberRecognizer.Lib.Training.GeneticOperator;
 
 namespace OcrTestApp
@@ -131,7 +132,8 @@ namespace OcrTestApp
 		{
             trainer = new NetworkTrainer(ImageHelper.ReadTrainingData(TrainingDataPath));
             trainer.CrossoverInstance = new UniformCrossover();
-            trainer.MutationInstance = new GaussMutation();
+            trainer.MutationInstances = new List<IMutation>() { new GaussMutation(){ 
+                , new UniformMutation() };
             trainer.SelectionInstance = new TruncationSelection()
             {
                 TruncationSelectionPercentage = 0.1
