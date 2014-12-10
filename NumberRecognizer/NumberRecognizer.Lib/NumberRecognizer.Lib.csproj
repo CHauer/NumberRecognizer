@@ -45,6 +45,8 @@
   <ItemGroup>
     <Compile Include="DataManagement\DataManager.cs" />
     <Compile Include="DataManagement\NetworkDataManager.cs" />
+    <Compile Include="Training\Events\GenerationChangedEventArgs.cs" />
+    <Compile Include="Training\Events\MultiplePoolGenerationChangedEventArgs.cs" />
     <Compile Include="Network\HiddenLayerType.cs" />
     <Compile Include="Network\HiddenNeuron.cs" />
     <Compile Include="Network\ICacheable.cs" />

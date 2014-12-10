@@ -47,7 +47,7 @@
   <Class Name="NumberRecognizer.Lib.Training.NetworkTrainer">
     <Position X="0.75" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAACAAAAAAAgAAAAAABBAgAAAAAAgAAAAEAAgAgAA=</HashCode>
+      <HashCode>AACAACAAAAAAAgAAAAAABBAgAAAAAAgAAAAEAAgAgAA=</HashCode>
       <FileName>Training\NetworkTrainer.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -122,7 +122,7 @@
   <Class Name="NumberRecognizer.Lib.Training.TrainingParameter">
     <Position X="3.5" Y="4.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>ASAAAAIAAQAABAAAAAAAYAABCAgAEiAQCAAAEAAAAAA=</HashCode>
+      <HashCode>ASAAAAIAAQAABAAAAAAAYAABCAgAEiAQCAAAEAAIAAA=</HashCode>
       <FileName>Training\TrainingParameter.cs</FileName>
     </TypeIdentifier>
   </Class>

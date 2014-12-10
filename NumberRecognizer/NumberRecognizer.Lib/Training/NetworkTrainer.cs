@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using NumberRecognizer.Lib.Network;
 using NumberRecognizer.Lib.Training.Contract;
+using NumberRecognizer.Lib.Training.Events;
 
 namespace NumberRecognizer.Lib.Training
 {
+    
     /// <summary>
     /// The genetic algorithm trainer class.
     /// Provides functionality to train a neuronal network with 
@@ -87,13 +89,18 @@ namespace NumberRecognizer.Lib.Training
         /// <summary>
         /// Occurs when the generation has changed.
         /// </summary>
-        public event Action<int, PatternRecognitionNetwork> GenerationChanged;
+        public event EventHandler<GenerationChangedEventArgs> GenerationChanged;
+
+        /// <summary>
+        /// Occurs when the generation has changed.
+        /// </summary>
+        public event EventHandler<MultipleGenPoolGenerationChangedEventArgs> MultipleGenPoolGenerationChanged;
 
         /// <summary>
         /// Occurs when a new "best" network is calculated.
         /// Occures on each generation change.
         /// </summary>
-        public event Action<PatternRecognitionNetwork> FittestNetworkChanged;
+        public event EventHandler<PatternRecognitionNetwork> FittestNetworkChanged;
 
         #endregion
 
@@ -178,21 +185,21 @@ namespace NumberRecognizer.Lib.Training
                 startPopulation = CreateInitialPopulationFromMultiplePools();
             }
 
-            //if startPopulation is null -> Single Pool with random initialized population
-            //else -> Mutiple GenPool Merge Start Population
+            //if startPopulation is null - Single Pool with random initialized population
+            //else - Mutiple GenPool Merge Start Population
             GenPool finalPool = new GenPool(TrainingData, TrainingParameter, startPopulation);
             
             //Event forwarding
-            finalPool.GenerationChanged += (i, bestNetwork) =>
+            finalPool.GenerationChanged += (sender, e) =>
             {
                 if (GenerationChanged != null)
                 {
-                    GenerationChanged(i, bestNetwork);
+                    GenerationChanged(this, e);
                 }
 
                 if (FittestNetworkChanged != null)
                 {
-                    FittestNetworkChanged(bestNetwork);
+                    FittestNetworkChanged(this, e.CurrentFittestNetwork);
                 }
             };
 
@@ -206,9 +213,44 @@ namespace NumberRecognizer.Lib.Training
             return finalPopulation.ToList();
         }
 
+        /// <summary>
+        /// Creates the initial population for final calculation from multiple calculated pools.
+        /// </summary>
+        /// <returns>A initial population merged from multiple gen pools.</returns>
         private ConcurrentBag<PatternRecognitionNetwork> CreateInitialPopulationFromMultiplePools()
         {
-            throw new NotImplementedException();
+            ConcurrentBag<PatternRecognitionNetwork> population = new ConcurrentBag<PatternRecognitionNetwork>();
+
+            for (int i = 0; i < TrainingParameter.MultipleGenPoolCount; i++)
+            {
+                GenPool multiplePool = new GenPool(TrainingData, TrainingParameter) { IsMultipleGenPool = true };
+
+                int multipleGenPoolIdentifier = i;
+
+                multiplePool.GenerationChanged += (sender, e) =>
+                {
+                    if (MultipleGenPoolGenerationChanged != null)
+                    {
+                        MultipleGenPoolGenerationChanged(this, new MultipleGenPoolGenerationChangedEventArgs(e, multipleGenPoolIdentifier));
+                    }
+
+                    if (FittestNetworkChanged != null)
+                    {
+                        FittestNetworkChanged(this, e.CurrentFittestNetwork);
+                    }
+                };
+
+                IList<PatternRecognitionNetwork> networks = multiplePool.CalculatePoolGenerations();
+
+                Parallel.ForEach(networks, individual => individual.CalculateFitness(TrainingData.ToList()));
+
+                networks.OrderByDescending(n => n.Fitness)
+                        .Take(TrainingParameter.MultipleGenPoolSelectionCount)
+                        .ToList()
+                        .ForEach(population.Add);
+            }
+
+            return population;
         }
 
     }
