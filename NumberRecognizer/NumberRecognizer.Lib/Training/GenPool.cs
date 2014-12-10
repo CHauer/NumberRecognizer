@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using NumberRecognizer.Lib.Network;
+using NumberRecognizer.Lib.Training.Events;
 
 namespace NumberRecognizer.Lib.Training
 {
@@ -115,7 +116,7 @@ namespace NumberRecognizer.Lib.Training
         /// <summary>
         /// Occurs when the generation has changed.
         /// </summary>
-        public event Action<int, PatternRecognitionNetwork> GenerationChanged;
+        public event EventHandler<GenerationChangedEventArgs> GenerationChanged;
 
         #endregion
 
@@ -169,7 +170,7 @@ namespace NumberRecognizer.Lib.Training
 
                 if (GenerationChanged != null)
                 {
-                    GenerationChanged(i, bestNetwork);
+                    GenerationChanged(this, new GenerationChangedEventArgs(i, bestNetwork));
                 }
 
                 ConcurrentBag<PatternRecognitionNetwork> newGeneration = new ConcurrentBag<PatternRecognitionNetwork>();

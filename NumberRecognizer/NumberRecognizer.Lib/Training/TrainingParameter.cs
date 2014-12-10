@@ -128,6 +128,15 @@ namespace NumberRecognizer.Lib.Training
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether elitism method is used.
+        /// Fittest Network survives without genetic mutation/recombiniation.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if use elitism; otherwise, <c>false</c>.
+        /// </value>
+        public bool UseElitism { get; set; }
+
+        /// <summary>
         /// Gets the width of the image.
         /// </summary>
         /// <value>

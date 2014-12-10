@@ -15,6 +15,7 @@ using NumberRecognizer.Lib.Network;
 using NumberRecognizer.Lib.Training;
 using NumberRecognizer.Lib.Training.Contract;
 using NumberRecognizer.Lib.Training.GeneticOperator;
+using NumberRecognizer.Lib.Training.Events;
 
 namespace OcrTestApp
 {
@@ -131,9 +132,9 @@ namespace OcrTestApp
 		private IEnumerable<PatternRecognitionNetwork> TrainNetwork()
 		{
             trainer = new NetworkTrainer(ImageHelper.ReadTrainingData(TrainingDataPath));
-           
-            trainer.GenerationChanged += NetworkTrainer_HandleGenerationChanged;
-            
+            trainer.TrainingParameter.GenPoolTrainingMode = GenPoolType.MultipleGenPool;
+
+            trainer.GenerationChanged += Trainer_GenerationChanged;
             return trainer.TrainNetwork();
 
             #region Not Used
@@ -222,15 +223,15 @@ namespace OcrTestApp
             #endregion
         }
 
-        private void NetworkTrainer_HandleGenerationChanged(int currentGeneration, PatternRecognitionNetwork bestNetwork)
+        private void Trainer_GenerationChanged(object sender, GenerationChangedEventArgs e)
         {
             // GUI Update
-            Dictionary<string, double> fitnessDetail = bestNetwork.GetFitnessDetail(trainer.TrainingData.ToList());
+            Dictionary<string, double> fitnessDetail = e.CurrentFittestNetwork.GetFitnessDetail(trainer.TrainingData.ToList());
 
             Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
             {
-                this.CurrentGenerationLabel.Content = currentGeneration;
-                this.CurrentFitnessLabel.Content = bestNetwork.Fitness.ToString("F8");
+                this.CurrentGenerationLabel.Content = e.Generation;
+                this.CurrentFitnessLabel.Content = e.CurrentFittestNetwork.Fitness.ToString("F8");
 
                 for (int j = 0; j < fitnessDetail.Count; j++)
                 {
