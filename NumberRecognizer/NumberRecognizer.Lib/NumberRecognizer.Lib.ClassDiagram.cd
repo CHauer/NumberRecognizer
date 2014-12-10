@@ -47,7 +47,7 @@
   <Class Name="NumberRecognizer.Lib.Training.NetworkTrainer">
     <Position X="0.75" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AACAACAAAAAAAgAAAAAABBAgAAAAAAgAAAAEAAgAgAA=</HashCode>
+      <HashCode>AAAAACAAAAAAAgAAAAAABBAgAAAAAQgAAAAEAAgAgAA=</HashCode>
       <FileName>Training\NetworkTrainer.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -133,6 +133,20 @@
       <FileName>Training\GeneticOperator\GaussMutation.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="NumberRecognizer.Lib.Training.Events.GenerationChangedEventArgs" Collapsed="true">
+    <Position X="16" Y="4.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <FileName>Training\Events\GenerationChangedEventArgs.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="NumberRecognizer.Lib.Training.Events.MultipleGenPoolGenerationChangedEventArgs" Collapsed="true">
+    <Position X="16" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Training\Events\MultiplePoolGenerationChangedEventArgs.cs</FileName>
+    </TypeIdentifier>
   </Class>
   <Interface Name="NumberRecognizer.Lib.Network.INeuron">
     <Position X="8.75" Y="0.5" Width="2" />

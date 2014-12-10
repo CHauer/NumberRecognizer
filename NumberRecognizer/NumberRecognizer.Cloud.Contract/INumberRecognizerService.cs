@@ -30,6 +30,16 @@ namespace NumberRecognizer.Cloud.Contract
         bool CreateNetwork(string name, IEnumerable<TrainingImage> individualTrainingsData);
 
         /// <summary>
+        /// Creates the network and copies the training data from a previous network.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="individualTrainingsData">The individual trainings data.</param>
+        /// <param name="copyTraindataFromNetworkId">The copy traindata from network identifier.</param>
+        /// <returns></returns>
+        [OperationContract]
+        bool CreateNetwork(string name, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId);
+
+        /// <summary>
         /// Deletes the network.
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
