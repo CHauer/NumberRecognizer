@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="NumberRecognizer.Lib.Network.InputNeuron" BaseTypeListCollapsed="true">
-    <Position X="10.75" Y="0.5" Width="1.5" />
+    <Position X="11.25" Y="0.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
       <FileName>Network\InputNeuron.cs</FileName>
@@ -9,7 +9,7 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.OutputNeuron" BaseTypeListCollapsed="true">
-    <Position X="10.75" Y="2.5" Width="1.5" />
+    <Position X="11.25" Y="5.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAACAAIAAAAAAAAAAAAAEAAEAAAAA=</HashCode>
       <FileName>Network\OutputNeuron.cs</FileName>
@@ -17,145 +17,160 @@
     <Lollipop Position="0.2" />
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.PatternRecognitionNetwork">
-    <Position X="4" Y="0.5" Width="2.25" />
+    <Position X="6.25" Y="0.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AgBgACACIAABgAABABAAAA4MAACEQgQAAwAAgAIAAAA=</HashCode>
+      <HashCode>AgBgACBCIAABgAABABAAAA4MAACEQgQAAwAAgAIAAAA=</HashCode>
       <FileName>Network\PatternRecognitionNetwork.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NumberRecognizer.Lib.Network.RecognitionResult">
-    <Position X="6.5" Y="3" Width="2" />
+  <Class Name="NumberRecognizer.Lib.Network.RecognitionResult" Collapsed="true">
+    <Position X="8.75" Y="5.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAgAAAAAIAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Network\RecognitionResult.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.TrainingImage">
-    <Position X="1" Y="6.5" Width="2.5" />
+    <Position X="0.75" Y="4.25" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAACAAAAAAA=</HashCode>
       <FileName>Network\TrainingImage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.WeightedLink">
-    <Position X="9" Y="5.25" Width="1.5" />
+    <Position X="8.75" Y="1.75" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAACAAAAAQAAAAAAAAAAA=</HashCode>
       <FileName>Network\WeightedLink.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Training.NetworkTrainer">
-    <Position X="1" Y="0.5" Width="2.5" />
+    <Position X="0.75" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AQAAAAAAAAAAAgAAAIACRBAgAAAAEAgAAAAEAAAAgAA=</HashCode>
+      <HashCode>AAAAACAAAAAAAgAAAAAABBAgAAAAAAgAAAAEAAgAgAA=</HashCode>
       <FileName>Training\NetworkTrainer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.HiddenNeuron">
-    <Position X="9" Y="2.5" Width="1.5" />
+    <Position X="11.25" Y="2.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAACAAIAAAAAAAAAAAAAEAAEAAAAA=</HashCode>
       <FileName>Network\HiddenNeuron.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="NumberRecognizer.Lib.Training.ThreadSafeRandom">
-    <Position X="6.5" Y="0.5" Width="2" />
+  <Class Name="NumberRecognizer.Lib.Training.ThreadSafeRandom" Collapsed="true">
+    <Position X="8.75" Y="5" Width="2" />
     <TypeIdentifier>
       <HashCode>AgEAAAAAAAAAAAAAAAAAAAAAEAAAAAAAQAAAAAAACAA=</HashCode>
       <FileName>Training\ThreadSafeRandom.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.DataManagement.NetworkDataManager">
-    <Position X="15" Y="2.5" Width="2" />
+    <Position X="16" Y="2.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>DataManagement\NetworkDataManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Training.GeneticOperator.OnePointCrossover" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="13" Y="1.5" Width="1.5" />
+    <Position X="13.75" Y="1.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
       <FileName>Training\GeneticOperator\OnePointCrossover.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="NumberRecognizer.Lib.Training.GeneticOperator.TruncationSelection" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="13" Y="3.5" Width="1.5" />
+    <Position X="13.75" Y="3.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAIAgAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAQAAAAA=</HashCode>
       <FileName>Training\GeneticOperator\TruncationSelection.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="NumberRecognizer.Lib.Training.GeneticOperator.UniformCrossover" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="13" Y="2.5" Width="1.5" />
+    <Position X="13.75" Y="2.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
       <FileName>Training\GeneticOperator\UniformCrossover.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="NumberRecognizer.Lib.Training.GeneticOperator.UniformMutation" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="13" Y="0.5" Width="1.5" />
+    <Position X="13.75" Y="0.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAQAAAAAA=</HashCode>
       <FileName>Training\GeneticOperator\UniformMutation.cs</FileName>
     </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
+    <Lollipop Position="0.2" />
   </Class>
   <Class Name="NumberRecognizer.Lib.DataManagement.DataManager&lt;T&gt;">
-    <Position X="15" Y="0.5" Width="2" />
+    <Position X="16" Y="0.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAgAAAAAAIAAAAAAAAAAAAgAAAAAAAAAAAAEAA=</HashCode>
       <FileName>DataManagement\DataManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Training.GenPool">
-    <Position X="6.5" Y="4.75" Width="2" />
+    <Position X="3.5" Y="0.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAIAAAAAIAAAAAAAAAAAAAAAAAAEAAAAAAAAABAAA=</HashCode>
+      <HashCode>AAAAAAACAAIAAgAAAIAABAJgAAAAAIAAAAAEAAAAAAA=</HashCode>
       <FileName>Training\GenPool.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Training.TrainingParameter">
-    <Position X="5" Y="7.5" Width="1.5" />
+    <Position X="3.5" Y="4.5" Width="2.5" />
     <TypeIdentifier>
-      <HashCode>AAAAIAAAACAABgAAAAAAIAAAAAgAAiAQAEAAAAAAAAA=</HashCode>
+      <HashCode>ASAAAAIAAQAABAAAAAAAYAABCAgAEiAQCAAAEAAAAAA=</HashCode>
       <FileName>Training\TrainingParameter.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="NumberRecognizer.Lib.Training.GeneticOperator.GaussMutation" Collapsed="true">
+    <Position X="13.75" Y="4.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAEAAAAAAAAAAAAAAAAAQAAAAAEAQAAAAAA=</HashCode>
+      <FileName>Training\GeneticOperator\GaussMutation.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
   <Interface Name="NumberRecognizer.Lib.Network.INeuron">
-    <Position X="9" Y="0.5" Width="1.5" />
+    <Position X="8.75" Y="0.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Network\INeuron.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="NumberRecognizer.Lib.Training.Contract.ICrossover" Collapsed="true">
-    <Position X="13" Y="4.5" Width="1.5" />
+    <Position X="13.75" Y="5.25" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAA=</HashCode>
       <FileName>Training\Contract\ICrossover.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="NumberRecognizer.Lib.Training.Contract.IMutation" Collapsed="true">
-    <Position X="13" Y="5.25" Width="1.5" />
+    <Position X="13.75" Y="6" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAA=</HashCode>
       <FileName>Training\Contract\IMutation.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Interface Name="NumberRecognizer.Lib.Training.Contract.ISelection" Collapsed="true">
-    <Position X="13" Y="6" Width="1.5" />
+    <Position X="13.75" Y="6.75" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAIAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Training\Contract\ISelection.cs</FileName>
     </TypeIdentifier>
   </Interface>
+  <Interface Name="NumberRecognizer.Lib.Network.ICacheable" Collapsed="true">
+    <Position X="8.75" Y="6.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Network\ICacheable.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
   <Enum Name="NumberRecognizer.Lib.Network.HiddenLayerType">
-    <Position X="10.75" Y="5.25" Width="1.5" />
+    <Position X="8.75" Y="3.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAQIAAAAAAAAAAAAAAAAAAAAAAAAAAQAAACAAAA=</HashCode>
       <FileName>Network\HiddenLayerType.cs</FileName>

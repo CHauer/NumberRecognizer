@@ -37,7 +37,6 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
         /// <summary>
         /// Executes the mutation.
         /// Simple random mutation - Uniform Mutation
-        /// TODO Uniform - only one Genone can be changed
         /// </summary>
         /// <param name="network">The network.</param>
         /// <returns></returns>

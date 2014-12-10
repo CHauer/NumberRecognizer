@@ -42,7 +42,7 @@ namespace NumberRecognizer.Lib.Training
         /// <exception cref="System.ArgumentOutOfRangeException">Wrong ImageHeight or Width of TrainingImage</exception>
         public NetworkTrainer(IEnumerable<TrainingImage> trainingData, TrainingParameter parameter)
         {
-            //parameter != null 
+            //parameter != null given parameters else standard parameters
             TrainingParameter = parameter ?? new TrainingParameter();
 
             if (trainingData != null)
@@ -63,30 +63,6 @@ namespace NumberRecognizer.Lib.Training
         /// The training parameter.
         /// </value>
         public TrainingParameter TrainingParameter { get; private set; }
-
-        /// <summary>
-        /// Gets or sets the mutation instance.
-        /// </summary>
-        /// <value>
-        /// The mutation instance.
-        /// </value>
-        public IList<IMutation> MutationInstances { get; set; }
-
-        /// <summary>
-        /// Gets or sets the selection instance.
-        /// </summary>
-        /// <value>
-        /// The selection instance.
-        /// </value>
-        public ISelection SelectionInstance { get; set; }
-
-        /// <summary>
-        /// Gets or sets the crossover instance.
-        /// </summary>
-        /// <value>
-        /// The crossover instance.
-        /// </value>
-        public ICrossover CrossoverInstance { get; set; }
 
         /// <summary>
         /// Gets the training data.
@@ -112,6 +88,12 @@ namespace NumberRecognizer.Lib.Training
         /// Occurs when the generation has changed.
         /// </summary>
         public event Action<int, PatternRecognitionNetwork> GenerationChanged;
+
+        /// <summary>
+        /// Occurs when a new "best" network is calculated.
+        /// Occures on each generation change.
+        /// </summary>
+        public event Action<PatternRecognitionNetwork> FittestNetworkChanged;
 
         #endregion
 
@@ -185,129 +167,49 @@ namespace NumberRecognizer.Lib.Training
         /// <returns></returns>
         public IEnumerable<PatternRecognitionNetwork> TrainNetwork()
         {
-            IList<string> patterns = null;
-            ConcurrentBag<PatternRecognitionNetwork> currentGeneration = null;
+            ConcurrentBag<PatternRecognitionNetwork> startPopulation = null;
+            IList<PatternRecognitionNetwork> finalPopulation = null;
 
             ValidateTrainingData(checkTrainDataExists:true);
-            CheckGeneticOperators();
+            TrainingParameter.CheckGeneticOperators();
 
-            patterns = TrainingData.Select(x => x.RepresentingInformation).Distinct().ToList();
-
-            if (TrainingParameter.GenPoolTrainingMode == GenPoolType.SingleGenPool)
+            if (TrainingParameter.GenPoolTrainingMode == GenPoolType.MultipleGenPool)
             {
-                currentGeneration = CreateInitialPopulation(patterns);
-            }
-            else
-            {
-                //TODO Temp change to multiple
-                currentGeneration = CreateInitialPopulation(patterns);
-                //currentGeneration = CreateInitialPopulationFromMultiplePools(patterns);
+                startPopulation = CreateInitialPopulationFromMultiplePools();
             }
 
-            for (int i = 0; i < TrainingParameter.MaxGenerations; i++)
+            //if startPopulation is null -> Single Pool with random initialized population
+            //else -> Mutiple GenPool Merge Start Population
+            GenPool finalPool = new GenPool(TrainingData, TrainingParameter, startPopulation);
+            
+            //Event forwarding
+            finalPool.GenerationChanged += (i, bestNetwork) =>
             {
-                // Calculate Fitness
-                Parallel.ForEach(currentGeneration, individual => individual.CalculateFitness(TrainingData.ToList()));
-
-                PatternRecognitionNetwork bestNetwork = currentGeneration.OrderByDescending(x => x.Fitness).First();
-
                 if (GenerationChanged != null)
                 {
                     GenerationChanged(i, bestNetwork);
                 }
 
-                ConcurrentBag<PatternRecognitionNetwork> newGeneration = new ConcurrentBag<PatternRecognitionNetwork>();
-
-                // Specify individuals for recombination (e.g. truncation selection)
-                IEnumerable<PatternRecognitionNetwork> selectionNetworks = SelectionInstance.ExecuteSelection(currentGeneration);
-
-                // recombination / crossover (e.g. uniform crossover)
-                IEnumerable<PatternRecognitionNetwork> recombinedNetworks = CrossoverInstance.ExecuteCrossover(selectionNetworks.ToList());
-
-                Parallel.For(0, TrainingParameter.PopulationSize, (int x) =>
+                if (FittestNetworkChanged != null)
                 {
-                    PatternRecognitionNetwork parentNetwork =
-                        recombinedNetworks.ToList().OrderBy(individual => Guid.NewGuid()).First();
+                    FittestNetworkChanged(bestNetwork);
+                }
+            };
 
-                    // Create children
-                    PatternRecognitionNetwork firstChild = new PatternRecognitionNetwork(TrainingParameter.ImageWidth, TrainingParameter.ImageHeight, patterns);
-
-                    // Copy weights
-                    firstChild.CopyGenomeWeights(parentNetwork);
-
-                    //Uniform Mutation
-                    firstChild = ChooseMutation(parentNetwork.Fitness).ExecuteMutation(firstChild);
-                    
-                    // Add new children
-                    newGeneration.Add(firstChild);
-                });
-
-                currentGeneration = newGeneration;
-            }
+            finalPopulation = finalPool.CalculatePoolGenerations();
 
             // Calculate Fitness
-            Parallel.ForEach(currentGeneration, individual => individual.CalculateFitness(TrainingData.ToList()));
+            Parallel.ForEach(finalPopulation, individual => individual.CalculateFitness(TrainingData.ToList()));
 
-            ResultNetwork = currentGeneration.OrderBy(x => x.Fitness).First();
+            ResultNetwork = finalPopulation.OrderBy(x => x.Fitness).First();
 
-            return currentGeneration.ToList();
+            return finalPopulation.ToList();
         }
 
-        /// <summary>
-        /// Chooses the mutation instance based on the current network fitness.
-        /// Search for the instances where the fitness is greater than the minNetworkFitness 
-        /// of the instance and take the instance with the maximun minNetworkFitness.
-        /// </summary>
-        /// <param name="networkFitness">The network fitness.</param>
-        /// <returns></returns>
-        private IMutation ChooseMutation(double networkFitness)
+        private ConcurrentBag<PatternRecognitionNetwork> CreateInitialPopulationFromMultiplePools()
         {
-            return MutationInstances.Where(mi => networkFitness > mi.MinNetworkFitness)
-                                    .OrderByDescending(mi => mi.MinNetworkFitness)
-                                    .First();
+            throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Initializes the genetic operators.
-        /// </summary>
-        /// <exception cref="System.InvalidOperationException">The Genetic algorithm parts (selection, mutation, crossover)  +
-        ///                                                     are not correct initialized.</exception>
-        private void CheckGeneticOperators()
-        {
-            if (MutationInstances == null || MutationInstances.Count == 0 ||
-                CrossoverInstance == null || SelectionInstance == null)
-            {
-                throw new InvalidOperationException("The Genetic algorithm parts (selection, mutation, crossover) " +
-                                                    "are not correct initialized.");
-            }
-        }
-
-        /// <summary>
-        /// Creates the initial population.
-        /// </summary>
-        /// <param name="patterns">The patterns.</param>
-        /// <returns></returns>
-        private ConcurrentBag<PatternRecognitionNetwork> CreateInitialPopulation(IEnumerable<string> patterns)
-        {
-            ConcurrentBag<PatternRecognitionNetwork> currentGeneration =
-                new ConcurrentBag<PatternRecognitionNetwork>(new List<PatternRecognitionNetwork>());
-
-            if (currentGeneration.Count == 0)
-            {
-                Parallel.For(0, PopulationSize, (int i) =>
-                {
-                    ThreadSafeRandom random = new ThreadSafeRandom();
-
-                    PatternRecognitionNetwork patternRecognitionNetwork = new PatternRecognitionNetwork(ImageWidth, ImageHeight,
-                        patterns);
-                    patternRecognitionNetwork.Genomes.ForEach(x => x.Weight = (2*random.NextDouble()) - 1);
-
-                    // ReSharper disable once AccessToModifiedClosure
-                    currentGeneration.Add(patternRecognitionNetwork);
-                });
-            }
-
-            return currentGeneration;
-        }
     }
 }
