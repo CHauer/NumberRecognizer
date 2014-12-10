@@ -53,6 +53,7 @@
           <Property Name="TrainLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Network" Relationship="NetworkDataModel.NetworkTrainLog" FromRole="TrainLog" ToRole="Network" />
           <Property Name="GenerationNr" Type="Int32" Nullable="false" />
+          <Property Name="MultipleGenPoolIdentifier" Type="String" Nullable="false" />
           <Property Name="Fitness" Type="Double" Nullable="false" />
           <Property Name="PatternFitness0" Type="Double" Nullable="false" />
           <Property Name="PatternFitness1" Type="Double" Nullable="false" />

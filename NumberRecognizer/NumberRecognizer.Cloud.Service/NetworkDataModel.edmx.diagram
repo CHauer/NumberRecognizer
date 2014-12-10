@@ -7,7 +7,7 @@
       <Diagram DiagramId="61f13d22efc74bce8f7be903c7bb4850" Name="NetworkDiagramm" >
         <EntityTypeShape EntityType="NetworkDataModel.Network" Width="2" PointX="1.75" PointY="1.25" />
         <EntityTypeShape EntityType="NetworkDataModel.TrainingImage" Width="2.125" PointX="5.5" PointY="1.25" />
-        <EntityTypeShape EntityType="NetworkDataModel.TrainLog" Width="2" PointX="1.75" PointY="4.75" />
+        <EntityTypeShape EntityType="NetworkDataModel.TrainLog" Width="2.25" PointX="1.75" PointY="4.625" />
         <AssociationConnector Association="NetworkDataModel.NetworkTrainingImage" />
         <AssociationConnector Association="NetworkDataModel.NetworkTrainLog" />
       </Diagram>
