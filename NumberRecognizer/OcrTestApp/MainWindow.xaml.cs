@@ -131,14 +131,7 @@ namespace OcrTestApp
 		private IEnumerable<PatternRecognitionNetwork> TrainNetwork()
 		{
             trainer = new NetworkTrainer(ImageHelper.ReadTrainingData(TrainingDataPath));
-            trainer.CrossoverInstance = new UniformCrossover();
-            trainer.MutationInstances = new List<IMutation>() { new GaussMutation(){ 
-                , new UniformMutation() };
-            trainer.SelectionInstance = new TruncationSelection()
-            {
-                TruncationSelectionPercentage = 0.1
-            };
-
+           
             trainer.GenerationChanged += NetworkTrainer_HandleGenerationChanged;
             
             return trainer.TrainNetwork();
