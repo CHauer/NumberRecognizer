@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="61f13d22efc74bce8f7be903c7bb4850" Name="NetworkDiagramm" >
+        <EntityTypeShape EntityType="NetworkDataModel.Network" Width="2" PointX="1.75" PointY="1.25" />
+        <EntityTypeShape EntityType="NetworkDataModel.TrainingImageData" Width="2.125" PointX="5.5" PointY="1.25" />
+        <EntityTypeShape EntityType="NetworkDataModel.TrainLog" Width="2.25" PointX="1.75" PointY="5.375" />
+        <AssociationConnector Association="NetworkDataModel.NetworkTrainingImage" />
+        <AssociationConnector Association="NetworkDataModel.NetworkTrainLog" />
+        <EntityTypeShape EntityType="NetworkDataModel.PatternFitness" Width="1.5" PointX="6" PointY="5.25" />
+        <AssociationConnector Association="NetworkDataModel.TrainLogPatternFitness" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
