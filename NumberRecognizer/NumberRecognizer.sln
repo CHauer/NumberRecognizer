@@ -23,9 +23,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Worker", "NumberRecognizer.Cloud.Worker\NumberRecognizer.Cloud.Worker.csproj", "{A30B1F52-719D-4F66-BB4A-0D0E38002EC9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizerCloud.Data", "NumberRecognizerCloud.Data\NumberRecognizerCloud.Data.csproj", "{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 8
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://hauersoftwarenet.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -56,6 +58,10 @@ Global
 		SccProjectTopLevelParentUniqueName7 = NumberRecognizer.sln
 		SccProjectName7 = NumberRecognizer.Cloud.Worker
 		SccLocalPath7 = NumberRecognizer.Cloud.Worker
+		SccProjectUniqueName8 = NumberRecognizerCloud.Data\\NumberRecognizerCloud.Data.csproj
+		SccProjectTopLevelParentUniqueName8 = NumberRecognizer.sln
+		SccProjectName8 = NumberRecognizerCloud.Data
+		SccLocalPath8 = NumberRecognizerCloud.Data
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,6 +96,10 @@ Global
 		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -102,5 +112,6 @@ Global
 		{8A392933-8119-4F02-80FA-CFAFD9F155D2} = {D4C723FC-550D-4777-8559-165FFC379049}
 		{A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279} = {D4C723FC-550D-4777-8559-165FFC379049}
 		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9} = {D4C723FC-550D-4777-8559-165FFC379049}
+		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F} = {D4C723FC-550D-4777-8559-165FFC379049}
 	EndGlobalSection
 EndGlobal
