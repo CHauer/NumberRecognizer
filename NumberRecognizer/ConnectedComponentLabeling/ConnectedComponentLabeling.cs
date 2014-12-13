@@ -5,11 +5,10 @@
 // <author>Markus Zytek</author>
 // <summary>Connected Component Labeling with Two-Pass Algorithm.</summary>
 //-----------------------------------------------------------------------
-namespace NumberRecognizer.ConnectedComponentLabeling
+namespace NumberRecognizer.Labeling
 {
     using System;
     using System.Collections.Generic;
-    using Windows.Foundation;
 
     /// <summary>
     /// Connected Component Labeling with Two-Pass Algorithm.
@@ -32,14 +31,9 @@ namespace NumberRecognizer.ConnectedComponentLabeling
         private int nextRegion = 1;
 
         /// <summary>
-        /// The label statistics.
+        /// The connected components.
         /// </summary>
-        private Dictionary<int, List<Point>> statistics;
-
-        /// <summary>
-        /// The minimum bounding rectangles.
-        /// </summary>
-        private Dictionary<int, MinimumBoundingRectangle> minimumBoundingRectangles;
+        private List<ConnectedComponent> connectedComponents = new List<ConnectedComponent>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ConnectedComponentLabeling" /> class.
@@ -115,8 +109,7 @@ namespace NumberRecognizer.ConnectedComponentLabeling
                 }
             }
 
-            /* LABEL STATISTICS */
-            this.statistics = new Dictionary<int, List<Point>>();
+            /* CONNECTED COMPONENTES */
             for (int y = 0; y < height; y++)
             {
                 for (int x = 0; x < width; x++)
@@ -124,33 +117,15 @@ namespace NumberRecognizer.ConnectedComponentLabeling
                     int label = this.labeled[y, x];
                     if (label != background)
                     {
-                        if (!this.statistics.ContainsKey(label))
+                        if (!this.connectedComponents.Exists(p => p.Label == label))
                         {
-                            this.statistics.Add(label, new List<Point>());
+                            this.connectedComponents.Add(new ConnectedComponent(label));
                         }
 
-                        this.statistics[label].Add(new Point(x, y));
+                        this.connectedComponents.Find(p => p.Label == label).Points.Add(new LabelingPoint(x, y));
                     }
                 }
             }
-
-            /* MINIMUM BOUNDING RECTANGLES */
-            this.minimumBoundingRectangles = new Dictionary<int, MinimumBoundingRectangle>();
-            foreach (KeyValuePair<int, List<Point>> label in this.statistics)
-            {
-                this.minimumBoundingRectangles.Add(label.Key, new MinimumBoundingRectangle(label.Value));
-            }
-        }
-
-        /// <summary>
-        /// Gets the minimum bounding rectangles.
-        /// </summary>
-        /// <value>
-        /// The minimum bounding rectangles.
-        /// </value>
-        public Dictionary<int, MinimumBoundingRectangle> MinimumBoundingRectangles
-        {
-            get { return this.minimumBoundingRectangles; }
         }
 
         /// <summary>
@@ -165,17 +140,14 @@ namespace NumberRecognizer.ConnectedComponentLabeling
         }
 
         /// <summary>
-        /// Gets the label count.
+        /// Gets the connected components.
         /// </summary>
         /// <value>
-        /// The label count.
+        /// The connected components.
         /// </value>
-        public int Count
+        public List<ConnectedComponent> ConnectedComponents
         {
-            get
-            {
-                return this.statistics.Count;
-            }
+            get { return this.connectedComponents; }
         }
 
         /// <summary>

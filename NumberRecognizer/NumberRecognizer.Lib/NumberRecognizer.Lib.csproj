@@ -43,8 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataManagement\DataManager.cs" />
-    <Compile Include="DataManagement\NetworkDataManager.cs" />
+    <Compile Include="DataManagement\DataSerializer.cs" />
+    <Compile Include="DataManagement\NetworkDataSerializer.cs" />
     <Compile Include="Training\Events\GenerationChangedEventArgs.cs" />
     <Compile Include="Training\Events\MultiplePoolGenerationChangedEventArgs.cs" />
     <Compile Include="Network\HiddenLayerType.cs" />

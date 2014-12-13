@@ -11,16 +11,16 @@ using NumberRecognizer.Lib.Network;
 namespace NumberRecognizer.Lib.DataManagement
 {
     /// <summary>
-    /// The NetworkDataManager Class provides
+    /// The NetworkDataSerializer Class provides
     /// functionalty to Save/Load a Network to/from file
     /// and Serialize a network to/from a byte array of data.
     /// </summary>
-    public class NetworkDataManager : DataManager<PatternRecognitionNetwork>
+    public class NetworkDataSerializer : DataSerializer<PatternRecognitionNetwork>
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="NetworkDataManager"/> class.
+        /// Initializes a new instance of the <see cref="NetworkDataSerializer"/> class.
         /// </summary>
-        public NetworkDataManager()
+        public NetworkDataSerializer()
         {
         }
 

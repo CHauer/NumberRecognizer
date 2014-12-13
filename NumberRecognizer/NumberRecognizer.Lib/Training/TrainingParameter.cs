@@ -37,8 +37,8 @@ namespace NumberRecognizer.Lib.Training
             MultipleGenPoolMaxGenerations = 50;
             MultipleGenPoolPopulationSize = 100;
 
-            ImageWidth = 16;
-            ImageHeight = 16;
+            ImageWidth = 20;
+            ImageHeight = 20;
         }
 
         /// <summary>

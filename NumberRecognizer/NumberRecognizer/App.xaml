@@ -1,4 +1,4 @@
-<Application x:Class="NumberRecognizer.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"	xmlns:local="using:NumberRecognizer"	xmlns:localData="using:NumberRecognizer.Data">
+<Application x:Class="NumberRecognizer.App.App" xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"	xmlns:local="using:NumberRecognizer"	xmlns:localData="using:NumberRecognizer.Data">
 
     <Application.Resources>
 

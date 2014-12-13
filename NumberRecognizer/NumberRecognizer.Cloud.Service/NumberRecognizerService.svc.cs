@@ -66,22 +66,31 @@ namespace NumberRecognizer.Cloud.Service
         /// <summary>
         /// Gets the networks.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A list of current available networks.</returns>
         public IList<NetworkInfo> GetNetworks()
         {
             using (var db = new NetworkDataModelContainer())
             {
                 var networks = db.NetworkSet.Select(network => new NetworkInfo()
                 {
-                    Calculated = network.Calculated == CalculationType.Ready ? true : false,
+                    Calculated = network.Calculated == CalculationType.Ready,
                     NetworkFitness = network.Fitness,
                     NetworkId = network.NetworkId,
                     NetworkName = network.NetworkName,
-                    CalculationStart = network.CalculationStart,
-                    CalculationEnd = network.CalculationEnd,
-                    FinalPoolFitnessLog = GetFitnessLog(network.NetworkId, null),
-                    MultiplePoolFitnessLog = GetMultiplePoolFitnessLog(network.NetworkId)
+                    Username = network.Username,
+                    CalculationStart = network.CalculationStart.HasValue ? network.CalculationStart : null,
+                    CalculationEnd = network.CalculationEnd.HasValue ? network.CalculationEnd : null,
+
                 });
+
+                foreach (var network in networks)
+                {
+                    if (network.Calculated)
+                    {
+                        network.FinalPoolFitnessLog = GetFitnessLog(network.NetworkId, null, db);
+                        network.MultiplePoolFitnessLog = GetMultiplePoolFitnessLog(network.NetworkId, db);
+                    }
+                }
 
                 return networks.ToList();
             }
@@ -90,105 +99,37 @@ namespace NumberRecognizer.Cloud.Service
         }
 
         /// <summary>
-        /// Gets the multiple pool fitness log.
-        /// </summary>
-        /// <param name="networkId">The network identifier.</param>
-        /// <returns></returns>
-        private Dictionary<string, FitnessLog> GetMultiplePoolFitnessLog(int networkId)
-        {
-            Dictionary<string, FitnessLog> poolLogs = new Dictionary<string, FitnessLog>();
-
-            using (var db = new NetworkDataModelContainer())
-            {
-                var network = db.NetworkSet.First(n => n.NetworkId == networkId);
-                var pools = network.TrainLogs.Select(tl => tl.MultipleGenPoolIdentifier).Distinct();
-
-                foreach (string poolId in pools)
-                {
-                    poolLogs.Add(poolId, GetFitnessLog(networkId, poolId));
-                }
-            }
-
-            return poolLogs;
-        }
-
-        /// <summary>
-        /// Gets the fitness log.
-        /// </summary>
-        /// <param name="networkId">The network identifier.</param>
-        /// <param name="poolId">The pool identifier.</param>
-        /// <returns></returns>
-        private FitnessLog GetFitnessLog(int networkId, string poolId)
-        {
-            using (var db = new NetworkDataModelContainer())
-            {
-                var network = db.NetworkSet.First(n => n.NetworkId == networkId);
-                var maxGeneration = network.TrainLogs
-                                           .Where(tl => tl.MultipleGenPoolIdentifier.Equals(poolId))
-                                           .Max(n => n.GenerationNr);
-
-                List<string> patterns = network.TrainLogs.First()
-                                               .PatternFitnessSet
-                                               .Select(p => p.Pattern)
-                                               .Distinct()
-                                               .ToList();
-
-                return new FitnessLog()
-                {
-                    FitnessTrend = network.TrainLogs
-                        .Where(tl => tl.MultipleGenPoolIdentifier.Equals(poolId))
-                        .OrderBy(tl => tl.GenerationNr)
-                        .Select(tl => tl.Fitness)
-                        .ToList<double>(),
-
-                    FinalPatternFittness = network.TrainLogs
-                        .First(tl => tl.MultipleGenPoolIdentifier.Equals(poolId)
-                                        && tl.GenerationNr == maxGeneration)
-                        .PatternFitnessSet.ToDictionary(i => i.Pattern, i => i.Fitness),
-
-
-                    PatternTrends = patterns.ToDictionary(key => key, 
-                        value => db.PatternFitnessSet
-                                .Where(p => p.TrainLog.Network.NetworkId == networkId 
-                                    && p.TrainLog.MultipleGenPoolIdentifier.Equals(poolId)
-                                    && p.Pattern.Equals(value))
-                                .OrderBy(i => i.TrainLog.GenerationNr)
-                                .Select(i => i.Fitness)
-                                .ToList<double>())
-                };
-            }
-        }
-
-        /// <summary>
         /// Creates the network.
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="networkName">Name of the network.</param>
+        /// <param name="username">The username.</param>
         /// <param name="individualTrainingsData">The individual trainings data.</param>
         /// <returns></returns>
-        public bool CreateNetwork(string name, IEnumerable<TrainingImage> individualTrainingsData)
+        public bool CreateNetwork(string networkName, string username,  IEnumerable<TrainingImage> individualTrainingsData)
         {
             bool status = true;
-            DataManager<double[,]> serializer = new DataManager<double[,]>();
+            DataSerializer<double[,]> serializer = new DataSerializer<double[,]>();
             int networkId = -1; 
 
             using (var db = new NetworkDataModelContainer())
             {
                 var newNetwork = db.NetworkSet.Add(new Network()
                 {
-                    NetworkName = name,
+                    NetworkName = networkName,
+                    Username = username,
                     TrainingImages = new List<TrainingImageData>(),
                     Calculated = CalculationType.NotStarted
                 });
 
                 networkId = newNetwork.NetworkId;
 
-                var newTrainigData = individualTrainingsData.Select(
-                data => new TrainingImageData()
+                var newTrainigData = new List<TrainingImageData>();
+                individualTrainingsData.ToList().ForEach(data => newTrainigData.Add(new TrainingImageData()
                 {
                     Pattern = data.Pattern,
                     ImageData = serializer.TransformToBinary(data.TransformTo2DArrayFromImageData()),
                     Network = newNetwork
-                });
+                }));
 
                 db.TrainingImageDataSet.AddRange(newTrainigData);
 
@@ -219,9 +160,71 @@ namespace NumberRecognizer.Cloud.Service
             return status;
         }
 
-        public bool CreateNetworkWithTrainingDataCopy(string name, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId)
+        /// <summary>
+        /// Creates the network and copies the training data from a previous network.
+        /// </summary>
+        /// <param name="networkName">Name of the network.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="individualTrainingsData">The individual trainings data.</param>
+        /// <param name="copyTraindataFromNetworkId">The copy traindata from network identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.NotImplementedException"></exception>
+        public bool CreateNetworkWithTrainingDataCopy(string networkName, string username, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId)
         {
-            throw new NotImplementedException();
+            bool status = true;
+            DataSerializer<double[,]> serializer = new DataSerializer<double[,]>();
+            int networkId = -1;
+
+            using (var db = new NetworkDataModelContainer())
+            {
+                var newNetwork = db.NetworkSet.Add(new Network()
+                {
+                    NetworkName = networkName,
+                    Username = username,
+                    TrainingImages = new List<TrainingImageData>(),
+                    Calculated = CalculationType.NotStarted
+                });
+
+                var copyNetwork = db.NetworkSet.First(n => n.NetworkId == copyTraindataFromNetworkId);
+
+                networkId = newNetwork.NetworkId;
+
+                var newTrainigData = new List<TrainingImageData>();
+                individualTrainingsData.ToList().ForEach(data => newTrainigData.Add(new TrainingImageData()
+                {
+                    Pattern = data.Pattern,
+                    ImageData = serializer.TransformToBinary(data.TransformTo2DArrayFromImageData()),
+                    Network = newNetwork
+                }));
+
+                db.TrainingImageDataSet.AddRange(newTrainigData);
+                db.TrainingImageDataSet.AddRange(copyNetwork.TrainingImages);
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
+                    status = false;
+                }
+            }
+
+            BrokeredMessage msg = new BrokeredMessage("training");
+            msg.Properties["networkId"] = networkId;
+
+            try
+            {
+                queueClient.Send(msg);
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+                status = false;
+            }
+
+            return status;
         }
 
         /// <summary>
@@ -261,7 +264,7 @@ namespace NumberRecognizer.Cloud.Service
         /// <returns></returns>
         public NumberRecognitionResult RecognizePhoneNumber(int networkId, IList<RecognitionImage> imageData)
         {
-            NetworkDataManager dataManager = new NetworkDataManager();
+            NetworkDataSerializer dataSerializer = new NetworkDataSerializer();
             PatternRecognitionNetwork network;
             StringBuilder numberBuilder = new StringBuilder();
             NumberRecognitionResult result = new NumberRecognitionResult
@@ -273,7 +276,7 @@ namespace NumberRecognizer.Cloud.Service
             {
                 var networkFromDb = db.NetworkSet.First(n => n.NetworkId == networkId);
 
-                network = dataManager.TransformFromBinary(networkFromDb.NetworkData);
+                network = dataSerializer.TransformFromBinary(networkFromDb.NetworkData);
             }
 
             foreach (RecognitionImage image in imageData)
@@ -292,6 +295,82 @@ namespace NumberRecognizer.Cloud.Service
             result.Number = numberBuilder.ToString();
 
             return result;
+        }
+
+        /// <summary>
+        /// Gets the multiple pool fitness log.
+        /// </summary>
+        /// <param name="networkId">The network identifier.</param>
+        /// <returns></returns>
+        private Dictionary<string, FitnessLog> GetMultiplePoolFitnessLog(int networkId, NetworkDataModelContainer db)
+        {
+            Dictionary<string, FitnessLog> poolLogs = new Dictionary<string, FitnessLog>();
+
+            var network = db.NetworkSet.First(n => n.NetworkId == networkId);
+
+            if (network.TrainLogs.Count == 0)
+            {
+                return null;
+            }
+
+            var pools = network.TrainLogs.Select(tl => tl.MultipleGenPoolIdentifier).Distinct();
+
+            foreach (string poolId in pools)
+            {
+                poolLogs.Add(poolId, GetFitnessLog(networkId, poolId, db));
+            }
+
+            return poolLogs;
+        }
+
+        /// <summary>
+        /// Gets the fitness log.
+        /// </summary>
+        /// <param name="networkId">The network identifier.</param>
+        /// <param name="poolId">The pool identifier.</param>
+        /// <returns></returns>
+        private FitnessLog GetFitnessLog(int networkId, string poolId, NetworkDataModelContainer db)
+        {
+            var network = db.NetworkSet.First(n => n.NetworkId == networkId);
+
+            if (network.TrainLogs.Count == 0)
+            {
+                return null;
+            }
+
+            var maxGeneration = network.TrainLogs
+                                       .Where(tl => tl.MultipleGenPoolIdentifier.Equals(poolId))
+                                       .Max(n => n.GenerationNr);
+
+            List<string> patterns = network.TrainLogs.First()
+                                           .PatternFitnessSet
+                                           .Select(p => p.Pattern)
+                                           .Distinct()
+                                           .ToList();
+
+            return new FitnessLog()
+            {
+                FitnessTrend = network.TrainLogs
+                    .Where(tl => tl.MultipleGenPoolIdentifier.Equals(poolId))
+                    .OrderBy(tl => tl.GenerationNr)
+                    .Select(tl => tl.Fitness)
+                    .ToList<double>(),
+
+                FinalPatternFittness = network.TrainLogs
+                    .First(tl => tl.MultipleGenPoolIdentifier.Equals(poolId)
+                                    && tl.GenerationNr == maxGeneration)
+                    .PatternFitnessSet.ToDictionary(i => i.Pattern, i => i.Fitness),
+
+
+                PatternTrends = patterns.ToDictionary(key => key,
+                    value => db.PatternFitnessSet
+                            .Where(p => p.TrainLog.Network.NetworkId == networkId
+                                && p.TrainLog.MultipleGenPoolIdentifier.Equals(poolId)
+                                && p.Pattern.Equals(value))
+                            .OrderBy(i => i.TrainLog.GenerationNr)
+                            .Select(i => i.Fitness)
+                            .ToList<double>())
+            };
         }
     }
 }

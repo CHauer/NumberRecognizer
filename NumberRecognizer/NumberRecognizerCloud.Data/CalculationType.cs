@@ -15,6 +15,7 @@ namespace NumberRecognizer.Cloud.Data
     {
         NotStarted = 1,
         Running = 2,
-        Ready = 4
+        Ready = 4,
+        Error = 8
     }
 }

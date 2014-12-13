@@ -5,76 +5,37 @@
 // <author>Markus Zytek</author>
 // <summary>Minimum Bounding Rectangle.</summary>
 //-----------------------------------------------------------------------
-namespace NumberRecognizer.ConnectedComponentLabeling
+namespace NumberRecognizer.Labeling
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using Windows.Foundation;
-
+    
     /// <summary>
     /// Minimum Bounding Rectangle.
     /// </summary>
     public class MinimumBoundingRectangle
     {
         /// <summary>
-        /// The top most y-coordinate.
-        /// </summary>
-        private double top;
-
-        /// <summary>
-        /// The left most x-coordinate.
-        /// </summary>
-        private double left;
-
-        /// <summary>
-        /// The right most x-coordinate.
-        /// </summary>
-        private double right;
-
-        /// <summary>
-        /// The bottom most y-coordinate.
-        /// </summary>
-        private double bottom;
-
-        /// <summary>
-        /// The points.
-        /// </summary>
-        private List<Point> points;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="MinimumBoundingRectangle"/> class.
         /// </summary>
         /// <param name="points">The points.</param>
-        public MinimumBoundingRectangle(List<Point> points)
+        public MinimumBoundingRectangle(List<LabelingPoint> points)
         {
-            this.points = points;
-            this.left = points.Min(p => p.X);
-            this.right = points.Max(p => p.X);
-            this.top = points.Min(p => p.Y);
-            this.bottom = points.Max(p => p.Y);
-        }
-
-        /// <summary>
-        /// Gets the points.
-        /// </summary>
-        /// <value>
-        /// The points.
-        /// </value>
-        public List<Point> Points
-        {
-            get { return this.points; }
+            this.Left = points.Min(p => p.X);
+            this.Top = points.Min(p => p.Y);
+            this.Width = points.Max(p => p.X) - this.Left;
+            this.Height = points.Max(p => p.Y) - this.Top;
+            this.Size = Math.Max(this.Width, this.Height);
         }
 
         /// <summary>
         /// Gets the top.
         /// </summary>
         /// <value>
-        /// The top most x-coordinate.
+        /// The top most y-coordinate.
         /// </value>
-        public double Top
-        {
-            get { return this.top; }
-        }
+        public double Top { get; private set; }
 
         /// <summary>
         /// Gets the left.
@@ -84,7 +45,8 @@ namespace NumberRecognizer.ConnectedComponentLabeling
         /// </value>
         public double Left
         {
-            get { return this.left; }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -95,7 +57,8 @@ namespace NumberRecognizer.ConnectedComponentLabeling
         /// </value>
         public double Width
         {
-            get { return this.right - this.left; }
+            get;
+            private set;
         }
 
         /// <summary>
@@ -106,7 +69,48 @@ namespace NumberRecognizer.ConnectedComponentLabeling
         /// </value>
         public double Height
         {
-            get { return this.bottom - this.top; }
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the size.
+        /// </summary>
+        /// <value>
+        /// The size max(width, height).
+        /// </value>
+        public double Size
+        {
+            get;
+            private set;
+        }
+
+        /// <summary>
+        /// Gets the padding left.
+        /// </summary>
+        /// <value>
+        /// The padding left.
+        /// </value>
+        public double PadLeft
+        {
+            get
+            {
+                return Math.Floor((this.Size - this.Width) / 2);
+            }
+        }
+
+        /// <summary>
+        /// Gets the padding top.
+        /// </summary>
+        /// <value>
+        /// The padding top.
+        /// </value>
+        public double PadTop
+        {
+            get
+            {
+                return Math.Floor((this.Size - this.Height) / 2);
+            }
         }
     }
 }

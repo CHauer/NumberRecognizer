@@ -7,8 +7,8 @@
     <ProjectGuid>{66AEAAD7-23AC-4E2D-8DF6-4142464F719B}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NumberRecognizer</RootNamespace>
-    <AssemblyName>NumberRecognizer</AssemblyName>
+    <RootNamespace>NumberRecognizer.App</RootNamespace>
+    <AssemblyName>NumberRecognizer.App</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <TargetPlatformVersion>8.1</TargetPlatformVersion>
     <MinimumVisualStudioVersion>12</MinimumVisualStudioVersion>
@@ -111,18 +111,33 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ItemsPage.xaml.cs">
-      <DependentUpon>ItemsPage.xaml</DependentUpon>
+    <Compile Include="Control\InkCanvasRT.cs" />
+    <Compile Include="DataModel\NetworkDataGroup.cs" />
+    <Compile Include="Help\ImageHelperRT.cs" />
+    <Compile Include="Service References\NumberRecognizerService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
-    <Compile Include="SplitPage.xaml.cs">
-      <DependentUpon>SplitPage.xaml</DependentUpon>
+    <Compile Include="ViewModel\GroupedNetworksDesignViewModel.cs" />
+    <Compile Include="ViewModel\GroupedNetworksViewModel.cs" />
+    <Compile Include="View\NetworkDetailPage.xaml.cs">
+      <DependentUpon>NetworkDetailPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="DataModel\SampleDataSource.cs" />
     <Compile Include="Common\RelayCommand.cs" />
     <Compile Include="Common\ObservableDictionary.cs" />
     <Compile Include="Common\NavigationHelper.cs" />
     <Compile Include="Common\SuspensionManager.cs" />
+    <Compile Include="View\CreateNetworkPage.xaml.cs">
+      <DependentUpon>CreateNetworkPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GroupDetailPage.xaml.cs">
+      <DependentUpon>GroupDetailPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\GroupedNetworksPage.xaml.cs">
+      <DependentUpon>GroupedNetworksPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -131,8 +146,10 @@
     <None Include="ApplicationInsights.config" />
     <None Include="Common\ReadMe.txt" />
     <None Include="NumberRecognizer_TemporaryKey.pfx" />
-    <Content Include="DataModel\SampleData.json" />
     <None Include="packages.config" />
+    <None Include="Properties\DataSources\NumberRecognizer.Cloud.Contract.Data.NetworkInfo.datasource" />
+    <None Include="Properties\DataSources\NumberRecognizer.Cloud.Contract.Data.NumberRecognitionResult.datasource" />
+    <None Include="Properties\ServiceReferences.Designer.ClientConfig" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Logo.scale-100.png" />
@@ -142,17 +159,45 @@
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />
     <Content Include="Assets\DarkGray.png" />
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService1.disco" />
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService1.wsdl" />
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService4.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService41.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService42.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService43.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\NumberRecognizerService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+    <None Include="Service References\NumberRecognizerService\configuration.svcinfo" />
+    <None Include="Service References\NumberRecognizerService\configuration91.svcinfo" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="ItemsPage.xaml">
+    <Page Include="View\NetworkDetailPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="SplitPage.xaml">
+    <Page Include="View\CreateNetworkPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\GroupDetailPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\GroupedNetworksPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -181,8 +226,20 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModel\" />
-    <Folder Include="View\" />
+    <WCFMetadataStorage Include="Service References\NumberRecognizerService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ConnectedComponentLabeling\NumberRecognizer.Labeling.csproj">
+      <Project>{73dab28e-ec91-469b-904e-9ec8123d155f}</Project>
+      <Name>NumberRecognizer.Labeling</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\NumberRecognizer.Cloud.Contract\NumberRecognizer.Cloud.Contract.csproj">
+      <Project>{75663fb2-975a-4d29-816b-5750e61891dc}</Project>
+      <Name>NumberRecognizer.Cloud.Contract</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

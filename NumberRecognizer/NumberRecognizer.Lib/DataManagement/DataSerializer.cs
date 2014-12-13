@@ -11,11 +11,11 @@ using NumberRecognizer.Lib.Network;
 namespace NumberRecognizer.Lib.DataManagement
 {
     /// <summary>
-    /// The DataManager Class provides
+    /// The DataSerializer Class provides
     /// functionalty to Save/Load a instance of T to/from file
     /// and Serialize a instance to/from a byte array of data.
     /// </summary>
-    public class DataManager<T> where T : class
+    public class DataSerializer<T> where T : class
     {
 
         /// <summary>

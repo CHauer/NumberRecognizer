@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 12/13/2014 01:23:41
+-- Date Created: 12/13/2014 16:01:29
 -- Generated from EDMX file: C:\Users\Chris\FH WN\Projekte\Master\NumberRecognizer\NumberRecognizerCloud.Data\NetworkDataModel.edmx
 -- --------------------------------------------------
 
@@ -54,9 +54,11 @@ CREATE TABLE [dbo].[NetworkSet] (
     [NetworkName] nvarchar(max)  NOT NULL,
     [Calculated] int  NOT NULL,
     [Fitness] float  NOT NULL,
-    [NetworkData] varbinary(max)  NOT NULL,
-    [CalculationStart] datetime  NOT NULL,
-    [CalculationEnd] datetime  NOT NULL
+    [NetworkData] varbinary(max)  NULL,
+    [CalculationStart] datetime  NULL,
+    [CalculationEnd] datetime  NULL,
+    [Username] nvarchar(max)  NOT NULL,
+    [ErrorStatus] nvarchar(max)  NULL
 );
 GO
 

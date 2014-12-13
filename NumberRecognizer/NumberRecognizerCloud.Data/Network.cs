@@ -25,8 +25,10 @@ namespace NumberRecognizer.Cloud.Data
         public CalculationType Calculated { get; set; }
         public double Fitness { get; set; }
         public byte[] NetworkData { get; set; }
-        public System.DateTime CalculationStart { get; set; }
-        public System.DateTime CalculationEnd { get; set; }
+        public Nullable<System.DateTime> CalculationStart { get; set; }
+        public Nullable<System.DateTime> CalculationEnd { get; set; }
+        public string Username { get; set; }
+        public string ErrorStatus { get; set; }
     
         public virtual ICollection<TrainingImageData> TrainingImages { get; set; }
         public virtual ICollection<TrainLog> TrainLogs { get; set; }

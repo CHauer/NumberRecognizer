@@ -19,7 +19,7 @@
       <LocalStorage name="NumberRecognizerService.svclog" cleanOnRoleRecycle="false" sizeInMB="100" />
     </LocalResources>
   </WebRole>
-  <WorkerRole name="NumberRecognizer.Cloud.Worker" vmsize="Small">
+  <WorkerRole name="NumberRecognizer.Cloud.Worker" vmsize="Medium">
     <ConfigurationSettings>
       <Setting name="Microsoft.ServiceBus.ConnectionString" />
       <Setting name="QueueName" />
