@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://aec643ac9c4c4965af5743e42f28779d.cloudapp.net/NumberRecognizerService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://numberrecognizer.cloudapp.net/NumberRecognizerService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:complexType name="ArrayOfNetworkInfo">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="NetworkInfo" nillable="true" type="tns:NetworkInfo" />
