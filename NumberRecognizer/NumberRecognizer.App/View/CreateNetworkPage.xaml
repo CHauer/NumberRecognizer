@@ -12,10 +12,9 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <!-- TODO: Delete this line if the key AppName is declared in App.xaml -->
-        <x:String x:Key="PageName">Phone Number Recognition: Create Network</x:String>
-        <x:Double x:Key="StrokeThickness">6.0</x:Double>
+        <x:Double x:Key="StrokeThickness">4.0</x:Double>
         <x:Double x:Key="FontSize">40.0</x:Double>
+        <x:Double x:Key="InkHeight">100</x:Double>
     </Page.Resources>
 
     <!--
@@ -47,57 +46,77 @@
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{StaticResource PageName}" Foreground="OrangeRed" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
-            <Button Grid.Column="2" x:Name="nextButton" Margin="39,59,39,0" Style="{StaticResource NavigationBackButtonNormalStyle}" RenderTransformOrigin="0.5,0.5" Click="NextButton_Click">
-                <Button.RenderTransform>
-                    <CompositeTransform Rotation="180"/>
-                </Button.RenderTransform>
-            </Button>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" >
+                <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource CustomHeaderTextBlockStyle}" />
+                <TextBlock x:Name="pageSubTitle" Text=" - Create Network" Foreground="OrangeRed" Style="{StaticResource CustomHeaderTextBlockStyle}" />
+            </StackPanel>
         </Grid>
-        <Grid Grid.Row="1" Margin="100,50">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="50"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <TextBlock Grid.Row="0" Grid.Column="0" Text="Description:&#42;" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Name="NameTextBox" FontSize="{StaticResource FontSize}"/>
-            <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Text="Please write some Network Training Data Numbers on each Canvas." Style="{StaticResource SubheaderTextBlockStyle}" Foreground="OrangeRed" VerticalAlignment="Center"/>
-            <TextBlock Grid.Row="2" Grid.Column="0" Text="0" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <control:InkCanvasRT Grid.Row="2" Grid.Column="1" x:Name="InkCanvasRT0" StrokeThickness="{StaticResource StrokeThickness}"/>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="1" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <control:InkCanvasRT Grid.Row="3" Grid.Column="1" x:Name="InkCanvasRT1" StrokeThickness="{StaticResource StrokeThickness}"/>
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="2" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <control:InkCanvasRT Grid.Row="4" Grid.Column="1" x:Name="InkCanvasRT2" StrokeThickness="{StaticResource StrokeThickness}"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Text="3" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <control:InkCanvasRT Grid.Row="5" Grid.Column="1" x:Name="InkCanvasRT3" StrokeThickness="{StaticResource StrokeThickness}"/>
-            <TextBlock Grid.Row="6" Grid.Column="0" Text="4" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <control:InkCanvasRT Grid.Row="6" Grid.Column="1" x:Name="InkCanvasRT4" StrokeThickness="{StaticResource StrokeThickness}"/>
-            <TextBlock Grid.Row="7" Grid.Column="0" Text="5" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <control:InkCanvasRT Grid.Row="7" Grid.Column="1" x:Name="InkCanvasRT5" StrokeThickness="{StaticResource StrokeThickness}"/>
-            <TextBlock Grid.Row="8" Grid.Column="0" Text="6" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <control:InkCanvasRT Grid.Row="8" Grid.Column="1" x:Name="InkCanvasRT6" StrokeThickness="{StaticResource StrokeThickness}"/>
-            <TextBlock Grid.Row="9" Grid.Column="0" Text="7" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <control:InkCanvasRT Grid.Row="9" Grid.Column="1" x:Name="InkCanvasRT7" StrokeThickness="{StaticResource StrokeThickness}"/>
-            <TextBlock Grid.Row="10" Grid.Column="0" Text="8" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <control:InkCanvasRT Grid.Row="10" Grid.Column="1" x:Name="InkCanvasRT8" StrokeThickness="{StaticResource StrokeThickness}"/>
-            <TextBlock Grid.Row="11" Grid.Column="0" Text="9" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <control:InkCanvasRT Grid.Row="11" Grid.Column="1" x:Name="InkCanvasRT9" StrokeThickness="{StaticResource StrokeThickness}"/>
-        </Grid>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <Grid Grid.Row="1" Margin="100,50">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Description:&#42;" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Name="NameTextBox" FontSize="{StaticResource FontSize}"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Text="Please write some Network Training Data Numbers on each Canvas."
+                           Style="{StaticResource CustomTextBlockStyle}" Margin="0, 10"
+                           Foreground="OrangeRed" VerticalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="0" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <control:InkCanvasRT Grid.Row="2" Grid.Column="1" x:Name="InkCanvasRT0" 
+                                     StrokeThickness="{StaticResource StrokeThickness}"
+                                     Height="{StaticResource InkHeight}" Margin="0,10" />
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="1" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <control:InkCanvasRT Grid.Row="3" Grid.Column="1" x:Name="InkCanvasRT1" 
+                                     StrokeThickness="{StaticResource StrokeThickness}"
+                                     Height="{StaticResource InkHeight}" Margin="0,10"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="2" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <control:InkCanvasRT Grid.Row="4" Grid.Column="1" x:Name="InkCanvasRT2" 
+                                     StrokeThickness="{StaticResource StrokeThickness}"
+                                     Height="{StaticResource InkHeight}" Margin="0,10"/>
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="3" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <control:InkCanvasRT Grid.Row="5" Grid.Column="1" x:Name="InkCanvasRT3" 
+                                     StrokeThickness="{StaticResource StrokeThickness}"
+                                     Height="{StaticResource InkHeight}" Margin="0,10"/>
+                <TextBlock Grid.Row="6" Grid.Column="0" Text="4" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <control:InkCanvasRT Grid.Row="6" Grid.Column="1" x:Name="InkCanvasRT4" 
+                                     StrokeThickness="{StaticResource StrokeThickness}"
+                                     Height="{StaticResource InkHeight}" Margin="0,10"/>
+                <TextBlock Grid.Row="7" Grid.Column="0" Text="5" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <control:InkCanvasRT Grid.Row="7" Grid.Column="1" x:Name="InkCanvasRT5" 
+                                     StrokeThickness="{StaticResource StrokeThickness}"
+                                     Height="{StaticResource InkHeight}" Margin="0,10"/>
+                <TextBlock Grid.Row="8" Grid.Column="0" Text="6" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <control:InkCanvasRT Grid.Row="8" Grid.Column="1" x:Name="InkCanvasRT6" 
+                                     StrokeThickness="{StaticResource StrokeThickness}"
+                                     Height="{StaticResource InkHeight}" Margin="0,10"/>
+                <TextBlock Grid.Row="9" Grid.Column="0" Text="7" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <control:InkCanvasRT Grid.Row="9" Grid.Column="1" x:Name="InkCanvasRT7" 
+                                     StrokeThickness="{StaticResource StrokeThickness}"
+                                     Height="{StaticResource InkHeight}" Margin="0,10"/>
+                <TextBlock Grid.Row="10" Grid.Column="0" Text="8" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <control:InkCanvasRT Grid.Row="10" Grid.Column="1" x:Name="InkCanvasRT8" 
+                                     StrokeThickness="{StaticResource StrokeThickness}"
+                                     Height="{StaticResource InkHeight}" Margin="0,10"/>
+                <TextBlock Grid.Row="11" Grid.Column="0" Text="9" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <control:InkCanvasRT Grid.Row="11" Grid.Column="1" x:Name="InkCanvasRT9" 
+                                     StrokeThickness="{StaticResource StrokeThickness}"
+                                     Height="{StaticResource InkHeight}" Margin="0,10"/>
+            </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>

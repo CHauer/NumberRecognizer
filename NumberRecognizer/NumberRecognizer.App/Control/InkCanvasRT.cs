@@ -65,7 +65,7 @@ namespace NumberRecognizer.App.Control
             this.BackgroundColor = Colors.White;
             this.Background = new SolidColorBrush(this.BackgroundColor);
             this.Margin = new Thickness() { Bottom = 2, Left = 2, Right = 2, Top = 2 };
-            this.StrokeThickness = 4.0;
+            this.StrokeThickness = 2.0;
             this.PointerPressed += this.InkCanvasRT_PointerPressed;
             this.PointerReleased += this.InkCanvasRT_PointerReleased;
             this.PointerExited += this.InkCanvasRT_PointerReleased;
@@ -177,19 +177,24 @@ namespace NumberRecognizer.App.Control
 
                 if (Distance(this.previousContactPoint, this.currentContactPoint) > this.StrokeThickness)
                 {
-                    Polyline polyLine = new Polyline()
+                    Line line = new Line()
                     {
-                        Points = { this.previousContactPoint, this.currentContactPoint },
+                        X1 = this.previousContactPoint.X,
+                        Y1 = this.previousContactPoint.Y,
+                        X2 = this.currentContactPoint.X, 
+                        Y2 = this.currentContactPoint.Y,
                         StrokeThickness = this.StrokeThickness,
                         Stroke = new SolidColorBrush(this.ForegroundColor)
                     };
 
                     this.previousContactPoint = this.currentContactPoint;
-                    this.Children.Add(polyLine);
+                    this.Children.Add(line);
                 }
 
                 this.inkManager.ProcessPointerUpdate(pointerPoint);
             }
+
+            e.Handled = true;
         }
 
         /// <summary>

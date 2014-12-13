@@ -60,6 +60,7 @@ namespace NumberRecognizer.App.Common
     public class NavigationHelper : DependencyObject
     {
         private Page Page { get; set; }
+
         private Frame Frame { get { return this.Page.Frame; } }
 
         /// <summary>

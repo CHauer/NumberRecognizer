@@ -5,16 +5,17 @@
 // <author>Markus Zytek</author>
 // <summary>Grouped Items Page.</summary>
 //-----------------------------------------------------------------------
+using System;
+using NumberRecognizer.App.Common;
+using NumberRecognizer.App;
+using NumberRecognizer.App.Common;
+using NumberRecognizer.App.DataModel;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
+
 namespace NumberRecognizer.App
 {
-    using System;
-    using NumberRecognizer.App.Common;
-    using NumberRecognizer.App;
-    using NumberRecognizer.App.Common;
-    using NumberRecognizer.App.DataModel;
-    using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Controls;
-    using Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// A page that displays a grouped collection of items.
