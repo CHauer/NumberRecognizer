@@ -79,9 +79,8 @@ namespace NumberRecognizer.Cloud.Service
                     NetworkName = network.NetworkName,
                     CalculationStart = network.CalculationStart,
                     CalculationEnd = network.CalculationEnd,
-                    MultipleGenPool = network.UseMultipleGenPool,
                     FinalPoolFitnessLog = GetFitnessLog(network.NetworkId, null),
-                    MultiplePoolFitnessLog = network.UseMultipleGenPool ? GetMultiplePoolFitnessLog(network.NetworkId) : null
+                    MultiplePoolFitnessLog = GetMultiplePoolFitnessLog(network.NetworkId)
                 });
 
                 return networks.ToList();
@@ -178,7 +177,6 @@ namespace NumberRecognizer.Cloud.Service
                 {
                     NetworkName = name,
                     TrainingImages = new List<TrainingImageData>(),
-                    UseMultipleGenPool = true,
                     Calculated = CalculationType.NotStarted
                 });
 
