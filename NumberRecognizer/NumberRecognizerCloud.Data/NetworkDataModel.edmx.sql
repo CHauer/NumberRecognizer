@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 12/13/2014 16:01:29
+-- Date Created: 12/13/2014 23:20:02
 -- Generated from EDMX file: C:\Users\Chris\FH WN\Projekte\Master\NumberRecognizer\NumberRecognizerCloud.Data\NetworkDataModel.edmx
 -- --------------------------------------------------
 
@@ -57,7 +57,6 @@ CREATE TABLE [dbo].[NetworkSet] (
     [NetworkData] varbinary(max)  NULL,
     [CalculationStart] datetime  NULL,
     [CalculationEnd] datetime  NULL,
-    [Username] nvarchar(max)  NOT NULL,
     [ErrorStatus] nvarchar(max)  NULL
 );
 GO
@@ -75,7 +74,7 @@ GO
 CREATE TABLE [dbo].[TrainLogSet] (
     [TrainLogId] int IDENTITY(1,1) NOT NULL,
     [GenerationNr] int  NOT NULL,
-    [MultipleGenPoolIdentifier] nvarchar(max)  NOT NULL,
+    [MultipleGenPoolIdentifier] nvarchar(max)  NULL,
     [Fitness] float  NOT NULL,
     [Network_NetworkId] int  NOT NULL
 );

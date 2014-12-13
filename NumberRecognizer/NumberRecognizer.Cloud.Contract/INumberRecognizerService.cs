@@ -49,6 +49,7 @@ namespace NumberRecognizer.Cloud.Contract
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
         /// <returns></returns>
+        [OperationContract]
         bool DeleteNetwork(int networkId);
 
         /// <summary>

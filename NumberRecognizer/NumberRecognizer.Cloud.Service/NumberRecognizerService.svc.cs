@@ -77,7 +77,6 @@ namespace NumberRecognizer.Cloud.Service
                     NetworkFitness = network.Fitness,
                     NetworkId = network.NetworkId,
                     NetworkName = network.NetworkName,
-                    Username = network.Username,
                     CalculationStart = network.CalculationStart.HasValue ? network.CalculationStart : null,
                     CalculationEnd = network.CalculationEnd.HasValue ? network.CalculationEnd : null,
 
@@ -116,7 +115,6 @@ namespace NumberRecognizer.Cloud.Service
                 var newNetwork = db.NetworkSet.Add(new Network()
                 {
                     NetworkName = networkName,
-                    Username = username,
                     TrainingImages = new List<TrainingImageData>(),
                     Calculated = CalculationType.NotStarted
                 });
@@ -180,7 +178,6 @@ namespace NumberRecognizer.Cloud.Service
                 var newNetwork = db.NetworkSet.Add(new Network()
                 {
                     NetworkName = networkName,
-                    Username = username,
                     TrainingImages = new List<TrainingImageData>(),
                     Calculated = CalculationType.NotStarted
                 });

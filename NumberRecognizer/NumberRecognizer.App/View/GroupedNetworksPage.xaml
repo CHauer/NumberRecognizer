@@ -55,7 +55,7 @@
             SelectedItem="{Binding SelectedNetwork}"
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
-            ItemClick="NetworkView_ItemClick">
+            ItemClick="NetworkView_ItemClick" >
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <Grid HorizontalAlignment="Left" Width="300" Height="200">
@@ -79,10 +79,8 @@
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
                             <Grid Margin="0,0,0,2">
-                                <Button Foreground="OrangeRed"
-                                    AutomationProperties.Name="Group Title"
-                                    Click="Header_Click"
-                                    Style="{StaticResource TextBlockButtonStyle}" >
+                                <Button AutomationProperties.Name="Group Title"
+                                        Style="{StaticResource TextBlockButtonStyle}">
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding Title}" Margin="0,-11,10,10" Style="{StaticResource CustomTextBlockStyle}" />
                                         <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-11,0,10" Style="{StaticResource CustomTextBlockStyle}" />
