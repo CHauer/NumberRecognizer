@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Runtime.Serialization;
@@ -11,16 +12,18 @@ using Microsoft.ServiceBus.Messaging;
 using Microsoft.WindowsAzure;
 using NumberRecognizer.Cloud.Contract;
 using NumberRecognizer.Cloud.Contract.Data;
+using NumberRecognizer.Cloud.Data;
 using NumberRecognizer.Lib.DataManagement;
-using NumberRecognizerCloud.Data;
+using NumberRecognizer.Lib.Network;
+using NumberRecognizer.Cloud.Contract.Data;
 
 namespace NumberRecognizer.Cloud.Service
 {
-    // HINWEIS: Mit dem Befehl "Umbenennen" im Menü "Umgestalten" können Sie den Klassennamen "NumberRecognizerService" sowohl im Code als auch in der SVC- und der Konfigurationsdatei ändern.
-    // HINWEIS: Wählen Sie zum Starten des WCF-Testclients zum Testen dieses Diensts NumberRecognizerService.svc oder NumberRecognizerService.svc.cs im Projektmappen-Explorer aus, und starten Sie das Debuggen.
+    /// <summary>
+    /// 
+    /// </summary>
     public class NumberRecognizerService :  INumberRecognizerService
     {
-
         /// <summary>
         /// The queue client
         /// </summary>
@@ -195,8 +198,9 @@ namespace NumberRecognizer.Cloud.Service
                 {
                     db.SaveChanges();
                 }
-                catch
+                catch(Exception ex)
                 {
+                    Trace.TraceError(ex.Message);
                     status = false;
                 }
             }
@@ -208,8 +212,9 @@ namespace NumberRecognizer.Cloud.Service
             {
                 queueClient.Send(msg);
             }
-            catch
+            catch (Exception ex)
             {
+                Trace.TraceError(ex.Message);
                 status = false;
             }
 
@@ -221,14 +226,74 @@ namespace NumberRecognizer.Cloud.Service
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Deletes the network.
+        /// </summary>
+        /// <param name="networkId">The network identifier.</param>
+        /// <returns></returns>
         public bool DeleteNetwork(int networkId)
         {
-            throw new NotImplementedException();
+            using (var db = new NetworkDataModelContainer())
+            {
+                var delNetwork = db.NetworkSet.First(n => n.NetworkId == networkId);
+
+                db.PatternFitnessSet.RemoveRange(db.PatternFitnessSet.Where(pfs => pfs.TrainLog.Network.NetworkId == networkId));
+                db.TrainLogSet.RemoveRange(delNetwork.TrainLogs);
+                db.NetworkSet.Remove(delNetwork);
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch(Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
+                    return false;
+                }
+            }
+
+            return true;
         }
 
-        public RecognitionResult RecognizePhoneNumber(int networkId, IList<RecognitionImage> imageData)
+        /// <summary>
+        /// Recognizes the phone number from image.
+        /// </summary>
+        /// <param name="networkId">The network identifier.</param>
+        /// <param name="imageData">The image data.</param>
+        /// <returns></returns>
+        public NumberRecognitionResult RecognizePhoneNumber(int networkId, IList<RecognitionImage> imageData)
         {
-            throw new NotImplementedException();
+            NetworkDataManager dataManager = new NetworkDataManager();
+            PatternRecognitionNetwork network;
+            StringBuilder numberBuilder = new StringBuilder();
+            NumberRecognitionResult result = new NumberRecognitionResult
+            {
+                Items = new List<Contract.Data.NumberRecognitionResultItem>()
+            };
+
+            using (var db = new NetworkDataModelContainer())
+            {
+                var networkFromDb = db.NetworkSet.First(n => n.NetworkId == networkId);
+
+                network = dataManager.TransformFromBinary(networkFromDb.NetworkData);
+            }
+
+            foreach (RecognitionImage image in imageData)
+            {
+                var recognitionResult = network.RecognizeCharacter(image.TransformTo2DArrayFromImageData()).ToList();
+
+                numberBuilder.Append(recognitionResult[0].RecognizedCharacter);
+
+                result.Items.Add(new NumberRecognitionResultItem()
+                {
+                    NumericCharacter = Convert.ToInt32(recognitionResult[0].RecognizedCharacter),
+                    Probabilities = recognitionResult.ToDictionary(key => key.RecognizedCharacter[0], value => value.Propability)
+                });
+            }
+
+            result.Number = numberBuilder.ToString();
+
+            return result;
         }
     }
 }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NumberRecognizerCloud.Data
+namespace NumberRecognizer.Cloud.Data
 {
     using System;
     

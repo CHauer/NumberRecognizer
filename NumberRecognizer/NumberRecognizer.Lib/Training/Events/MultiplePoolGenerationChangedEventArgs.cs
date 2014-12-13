@@ -14,13 +14,14 @@ namespace NumberRecognizer.Lib.Training.Events
     {
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="MultipleGenPoolGenerationChangedEventArgs"/> class.
+        /// Initializes a new instance of the <see cref="MultipleGenPoolGenerationChangedEventArgs" /> class.
         /// </summary>
         /// <param name="generation">The generation.</param>
         /// <param name="network">The network.</param>
+        /// <param name="patternFitness">The pattern fitness.</param>
         /// <param name="multipleGenPoolIdentifier">The multiple gen pool identifier.</param>
-        public MultipleGenPoolGenerationChangedEventArgs(int generation, PatternRecognitionNetwork network, int multipleGenPoolIdentifier)
-            : base(generation, network)
+        public MultipleGenPoolGenerationChangedEventArgs(int generation, PatternRecognitionNetwork network, Dictionary<string, double> patternFitness, int multipleGenPoolIdentifier)
+            : base(generation, network, patternFitness)
         {
             MultipleGenPoolIdentifier = multipleGenPoolIdentifier;
         }
@@ -31,7 +32,7 @@ namespace NumberRecognizer.Lib.Training.Events
         /// <param name="args">The <see cref="GenerationChangedEventArgs"/> instance containing the event data.</param>
         /// <param name="multipleGenPoolIdentifier">The multiple gen pool identifier.</param>
         public MultipleGenPoolGenerationChangedEventArgs(GenerationChangedEventArgs args, int multipleGenPoolIdentifier)
-            : base(args.Generation, args.CurrentFittestNetwork)
+            : base(args.Generation, args.CurrentFittestNetwork, args.PatternFitness)
         {
             MultipleGenPoolIdentifier = multipleGenPoolIdentifier;
         }

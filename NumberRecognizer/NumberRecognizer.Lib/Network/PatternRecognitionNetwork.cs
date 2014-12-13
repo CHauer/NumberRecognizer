@@ -348,11 +348,11 @@ namespace NumberRecognizer.Lib.Network
         /// Calculates the fitness.
         /// </summary>
         /// <param name="trainingData">The training data.</param>
-        public void CalculateFitness(ICollection<TrainingImage> trainingData)
+        public void CalculateFitness(ICollection<PatternTrainingImage> trainingData)
 		{
 			double sum = 0;
 
-			foreach (TrainingImage image in trainingData)
+			foreach (PatternTrainingImage image in trainingData)
 			{
 				SetInputData(image.PixelValues);
 
@@ -375,16 +375,16 @@ namespace NumberRecognizer.Lib.Network
         /// </summary>
         /// <param name="trainingData">The training data.</param>
         /// <returns></returns>
-		public Dictionary<string, double> GetFitnessDetail(ICollection<TrainingImage> trainingData)
+		public Dictionary<string, double> GetFitnessDetail(ICollection<PatternTrainingImage> trainingData)
 		{
 			Dictionary<string, double> results = new Dictionary<string, double>();
 
 			foreach (
-				IGrouping<string, TrainingImage> representingInformation in trainingData.GroupBy(x => x.RepresentingInformation))
+				IGrouping<string, PatternTrainingImage> representingInformation in trainingData.GroupBy(x => x.RepresentingInformation))
 			{
 				results[representingInformation.Key] = 0;
 
-				foreach (TrainingImage image in representingInformation)
+				foreach (PatternTrainingImage image in representingInformation)
 				{
 					SetInputData(image.PixelValues);
 

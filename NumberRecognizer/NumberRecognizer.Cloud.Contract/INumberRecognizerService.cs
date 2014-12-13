@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.ServiceModel;
 using System.Text;
+using System.ServiceModel;
 using NumberRecognizer.Cloud.Contract.Data;
 
 namespace NumberRecognizer.Cloud.Contract
@@ -53,7 +53,7 @@ namespace NumberRecognizer.Cloud.Contract
         /// <param name="imageData">The image data.</param>
         /// <returns></returns>
         [OperationContract]
-        RecognitionResult RecognizePhoneNumber(int networkId, IList<RecognitionImage> imageData);
+        NumberRecognitionResult RecognizePhoneNumber(int networkId, IList<RecognitionImage> imageData);
 
     }
 }

@@ -64,7 +64,7 @@
     <Compile Include="Network\OutputNeuron.cs" />
     <Compile Include="Network\PatternRecognitionNetwork.cs" />
     <Compile Include="Network\RecognitionResult.cs" />
-    <Compile Include="Network\TrainingImage.cs" />
+    <Compile Include="Network\PatternTrainingImage.cs" />
     <Compile Include="Network\WeightedLink.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Training\GeneticOperator\OnePointCrossover.cs" />

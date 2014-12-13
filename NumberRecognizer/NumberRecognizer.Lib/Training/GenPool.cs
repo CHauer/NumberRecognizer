@@ -28,7 +28,7 @@ namespace NumberRecognizer.Lib.Training
         /// </summary>
         /// <param name="trainingData">The training data.</param>
         /// <param name="parameter">The parameter.</param>
-        public GenPool(IEnumerable<TrainingImage> trainingData,
+        public GenPool(IEnumerable<PatternTrainingImage> trainingData,
                        TrainingParameter parameter)
             : this(trainingData, parameter, null)
         {
@@ -41,14 +41,14 @@ namespace NumberRecognizer.Lib.Training
         /// <param name="startPopulation">The start generation.</param>
         /// <param name="trainingData">The training data.</param>
         /// <param name="parameter">The parameter.</param>
-        public GenPool(IEnumerable<TrainingImage> trainingData,
+        public GenPool(IEnumerable<PatternTrainingImage> trainingData,
                        TrainingParameter parameter,
                        ConcurrentBag<PatternRecognitionNetwork> startPopulation)
         {
             IsMultipleGenPool = false;
             TrainingParameter = parameter;
 
-            TrainingData = new ConcurrentBag<TrainingImage>(trainingData);
+            TrainingData = new ConcurrentBag<PatternTrainingImage>(trainingData);
             Patterns = TrainingData.Select(x => x.RepresentingInformation).Distinct().ToList();
 
             //if startPopulation is null create random initial population
@@ -91,7 +91,7 @@ namespace NumberRecognizer.Lib.Training
         /// <value>
         /// The training data.
         /// </value>
-        public ConcurrentBag<TrainingImage> TrainingData { get; private set; }
+        public ConcurrentBag<PatternTrainingImage> TrainingData { get; private set; }
 
         /// <summary>
         /// Gets the result network.
@@ -170,7 +170,7 @@ namespace NumberRecognizer.Lib.Training
 
                 if (GenerationChanged != null)
                 {
-                    GenerationChanged(this, new GenerationChangedEventArgs(i, bestNetwork));
+                    GenerationChanged(this, new GenerationChangedEventArgs(i, bestNetwork, bestNetwork.GetFitnessDetail(TrainingData.ToList())));
                 }
 
                 ConcurrentBag<PatternRecognitionNetwork> newGeneration = new ConcurrentBag<PatternRecognitionNetwork>();
