@@ -4,7 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
 using NumberRecognizer.App.DataModel;
 using NumberRecognizer.App.NumberRecognizerService;
 using NumberRecognizer.Cloud.Contract.Data;
@@ -21,6 +23,8 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private ObservableCollection<NetworkDataGroup> groups;
 
+        private ICommand cmdCreateNetwork;
+
         #region Constructor
 
         /// <summary>
@@ -28,7 +32,8 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         public GroupedNetworksViewModel()
         {
-            LoadNetworks(); 
+            LoadNetworks();
+            LoadCommands();
         }
 
         #endregion
@@ -52,7 +57,7 @@ namespace NumberRecognizer.App.ViewModel
                 return;
             }
 
-            groups = new ObservableCollection<NetworkDataGroup>();
+            Groups = new ObservableCollection<NetworkDataGroup>();
 
             foreach(string groupName in networks.Select(n => n.Username).Distinct())
             {
@@ -62,8 +67,16 @@ namespace NumberRecognizer.App.ViewModel
                     group.Items.Add(network);
                 }
 
-                groups.Add(group);
+                Groups.Add(group);
             }
+        }
+
+        /// <summary>
+        /// Loads the commands.
+        /// </summary>
+        private void LoadCommands()
+        {
+            AddNetwork = new RelayCommand(() => App.Frame.Navigate(typeof(CreateNetworkPage)));
         }
 
         #endregion
@@ -78,12 +91,39 @@ namespace NumberRecognizer.App.ViewModel
         /// </imgByte>
         public ObservableCollection<NetworkDataGroup> Groups
         {
-            get { return this.groups; }
+            get
+            {
+                return this.groups;
+            }
+            set
+            {
+                groups = value;
+                RaisePropertyChanged(() => Groups);
+            }
         }
 
         #endregion
 
         #region Commands
+
+        /// <summary>
+        /// Gets or sets the add network.
+        /// </summary>
+        /// <value>
+        /// The add network.
+        /// </value>
+        public ICommand CreateNetwork
+        {
+            get
+            {
+                return cmdCreateNetwork;
+            }
+            set
+            {
+                cmdCreateNetwork = value;
+                RaisePropertyChanged(() => CreateNetwork);
+            }
+        }
 
         #endregion
     }

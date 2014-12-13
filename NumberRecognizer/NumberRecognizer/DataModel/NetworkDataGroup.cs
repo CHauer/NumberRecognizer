@@ -6,6 +6,7 @@
 // <summary>Network Data Group.</summary>
 //-----------------------------------------------------------------------
 
+using GalaSoft.MvvmLight;
 using NumberRecognizer.Cloud.Contract.Data;
 
 namespace NumberRecognizer.App.DataModel
@@ -15,8 +16,14 @@ namespace NumberRecognizer.App.DataModel
     /// <summary>
     /// Network Data Group.
     /// </summary>
-    public class NetworkDataGroup
+    public class NetworkDataGroup : ViewModelBase
     {
+
+        /// <summary>
+        /// The titel
+        /// </summary>
+        private string title;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkDataGroup"/> class.
         /// </summary>
@@ -43,7 +50,18 @@ namespace NumberRecognizer.App.DataModel
         /// <imgByte>
         /// The title.
         /// </imgByte>
-        public string Title { get; private set; }
+        public string Title
+        {
+            get
+            {
+                return title;
+            }
+            private set
+            {
+                this.title = value;
+                RaisePropertyChanged(() => Title);
+            }
+        }
 
         /// <summary>
         /// Gets the items.

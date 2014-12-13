@@ -51,14 +51,6 @@ namespace NumberRecognizer.App
         }
 
         /// <summary>
-        /// Gets This can be changed to a strongly typed view model.
-        /// </summary>
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
-        }
-
-        /// <summary>
         /// Invoked when a group header is clicked.
         /// </summary>
         /// <param name="sender">The Button used as a group header for the selected group.</param>
@@ -127,14 +119,5 @@ namespace NumberRecognizer.App
             //this.DefaultViewModel["Groups"] = sampleDataGroups;
         }
 
-        /// <summary>
-        /// Handles the Click event of the AddNetworkAppBarButton control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="RoutedEventArgs"/> instance containing the event data.</param>
-        private void AddNetworkAppBarButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Frame.Navigate(typeof(CreateNetworkPage));
-        }
     }
 }

@@ -8,14 +8,12 @@
     xmlns:vm="using:NumberRecognizer.App.ViewModel"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    d:DataContext="{d:DesignInstance Type=vm:GroupedNetworksDesignViewModel, IsDesignTimeCreatable=True}"
     mc:Ignorable="d">
     <Page.DataContext>
         <!--<Binding Source="{StaticResource HubViewModelInstance}" />-->
         <vm:GroupedNetworksViewModel/>
     </Page.DataContext>
-    <d:Page.DataConext>
-        <vm:GroupedNetworksDesignViewModel/>
-    </d:Page.DataConext>
     <Page.Resources>
         <x:String x:Key="ChevronGlyph">&#xE26B;</x:String>
         <!--
@@ -26,8 +24,7 @@
             x:Name="GroupedItemsViewSource"
             Source="{Binding Groups}"
             IsSourceGrouped="True"
-            ItemsPath="Items"
-            d:Source="{Binding Groups}" />
+            ItemsPath="Items" />
     </Page.Resources>
 
     <!--
@@ -65,7 +62,7 @@
                             <!--<Image Source="{Binding ImagePath}" Stretch="UniformToFill" AutomationProperties.Name="{Binding Title}"/>-->
                         </Border>
                         <StackPanel VerticalAlignment="Bottom" Background="{ThemeResource ListViewItemOverlayBackgroundThemeBrush}">
-                            <TextBlock Text="{Binding Title}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}" Height="60" Margin="15,0,15,0"/>
+                            <TextBlock Text="{Binding NetworkName}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"  Height="60" Margin="15,0,15,0"/>
                             <!--<TextBlock Text="{Binding Subtitle}" Foreground="{ThemeResource ListViewItemOverlaySecondaryForegroundThemeBrush}" Style="{StaticResource CaptionTextBlockStyle}" TextWrapping="NoWrap" Margin="15,0,15,10"/>-->
                         </StackPanel>
                     </Grid>
@@ -116,7 +113,7 @@
     <Page.BottomAppBar>
         <AppBar Background="OrangeRed">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <AppBarButton Name="AddNetworkAppBarButton" Label="Create new Network" Icon="Add" Click="AddNetworkAppBarButton_Click"/>
+                <AppBarButton Name="AddNetworkAppBarButton" Label="Create new Network" Icon="Add" Command="{Binding CreateNetwork}"/>
                 <AppBarButton Name="RemoveNetworkAppBarButton" Label="Delete selected Networks" Icon="Remove"/>
                 <AppBarSeparator/>
                 <AppBarToggleButton Name="AutoRefreshNetworksAppBarToggleButton" Icon="Refresh" IsChecked="True" Label="Sync Networks (10 sec.)"/>
