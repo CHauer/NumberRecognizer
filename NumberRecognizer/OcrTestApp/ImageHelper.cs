@@ -27,17 +27,17 @@ namespace OcrTestApp
 			return pixelValues;
 		}
 
-		public static ICollection<TrainingImage> ReadTrainingData(string directoryPath)
+		public static ICollection<PatternTrainingImage> ReadTrainingData(string directoryPath)
 		{
 			DirectoryInfo directoryInfo = new DirectoryInfo(directoryPath);
 
-			ICollection<TrainingImage> trainingData = new List<TrainingImage>();
+			ICollection<PatternTrainingImage> trainingData = new List<PatternTrainingImage>();
 
 			foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
 			{
 				foreach (FileInfo fileInfo in directory.GetFiles().Where(x => x.Extension == ".png"))
 				{
-					trainingData.Add(new TrainingImage()
+					trainingData.Add(new PatternTrainingImage()
 					{
 						RepresentingInformation = directory.Name,
 						PixelValues = GetPixelsFromImagePath(fileInfo.FullName)

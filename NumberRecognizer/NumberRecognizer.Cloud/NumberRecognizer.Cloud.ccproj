@@ -61,9 +61,13 @@
   <ItemGroup>
     <Folder Include="NumberRecognizer.Cloud.ServiceContent\" />
     <Folder Include="NumberRecognizer.Cloud.WorkerContent\" />
+    <Folder Include="Profiles" />
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="NumberRecognizer.Cloud.ServiceContent\diagnostics.wadcfgx" />
+  </ItemGroup>
+  <ItemGroup>
+    <PublishProfile Include="Profiles\ipsupportProduction.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

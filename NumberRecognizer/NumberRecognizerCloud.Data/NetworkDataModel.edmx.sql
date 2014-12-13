@@ -2,7 +2,7 @@
 -- --------------------------------------------------
 -- Entity Designer DDL Script for SQL Server 2005, 2008, 2012 and Azure
 -- --------------------------------------------------
--- Date Created: 12/11/2014 22:29:40
+-- Date Created: 12/13/2014 01:23:41
 -- Generated from EDMX file: C:\Users\Chris\FH WN\Projekte\Master\NumberRecognizer\NumberRecognizerCloud.Data\NetworkDataModel.edmx
 -- --------------------------------------------------
 
@@ -23,6 +23,9 @@ GO
 IF OBJECT_ID(N'[dbo].[FK_NetworkTrainLog]', 'F') IS NOT NULL
     ALTER TABLE [dbo].[TrainLogSet] DROP CONSTRAINT [FK_NetworkTrainLog];
 GO
+IF OBJECT_ID(N'[dbo].[FK_TrainLogPatternFitness]', 'F') IS NOT NULL
+    ALTER TABLE [dbo].[PatternFitnessSet] DROP CONSTRAINT [FK_TrainLogPatternFitness];
+GO
 
 -- --------------------------------------------------
 -- Dropping existing tables
@@ -37,6 +40,9 @@ GO
 IF OBJECT_ID(N'[dbo].[TrainLogSet]', 'U') IS NOT NULL
     DROP TABLE [dbo].[TrainLogSet];
 GO
+IF OBJECT_ID(N'[dbo].[PatternFitnessSet]', 'U') IS NOT NULL
+    DROP TABLE [dbo].[PatternFitnessSet];
+GO
 
 -- --------------------------------------------------
 -- Creating all tables
@@ -50,8 +56,7 @@ CREATE TABLE [dbo].[NetworkSet] (
     [Fitness] float  NOT NULL,
     [NetworkData] varbinary(max)  NOT NULL,
     [CalculationStart] datetime  NOT NULL,
-    [CalculationEnd] datetime  NOT NULL,
-    [UseMultipleGenPool] bit  NOT NULL
+    [CalculationEnd] datetime  NOT NULL
 );
 GO
 

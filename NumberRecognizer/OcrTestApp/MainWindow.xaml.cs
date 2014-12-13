@@ -146,7 +146,7 @@ namespace OcrTestApp
             //const int truncationSelectionAbsolute = (int)(populationSize * truncationSelectionPercentage);
 
             //// Read Imagedata
-            //TrainingData = new ConcurrentBag<TrainingImage>(ImageHelper.ReadTrainingData(TrainingDataPath));
+            //TrainingData = new ConcurrentBag<PatternTrainingImage>(ImageHelper.ReadTrainingData(TrainingDataPath));
 
             //// Create initial population
             //ConcurrentBag<PatternRecognitionNetwork> currentGeneration =

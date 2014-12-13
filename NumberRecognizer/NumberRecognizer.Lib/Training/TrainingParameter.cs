@@ -28,7 +28,7 @@ namespace NumberRecognizer.Lib.Training
         /// </summary>
         private void InitializeParameters()
         {
-            GenPoolTrainingMode = GenPoolType.SingleGenPool;
+            GenPoolTrainingMode = GenPoolType.MultipleGenPool;
             
             SingleGenPoolPopulationSize = 100;
             SingleGenPoolMaxGenerations = 100;

@@ -34,7 +34,6 @@
     <Property Name="NetworkData" Type="varbinary(max)" Nullable="false" />
     <Property Name="CalculationStart" Type="datetime" Nullable="false" />
     <Property Name="CalculationEnd" Type="datetime" Nullable="false" />
-    <Property Name="UseMultipleGenPool" Type="bit" Nullable="false" DefaultValue="true" />
   </EntityType>
   <EntityType Name="TrainingImageDataSet">
     <Key>
@@ -135,7 +134,6 @@
           <NavigationProperty Name="TrainLogs" Relationship="NetworkDataModel.NetworkTrainLog" FromRole="Network" ToRole="TrainLog" />
           <Property Name="CalculationStart" Type="DateTime" Nullable="false" />
           <Property Name="CalculationEnd" Type="DateTime" Nullable="false" />
-          <Property Name="UseMultipleGenPool" Type="Boolean" Nullable="false" DefaultValue="true" />
         </EntityType>
         <EntityType Name="TrainingImageData">
           <Key>
@@ -199,7 +197,6 @@
           <ScalarProperty Name="NetworkData" ColumnName="NetworkData" />
           <ScalarProperty Name="CalculationStart" ColumnName="CalculationStart" />
           <ScalarProperty Name="CalculationEnd" ColumnName="CalculationEnd" />
-          <ScalarProperty Name="UseMultipleGenPool" ColumnName="UseMultipleGenPool" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

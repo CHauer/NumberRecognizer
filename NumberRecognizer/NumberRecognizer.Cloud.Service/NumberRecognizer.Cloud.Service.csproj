@@ -140,9 +140,9 @@
       <Project>{f32d5fd5-757d-461e-b825-44d47b357a60}</Project>
       <Name>NumberRecognizer.Lib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NumberRecognizerCloud.Data\NumberRecognizerCloud.Data.csproj">
+    <ProjectReference Include="..\NumberRecognizerCloud.Data\NumberRecognizer.Cloud.Data.csproj">
       <Project>{20ebd715-2c6f-4fdd-ba01-ac22803bae0f}</Project>
-      <Name>NumberRecognizerCloud.Data</Name>
+      <Name>NumberRecognizer.Cloud.Data</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

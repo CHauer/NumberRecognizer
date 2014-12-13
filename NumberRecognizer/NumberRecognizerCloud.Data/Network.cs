@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NumberRecognizerCloud.Data
+namespace NumberRecognizer.Cloud.Data
 {
     using System;
     using System.Collections.Generic;
@@ -16,7 +16,6 @@ namespace NumberRecognizerCloud.Data
     {
         public Network()
         {
-            this.UseMultipleGenPool = true;
             this.TrainingImages = new HashSet<TrainingImageData>();
             this.TrainLogs = new HashSet<TrainLog>();
         }
@@ -28,7 +27,6 @@ namespace NumberRecognizerCloud.Data
         public byte[] NetworkData { get; set; }
         public System.DateTime CalculationStart { get; set; }
         public System.DateTime CalculationEnd { get; set; }
-        public bool UseMultipleGenPool { get; set; }
     
         public virtual ICollection<TrainingImageData> TrainingImages { get; set; }
         public virtual ICollection<TrainLog> TrainLogs { get; set; }

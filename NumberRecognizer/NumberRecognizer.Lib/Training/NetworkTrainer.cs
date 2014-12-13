@@ -31,8 +31,8 @@ namespace NumberRecognizer.Lib.Training
         /// Initializes a new instance of the <see cref="NetworkTrainer" /> class.
         /// </summary>
         /// <param name="trainingData">The training data.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Wrong ImageHeight or Width of TrainingImage</exception>
-        public NetworkTrainer(IEnumerable<TrainingImage> trainingData) : this(trainingData, null)
+        /// <exception cref="System.ArgumentOutOfRangeException">Wrong ImageHeight or Width of PatternTrainingImage</exception>
+        public NetworkTrainer(IEnumerable<PatternTrainingImage> trainingData) : this(trainingData, null)
         {
         }
 
@@ -41,15 +41,15 @@ namespace NumberRecognizer.Lib.Training
         /// </summary>
         /// <param name="trainingData">The training data.</param>
         /// <param name="parameter">The parameter.</param>
-        /// <exception cref="System.ArgumentOutOfRangeException">Wrong ImageHeight or Width of TrainingImage</exception>
-        public NetworkTrainer(IEnumerable<TrainingImage> trainingData, TrainingParameter parameter)
+        /// <exception cref="System.ArgumentOutOfRangeException">Wrong ImageHeight or Width of PatternTrainingImage</exception>
+        public NetworkTrainer(IEnumerable<PatternTrainingImage> trainingData, TrainingParameter parameter)
         {
             //parameter != null given parameters else standard parameters
             TrainingParameter = parameter ?? new TrainingParameter();
 
             if (trainingData != null)
             {
-                TrainingData = new ConcurrentBag<TrainingImage>(trainingData);
+                TrainingData = new ConcurrentBag<PatternTrainingImage>(trainingData);
                 ValidateTrainingData();
             }
         }
@@ -72,7 +72,7 @@ namespace NumberRecognizer.Lib.Training
         /// <value>
         /// The training data.
         /// </value>
-        public ConcurrentBag<TrainingImage> TrainingData { get; private set; }
+        public ConcurrentBag<PatternTrainingImage> TrainingData { get; private set; }
 
         /// <summary>
         /// Gets the result network.
@@ -109,11 +109,11 @@ namespace NumberRecognizer.Lib.Training
         /// <summary>
         /// Adds the training data.
         /// </summary>
-        /// <param name="trainingImage">The training image.</param>
+        /// <param name="patternTrainingImage">The training image.</param>
         /// <exception cref="System.ArgumentOutOfRangeException" />
-        public void AddTrainingData(TrainingImage trainingImage)
+        public void AddTrainingData(PatternTrainingImage patternTrainingImage)
         {
-            TrainingData.Add(trainingImage);
+            TrainingData.Add(patternTrainingImage);
 
             ValidateTrainingData();
 
@@ -125,9 +125,9 @@ namespace NumberRecognizer.Lib.Training
         /// </summary>
         /// <param name="trainingData">The training data.</param>
         /// <exception cref="System.ArgumentOutOfRangeException"></exception>
-        public void AddTrainingData(ICollection<TrainingImage> trainingData)
+        public void AddTrainingData(ICollection<PatternTrainingImage> trainingData)
         {
-            foreach (TrainingImage item in trainingData)
+            foreach (PatternTrainingImage item in trainingData)
             {
                 TrainingData.Add(item);
             }
