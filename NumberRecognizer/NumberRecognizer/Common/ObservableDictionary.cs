@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Windows.Foundation.Collections;
 
-namespace NumberRecognizer.Common
+namespace NumberRecognizer.App.Common
 {
     /// <summary>
     /// Implementierung von IObservableMap, die ein erneutes Eintreten zur Verwendung als Standardanzeigemodell

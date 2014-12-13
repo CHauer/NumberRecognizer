@@ -292,9 +292,9 @@ namespace OcrTestApp
 
             if (saveFileDialog.ShowDialog() == true)
             {
-                NetworkDataManager dataManager = new NetworkDataManager();
+                NetworkDataSerializer dataSerializer = new NetworkDataSerializer();
 
-                dataManager.SaveToFile(saveFileDialog.FileName, ResultNetwork);
+                dataSerializer.SaveToFile(saveFileDialog.FileName, ResultNetwork);
             }
         }
 
@@ -308,9 +308,9 @@ namespace OcrTestApp
 
             if (openFileDialog.ShowDialog() == true)
             {
-                NetworkDataManager dataManager = new NetworkDataManager();
+                NetworkDataSerializer dataSerializer = new NetworkDataSerializer();
 
-                ResultNetwork = dataManager.LoadFromFile(openFileDialog.FileName);
+                ResultNetwork = dataSerializer.LoadFromFile(openFileDialog.FileName);
 
                 Dictionary<string, double> fitnessDetail = ResultNetwork.GetFitnessDetail(trainer.TrainingData.ToList());
 

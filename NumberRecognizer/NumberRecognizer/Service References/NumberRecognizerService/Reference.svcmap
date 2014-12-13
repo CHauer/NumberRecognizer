@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="9fdaa08d-fdb6-4c93-9cf2-dcd3c4690e5e" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>false</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8644/NumberRecognizerService.svc" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="NumberRecognizerService1.disco" MetadataType="Disco" ID="9b814b2d-de77-4f69-8229-d5b6d4906c31" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?disco" />
+    <MetadataFile FileName="NumberRecognizerService4.xsd" MetadataType="Schema" ID="a5ae0faf-3c01-456c-a2ec-b38169cdb8b1" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd0" />
+    <MetadataFile FileName="NumberRecognizerService41.xsd" MetadataType="Schema" ID="ed8939d3-6dda-4c11-aaed-6cfde35eaa7a" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd1" />
+    <MetadataFile FileName="NumberRecognizerService42.xsd" MetadataType="Schema" ID="edd48c06-e8d6-45dc-a62c-f4d2e773ab06" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd2" />
+    <MetadataFile FileName="NumberRecognizerService43.xsd" MetadataType="Schema" ID="3d787397-d78f-4482-a2f2-e9105d6e30e0" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd3" />
+    <MetadataFile FileName="NumberRecognizerService1.wsdl" MetadataType="Wsdl" ID="f606077a-fdb4-4ddb-ad34-fe06db6f0119" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?wsdl" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

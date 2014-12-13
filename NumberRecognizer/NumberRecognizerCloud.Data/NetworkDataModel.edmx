@@ -31,9 +31,11 @@
     <Property Name="NetworkName" Type="nvarchar(max)" Nullable="false" />
     <Property Name="Calculated" Type="int" Nullable="false" />
     <Property Name="Fitness" Type="float" Nullable="false" />
-    <Property Name="NetworkData" Type="varbinary(max)" Nullable="false" />
-    <Property Name="CalculationStart" Type="datetime" Nullable="false" />
-    <Property Name="CalculationEnd" Type="datetime" Nullable="false" />
+    <Property Name="NetworkData" Type="varbinary(max)" Nullable="true" />
+    <Property Name="CalculationStart" Type="datetime" Nullable="true" />
+    <Property Name="CalculationEnd" Type="datetime" Nullable="true" />
+    <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ErrorStatus" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
   <EntityType Name="TrainingImageDataSet">
     <Key>
@@ -129,11 +131,13 @@
           <Property Name="NetworkName" Type="String" Nullable="false" />
           <Property Name="Calculated" Type="NetworkDataModel.CalculationType" Nullable="false" />
           <Property Name="Fitness" Type="Double" Nullable="false" />
-          <Property Name="NetworkData" Type="Binary" Nullable="false" MaxLength="Max" />
+          <Property Name="NetworkData" Type="Binary" Nullable="true" MaxLength="Max" />
           <NavigationProperty Name="TrainingImages" Relationship="NetworkDataModel.NetworkTrainingImage" FromRole="Network" ToRole="TrainingImage" />
           <NavigationProperty Name="TrainLogs" Relationship="NetworkDataModel.NetworkTrainLog" FromRole="Network" ToRole="TrainLog" />
-          <Property Name="CalculationStart" Type="DateTime" Nullable="false" />
-          <Property Name="CalculationEnd" Type="DateTime" Nullable="false" />
+          <Property Name="CalculationStart" Type="DateTime" Nullable="true" />
+          <Property Name="CalculationEnd" Type="DateTime" Nullable="true" />
+          <Property Name="Username" Type="String" Nullable="false" />
+          <Property Name="ErrorStatus" Type="String" Nullable="true" />
         </EntityType>
         <EntityType Name="TrainingImageData">
           <Key>
@@ -159,6 +163,7 @@
           <Member Name="NotStarted" Value="1" />
           <Member Name="Running" Value="2" />
           <Member Name="Ready" Value="4" />
+          <Member Name="Error" Value="8" />
         </EnumType>
         <Association Name="NetworkTrainingImage">
           <End Type="NetworkDataModel.Network" Role="Network" Multiplicity="1" />
@@ -197,6 +202,8 @@
           <ScalarProperty Name="NetworkData" ColumnName="NetworkData" />
           <ScalarProperty Name="CalculationStart" ColumnName="CalculationStart" />
           <ScalarProperty Name="CalculationEnd" ColumnName="CalculationEnd" />
+          <ScalarProperty Name="Username" ColumnName="Username" />
+          <ScalarProperty Name="ErrorStatus" ColumnName="ErrorStatus" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

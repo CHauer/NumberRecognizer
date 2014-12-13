@@ -16,18 +16,20 @@ using NumberRecognizer.Lib.Training.Events;
 
 namespace NumberRecognizer.Cloud.Worker
 {
+    /// <summary>
+    /// The Azure Worker Role for calculating/traning 
+    /// new added of network.
+    /// </summary>
     public class WorkerRole : RoleEntryPoint
     {
-
         /// <summary>
-        /// Der Name Ihrer Warteschlange.
-        /// The queue name
+        /// The service bus queue name
         /// </summary>
         public string QueueName { get; set; }
 
-        // QueueClient ist threadsicher. Es wird empfohlen, den QueueClient im Zwischenspeicher abzulegen 
-        // statt ihn bei jeder Anforderung erneut zu erstellen
         /// <summary>
+        /// QueueClient ist threadsicher. Es wird empfohlen, den QueueClient im Zwischenspeicher abzulegen 
+        ///  statt ihn bei jeder Anforderung erneut zu erstellen
         /// The client
         /// </summary>
         private QueueClient client;
@@ -37,14 +39,15 @@ namespace NumberRecognizer.Cloud.Worker
         /// </summary>
         private ManualResetEvent completedEvent = new ManualResetEvent(false);
 
-        #region Initialize
+        #region Worker Start/Stop
 
         /// <summary>
-        /// Called when [start].
+        /// Called when the worker role gets started.
         /// </summary>
         /// <returns></returns>
         public override bool OnStart()
         {
+            //get queuename from Settings
             QueueName = CloudConfigurationManager.GetSetting("QueueName");
 
             // Die maximale Anzahl gleichzeitiger Verbindungen setzen 
@@ -61,11 +64,12 @@ namespace NumberRecognizer.Cloud.Worker
 
             // Die Verbindung zur Service Bus-Warteschlange initialisieren
             client = QueueClient.CreateFromConnectionString(connectionString, QueueName);
+
             return base.OnStart();
         }
 
         /// <summary>
-        /// Called when [stop].
+        /// Called when the worker role is stop.
         /// </summary>
         public override void OnStop()
         {
@@ -80,13 +84,15 @@ namespace NumberRecognizer.Cloud.Worker
         #region Run - Message Handling
 
         /// <summary>
-        /// Runs this instance.
+        /// Runs this worker role instance.
+        /// Handles incoming messages from service bus queue.
         /// </summary>
         public override void Run()
         {
             Trace.WriteLine("Beginn der Verarbeitung von Nachrichten");
 
-            // Initiiert das Nachrichtensystem und für jede erhaltene Nachricht wird der Rückruf aufgerufen; ein Aufruf von „Close“ auf dem Client beendet das Nachrichtensystem.
+            // Initiiert das Nachrichtensystem und für jede erhaltene Nachricht wird der Rückruf aufgerufen;
+            // ein Aufruf von „Close“ auf dem Client beendet das Nachrichtensystem.
             client.OnMessage((receivedMessage) =>
                 {
                     try
@@ -100,13 +106,18 @@ namespace NumberRecognizer.Cloud.Worker
                         {
                             TrainNetwork(Convert.ToInt32(receivedMessage.Properties["networkId"]));
                         }
+                        else if (message.Equals("trainRenew"))
+                        {
+                            TrainNetwork(Convert.ToInt32(receivedMessage.Properties["networkId"]), true);
+                        }
                         else
                         {
+                            //Warning unknown message to handle
                             Trace.TraceWarning(String.Format("Unknown Message {0}", message));
                         }
 
                     }
-                    catch(Exception ex)
+                    catch (Exception ex)
                     {
                         Trace.TraceError(ex.Message);
                     }
@@ -116,27 +127,58 @@ namespace NumberRecognizer.Cloud.Worker
         }
 
         /// <summary>
-        /// Trains the network.
+        /// Trains the network with the received networkid.
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
-        private void TrainNetwork(int networkId)
+        /// <param name="reTrainNetwork">if set to <c>true</c> the network is prepared 
+        ///                              for repeating the trainig.</param>
+        private void TrainNetwork(int networkId, bool reTrainNetwork = false)
         {
-            NetworkDataManager networkDataManager = new NetworkDataManager();
-            DataManager<double[,]> arrayDataManager = new DataManager<double[,]>();
+            NetworkDataSerializer networkDataSerializer = new NetworkDataSerializer();
+            DataSerializer<double[,]> arrayDataSerializer = new DataSerializer<double[,]>();
 
             PatternRecognitionNetwork network;
             NetworkTrainer trainer;
 
-            using(var db = new NetworkDataModelContainer())
+            using (var db = new NetworkDataModelContainer())
             {
-                var dbNetwork = db.NetworkSet.First(n => n.NetworkId == networkId);
-                var trainingData = dbNetwork.TrainingImages.Select(i => new PatternTrainingImage()
+                //check if network exists
+                if (!db.NetworkSet.Any(n => n.NetworkId == networkId))
                 {
-                    PixelValues = arrayDataManager.TransformFromBinary(i.ImageData),
+                    Trace.TraceError("The network (ID:{0}) was not found in the database.");
+                    return;
+                }
+
+                //load network entity
+                var dbNetwork = db.NetworkSet.First(n => n.NetworkId == networkId);
+
+                if (reTrainNetwork)
+                {
+                    //prepare network for new training (delete logs)
+                    if (PrepareNetworkForReTraining(networkId, dbNetwork, db)) return;
+                }
+                else
+                {
+                    //check if network is trained already
+                    if (dbNetwork.Calculated == CalculationType.Running || dbNetwork.Calculated == CalculationType.Ready)
+                    {
+                        Trace.TraceError("The network (ID:{0}) is already trained - use retrain function to train this network again.");
+                        return;
+                    }
+                }
+
+                //load training data
+                List<TrainingImageData> trainImages = dbNetwork.TrainingImages.ToList();
+
+                //transform to double arrays
+                IEnumerable<PatternTrainingImage> trainData = trainImages.Select(i => new PatternTrainingImage()
+                {
+                    PixelValues = arrayDataSerializer.TransformFromBinary(i.ImageData),
                     RepresentingInformation = i.Pattern
                 });
 
-                trainer = new NetworkTrainer(trainingData);
+                //Create network trainer instance
+                trainer = new NetworkTrainer(trainData);
 
                 dbNetwork.CalculationStart = DateTime.Now;
                 dbNetwork.Calculated = CalculationType.Running;
@@ -152,16 +194,16 @@ namespace NumberRecognizer.Cloud.Worker
             }
 
             trainer.MultipleGenPoolGenerationChanged += (sender, e) => Trainer_GenerationChanged(sender, e, networkId);
-
             trainer.GenerationChanged += (sender, e) => Trainer_GenerationChanged(sender, e, networkId);
 
+            //Train the network and save final network instance
             PatternRecognitionNetwork finalNetwork = trainer.TrainNetwork().First();
 
             using (var db = new NetworkDataModelContainer())
             {
                 var dbNetwork = db.NetworkSet.First(n => n.NetworkId == networkId);
 
-                dbNetwork.NetworkData = networkDataManager.TransformToBinary(finalNetwork);
+                dbNetwork.NetworkData = networkDataSerializer.TransformToBinary(finalNetwork);
                 dbNetwork.CalculationEnd = DateTime.Now;
                 dbNetwork.Calculated = CalculationType.Ready;
                 dbNetwork.Fitness = finalNetwork.Fitness;
@@ -176,6 +218,46 @@ namespace NumberRecognizer.Cloud.Worker
                 }
             }
 
+        }
+
+        /// <summary>
+        /// Prepares the network for re training.
+        /// </summary>
+        /// <param name="networkId">The network identifier.</param>
+        /// <param name="dbNetwork">The database network.</param>
+        /// <param name="db">The database.</param>
+        /// <returns></returns>
+        private bool PrepareNetworkForReTraining(int networkId, Network dbNetwork, NetworkDataModelContainer db)
+        {
+            if (dbNetwork.Calculated == CalculationType.Ready)
+            {
+                //remove old patterns fittness values
+                var removePatterns = db.PatternFitnessSet.Where(p => p.TrainLog.Network.NetworkId == networkId);
+                db.PatternFitnessSet.RemoveRange(removePatterns);
+
+                //remove old trainlog
+                var removeTrainLogs = dbNetwork.TrainLogs;
+                db.TrainLogSet.RemoveRange(removeTrainLogs);
+
+                dbNetwork.Calculated = CalculationType.NotStarted;
+
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
+                    return false;
+                }
+            }
+            else if (dbNetwork.Calculated == CalculationType.Running)
+            {
+                Trace.TraceError("The trainig for the network (ID:{0}) has not finished.", networkId);
+                return false;
+            }
+
+            return true;
         }
 
         /// <summary>

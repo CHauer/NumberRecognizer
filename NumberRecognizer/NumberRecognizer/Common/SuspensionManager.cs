@@ -11,7 +11,7 @@ using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace NumberRecognizer.Common
+namespace NumberRecognizer.App.Common
 {
     /// <summary>
     /// SuspensionManager erfasst den globalen Sitzungszustand, um die Verwaltung der Prozesslebensdauer

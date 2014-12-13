@@ -1,4 +1,4 @@
-﻿using NumberRecognizer.Common;
+﻿using NumberRecognizer.App.Common;
 
 using System;
 using System.Collections.Generic;
@@ -19,7 +19,7 @@ using Windows.UI.Xaml.Navigation;
 
 // Die Elementvorlage "Split App" ist unter http://go.microsoft.com/fwlink/?LinkId=234228 dokumentiert.
 
-namespace NumberRecognizer
+namespace NumberRecognizer.App
 {
     /// <summary>
     /// Stellt das anwendungsspezifische Verhalten bereit, um die Standardanwendungsklasse zu ergänzen.
@@ -89,7 +89,7 @@ namespace NumberRecognizer
                 // Wenn der Navigationsstapel nicht wiederhergestellt wird, zur ersten Seite navigieren
                 // und die neue Seite konfigurieren, indem die erforderlichen Informationen als Navigationsparameter
                 // übergeben werden
-                rootFrame.Navigate(typeof(ItemsPage), e.Arguments);
+                rootFrame.Navigate(typeof(GroupedNetworksPage), e.Arguments);
             }
             // Sicherstellen, dass das aktuelle Fenster aktiv ist
             Window.Current.Activate();

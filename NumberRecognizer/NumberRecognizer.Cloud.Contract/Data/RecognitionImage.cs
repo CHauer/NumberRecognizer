@@ -18,7 +18,6 @@ namespace NumberRecognizer.Cloud.Contract.Data
         [DataMember]
         public int Width{ get; set; }
 
-
         public void TransformFrom2DArrayToImageData(double[,] array)
         {
             int index = 0;
