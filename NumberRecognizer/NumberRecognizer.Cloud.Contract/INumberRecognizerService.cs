@@ -37,7 +37,7 @@ namespace NumberRecognizer.Cloud.Contract
         /// <param name="copyTraindataFromNetworkId">The copy traindata from network identifier.</param>
         /// <returns></returns>
         [OperationContract]
-        bool CreateNetwork(string name, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId);
+        bool CreateNetworkWithTrainingDataCopy(string name, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId);
 
         /// <summary>
         /// Deletes the network.
