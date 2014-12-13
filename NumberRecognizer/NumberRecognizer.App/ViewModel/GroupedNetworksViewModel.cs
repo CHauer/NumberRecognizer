@@ -76,7 +76,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void LoadCommands()
         {
-            AddNetwork = new RelayCommand(() => App.Frame.Navigate(typeof(CreateNetworkPage)));
+            CreateNetwork = new RelayCommand(() => App.Frame.Navigate(typeof(CreateNetworkPage)));
         }
 
         #endregion
