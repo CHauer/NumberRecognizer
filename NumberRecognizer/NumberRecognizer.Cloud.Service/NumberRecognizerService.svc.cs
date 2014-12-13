@@ -219,7 +219,7 @@ namespace NumberRecognizer.Cloud.Service
             return status;
         }
 
-        public bool CreateNetwork(string name, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId)
+        public bool CreateNetworkWithTrainingDataCopy(string name, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId)
         {
             throw new NotImplementedException();
         }
