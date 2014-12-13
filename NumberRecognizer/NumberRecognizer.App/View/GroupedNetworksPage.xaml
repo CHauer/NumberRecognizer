@@ -51,7 +51,8 @@
             Grid.RowSpan="2"
             Padding="116,137,40,46"
             ItemsSource="{Binding Source={StaticResource GroupedItemsViewSource}}"
-            SelectionMode="Multiple"
+            SelectionMode="Extended"
+            SelectedItem="{Binding SelectedNetwork}"
             IsSwipeEnabled="false"
             IsItemClickEnabled="True"
             ItemClick="NetworkView_ItemClick">
@@ -83,8 +84,8 @@
                                     Click="Header_Click"
                                     Style="{StaticResource TextBlockButtonStyle}" >
                                     <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="{Binding Title}" Margin="0,-11,10,10" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
-                                        <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-11,0,10" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />
+                                        <TextBlock Text="{Binding Title}" Margin="0,-11,10,10" Style="{StaticResource CustomTextBlockStyle}" />
+                                        <TextBlock Text="{StaticResource ChevronGlyph}" FontFamily="Segoe UI Symbol" Margin="0,-11,0,10" Style="{StaticResource CustomTextBlockStyle}" />
                                     </StackPanel>
                                 </Button>
                             </Grid>
@@ -106,17 +107,16 @@
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource HeaderTextBlockStyle}" Grid.Column="1" 
-                        IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40" Foreground="OrangeRed"/>
+            <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource CustomHeaderTextBlockStyle}"  Grid.Column="1" />
         </Grid>
     </Grid>
     <Page.BottomAppBar>
         <AppBar Background="OrangeRed">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <AppBarButton Name="AddNetworkAppBarButton" Label="Create new Network" Icon="Add" Command="{Binding CreateNetwork}"/>
-                <AppBarButton Name="RemoveNetworkAppBarButton" Label="Delete selected Networks" Icon="Remove"/>
+                <AppBarButton Name="RemoveNetworkAppBarButton" Label="Delete selected Networks" Icon="Remove" Command="{Binding DeleteNetwork}"/>
                 <AppBarSeparator/>
-                <AppBarToggleButton Name="AutoRefreshNetworksAppBarToggleButton" Icon="Refresh" IsChecked="True" Label="Sync Networks (10 sec.)"/>
+                <AppBarButton Name="RefreshNetworksAppBarButton" Icon="Refresh" Label="Refresh" Command="{Binding RefreshNetworks}" />
             </StackPanel>           
         </AppBar>
     </Page.BottomAppBar>

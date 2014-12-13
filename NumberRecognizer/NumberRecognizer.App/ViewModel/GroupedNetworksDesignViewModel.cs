@@ -37,7 +37,7 @@ namespace NumberRecognizer.App.ViewModel
         {
             groups = new ObservableCollection<NetworkDataGroup>()
             {
-                new NetworkDataGroup("MZytek", "MZytek"){
+                new NetworkDataGroup("Trained", "Trained"){
                     Items = new ObservableCollection<NetworkInfo>(){
                         new NetworkInfo(){
                             Username = "MZytek",
@@ -55,7 +55,7 @@ namespace NumberRecognizer.App.ViewModel
                         }
                     }
                 },
-                new NetworkDataGroup("CHauer", "CHauer"){
+                new NetworkDataGroup("Not Trained", "Not Trained"){
                     Items = new ObservableCollection<NetworkInfo>(){
                         new NetworkInfo(){
                             Username = "CHauer",

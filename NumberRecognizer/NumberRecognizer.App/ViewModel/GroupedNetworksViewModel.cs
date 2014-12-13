@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Mutzl.MvvmLight;
 using NumberRecognizer.App.DataModel;
 using NumberRecognizer.App.NumberRecognizerService;
 using NumberRecognizer.Cloud.Contract.Data;
@@ -23,7 +24,25 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private ObservableCollection<NetworkDataGroup> groups;
 
+        /// <summary>
+        /// The current network
+        /// </summary>
+        private NetworkInfo currentNetwork;
+
+        /// <summary>
+        /// The command create network
+        /// </summary>
         private ICommand cmdCreateNetwork;
+
+        /// <summary>
+        /// The command delete network
+        /// </summary>
+        private DependentRelayCommand cmdDeleteNetwork;
+
+        /// <summary>
+        /// The command refresh networks
+        /// </summary>
+        private ICommand cmdRefreshNetworks;
 
         #region Constructor
 
@@ -53,22 +72,26 @@ namespace NumberRecognizer.App.ViewModel
                 networks = await serviceProxy.GetNetworksAsync();
             }
             catch
-            { 
+            {
                 return;
             }
 
             Groups = new ObservableCollection<NetworkDataGroup>();
 
-            foreach(string groupName in networks.Select(n => n.Username).Distinct())
+            var groupTrained = new NetworkDataGroup("Trained", "Trained");
+            foreach (var network in networks.Where(n => n.Calculated))
             {
-                var group = new NetworkDataGroup(groupName, groupName);
-                foreach(var network in networks.Where(n => n.Username.Equals(group.Title)))
-                {
-                    group.Items.Add(network);
-                }
-
-                Groups.Add(group);
+                groupTrained.Items.Add(network);
             }
+            Groups.Add(groupTrained);
+
+            var groupNotTrained = new NetworkDataGroup("Not Trained", "Not Trained");
+            foreach (var network in networks.Where(n => !n.Calculated))
+            {
+                groupNotTrained.Items.Add(network);
+            }
+
+            Groups.Add(groupNotTrained);
         }
 
         /// <summary>
@@ -77,11 +100,32 @@ namespace NumberRecognizer.App.ViewModel
         private void LoadCommands()
         {
             CreateNetwork = new RelayCommand(() => App.Frame.Navigate(typeof(CreateNetworkPage)));
+            RefreshNetworks = new RelayCommand(LoadNetworks);
+            DeleteNetwork = new DependentRelayCommand(ExecuteDeleteNetwork, CanExecuteDeleteNetwork, this, () => SelectedNetwork);
         }
 
         #endregion
 
         #region Properties
+
+        /// <summary>
+        /// Gets or sets the current selected network.
+        /// </summary>
+        /// <value>
+        /// The current selected network.
+        /// </value>
+        public NetworkInfo SelectedNetwork
+        {
+            get
+            {
+                return currentNetwork;
+            }
+            set
+            {
+                currentNetwork = value;
+                RaisePropertyChanged(() => SelectedNetwork);
+            }
+        }
 
         /// <summary>
         /// Gets the groups.
@@ -125,6 +169,55 @@ namespace NumberRecognizer.App.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gets or sets the delete network.
+        /// </summary>
+        /// <value>
+        /// The delete network.
+        /// </value>
+        public DependentRelayCommand DeleteNetwork
+        {
+            get
+            {
+                return cmdDeleteNetwork;
+            }
+            set
+            {
+                cmdDeleteNetwork = value;
+                RaisePropertyChanged(() => DeleteNetwork);
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the refresh networks.
+        /// </summary>
+        /// <value>
+        /// The refresh networks.
+        /// </value>
+        public ICommand RefreshNetworks
+        {
+            get
+            {
+                return cmdRefreshNetworks;
+            }
+            set
+            {
+                cmdRefreshNetworks = value;
+                RaisePropertyChanged(() => RefreshNetworks);
+            }
+        }
+
         #endregion
+
+        private void ExecuteDeleteNetwork()
+        {
+            throw new NotImplementedException();
+        }
+
+        private bool CanExecuteDeleteNetwork()
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }
