@@ -113,7 +113,7 @@ namespace NumberRecognizer.App.NumberRecognizerService {
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration) {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_INumberRecognizerService)) {
-                return new System.ServiceModel.EndpointAddress("http://localhost:8644/NumberRecognizerService.svc");
+                return new System.ServiceModel.EndpointAddress("http://aec643ac9c4c4965af5743e42f28779d.cloudapp.net/NumberRecognizerService.svc");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

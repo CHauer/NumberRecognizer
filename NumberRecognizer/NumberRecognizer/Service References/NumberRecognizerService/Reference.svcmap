@@ -21,15 +21,15 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:8644/NumberRecognizerService.svc" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://aec643ac9c4c4965af5743e42f28779d.cloudapp.net/NumberRecognizerService.svc" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="NumberRecognizerService1.disco" MetadataType="Disco" ID="9b814b2d-de77-4f69-8229-d5b6d4906c31" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?disco" />
-    <MetadataFile FileName="NumberRecognizerService4.xsd" MetadataType="Schema" ID="a5ae0faf-3c01-456c-a2ec-b38169cdb8b1" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd0" />
-    <MetadataFile FileName="NumberRecognizerService41.xsd" MetadataType="Schema" ID="ed8939d3-6dda-4c11-aaed-6cfde35eaa7a" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd1" />
-    <MetadataFile FileName="NumberRecognizerService42.xsd" MetadataType="Schema" ID="edd48c06-e8d6-45dc-a62c-f4d2e773ab06" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd2" />
-    <MetadataFile FileName="NumberRecognizerService43.xsd" MetadataType="Schema" ID="3d787397-d78f-4482-a2f2-e9105d6e30e0" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd3" />
-    <MetadataFile FileName="NumberRecognizerService1.wsdl" MetadataType="Wsdl" ID="f606077a-fdb4-4ddb-ad34-fe06db6f0119" SourceId="1" SourceUrl="http://localhost:8644/NumberRecognizerService.svc?wsdl" />
+    <MetadataFile FileName="NumberRecognizerService.wsdl" MetadataType="Wsdl" ID="4f233eaa-0b0c-42ec-a6aa-8f5bb4e1198b" SourceId="1" SourceUrl="http://aec643ac9c4c4965af5743e42f28779d.cloudapp.net/NumberRecognizerService.svc?wsdl" />
+    <MetadataFile FileName="NumberRecognizerService.xsd" MetadataType="Schema" ID="669dc900-e2eb-4cf3-8c57-4bbc0f745eca" SourceId="1" SourceUrl="http://aec643ac9c4c4965af5743e42f28779d.cloudapp.net/NumberRecognizerService.svc?xsd=xsd3" />
+    <MetadataFile FileName="NumberRecognizerService1.xsd" MetadataType="Schema" ID="3363d332-f843-44b3-8651-52d262c27201" SourceId="1" SourceUrl="http://aec643ac9c4c4965af5743e42f28779d.cloudapp.net/NumberRecognizerService.svc?xsd=xsd2" />
+    <MetadataFile FileName="NumberRecognizerService2.xsd" MetadataType="Schema" ID="4d32b03b-f95c-4149-90c2-660e0aef26d8" SourceId="1" SourceUrl="http://aec643ac9c4c4965af5743e42f28779d.cloudapp.net/NumberRecognizerService.svc?xsd=xsd1" />
+    <MetadataFile FileName="NumberRecognizerService3.xsd" MetadataType="Schema" ID="a4e580bb-994a-45b8-82ad-1e4b76e90e5c" SourceId="1" SourceUrl="http://aec643ac9c4c4965af5743e42f28779d.cloudapp.net/NumberRecognizerService.svc?xsd=xsd0" />
+    <MetadataFile FileName="NumberRecognizerService.disco" MetadataType="Disco" ID="9654e82d-1323-4668-b05b-f0fff8659427" SourceId="1" SourceUrl="http://aec643ac9c4c4965af5743e42f28779d.cloudapp.net/NumberRecognizerService.svc?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

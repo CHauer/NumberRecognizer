@@ -26,6 +26,8 @@ namespace NumberRecognizer.App
     /// </summary>
     sealed partial class App : Application
     {
+        private static Frame rootFrame;
+
         /// <summary>
         /// Initialisiert das Singletonanwendungsobjekt.  Dies ist die erste Zeile von erstelltem Code
         /// und daher das logische Äquivalent von main() bzw. WinMain().
@@ -34,6 +36,20 @@ namespace NumberRecognizer.App
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+        }
+
+        /// <summary>
+        /// Gets the frame.
+        /// </summary>
+        /// <value>
+        /// The frame.
+        /// </value>
+        public static Frame Frame
+        {
+            get
+            {
+                return rootFrame;
+            }
         }
 
         /// <summary>
@@ -51,7 +67,7 @@ namespace NumberRecognizer.App
             }
 #endif
 
-            Frame rootFrame = Window.Current.Content as Frame;
+            rootFrame = Window.Current.Content as Frame;
 
             // App-Initialisierung nicht wiederholen, wenn das Fenster bereits Inhalte enthält.
             // Nur sicherstellen, dass das Fenster aktiv ist.

@@ -159,18 +159,18 @@
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />
     <Content Include="Assets\DarkGray.png" />
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService1.disco" />
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService1.wsdl" />
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService4.xsd">
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService.disco" />
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService.wsdl" />
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService41.xsd">
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService42.xsd">
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService43.xsd">
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService3.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\NumberRecognizerService\Reference.svcmap">
@@ -185,6 +185,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Style\AppStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Page>
     <Page Include="View\NetworkDetailPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
