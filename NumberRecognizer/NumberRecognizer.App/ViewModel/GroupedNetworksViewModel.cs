@@ -209,14 +209,23 @@ namespace NumberRecognizer.App.ViewModel
 
         #endregion
 
+        /// <summary>
+        /// Executes the delete network.
+        /// </summary>
         private void ExecuteDeleteNetwork()
         {
-            throw new NotImplementedException();
+            NumberRecognizerServiceClient serviceProxy = new NumberRecognizerServiceClient();
+
+            //serviceProxy.Delete
         }
 
+        /// <summary>
+        /// Determines whether this instance [can execute delete network].
+        /// </summary>
+        /// <returns></returns>
         private bool CanExecuteDeleteNetwork()
         {
-            throw new NotImplementedException();
+            return SelectedNetwork != null;
         }
 
     }

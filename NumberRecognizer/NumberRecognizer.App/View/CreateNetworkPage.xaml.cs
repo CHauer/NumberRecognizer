@@ -5,28 +5,27 @@
 // <author>Markus Zytek</author>
 // <summary>Create Network Page.</summary>
 //-----------------------------------------------------------------------
-
-
+using NumberRecognizer.App.Common;
+using NumberRecognizer.App.Common;
+using NumberRecognizer.App.Control;
+using NumberRecognizer.App.Help;
+using NumberRecognizer.App.ViewModel;
+using NumberRecognizer.Labeling;
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
+using Windows.System.UserProfile;
+using Windows.UI;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 
 namespace NumberRecognizer.App
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Runtime.InteropServices.WindowsRuntime;
-    using NumberRecognizer.App.Common;
-    using NumberRecognizer.App.Common;
-    using NumberRecognizer.App.Control;
-    using NumberRecognizer.App.Help;
-    using Windows.System.UserProfile;
-    using Windows.UI;
-    using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Controls;
-    using Windows.UI.Xaml.Media;
-    using Windows.UI.Xaml.Media.Imaging;
-    using Windows.UI.Xaml.Navigation;
-    using Windows.UI.Xaml.Shapes;
-    using NumberRecognizer.Labeling;
-
+  
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -40,12 +39,7 @@ namespace NumberRecognizer.App
         /// <summary>
         /// The default view model
         /// </summary>
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
-        /// <summary>
-        /// The ink canvases
-        /// </summary>
-        private List<InkCanvasRT> inkCanvasRT = new List<InkCanvasRT>();
+        private CreateNetworkViewModel defaultViewModel = new CreateNetworkViewModel();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateNetworkPage"/> class.
@@ -65,7 +59,7 @@ namespace NumberRecognizer.App
         /// <imgByte>
         /// The default view model.
         /// </imgByte>
-        public ObservableDictionary DefaultViewModel
+        public CreateNetworkViewModel DefaultViewModel
         {
             get { return this.defaultViewModel; }
         }
@@ -115,18 +109,16 @@ namespace NumberRecognizer.App
         /// </summary>
         private async void InitPage()
         {
-            this.inkCanvasRT.Add(this.InkCanvasRT0);
-            this.inkCanvasRT.Add(this.InkCanvasRT1);
-            this.inkCanvasRT.Add(this.InkCanvasRT2);
-            this.inkCanvasRT.Add(this.InkCanvasRT3);
-            this.inkCanvasRT.Add(this.InkCanvasRT4);
-            this.inkCanvasRT.Add(this.InkCanvasRT5);
-            this.inkCanvasRT.Add(this.InkCanvasRT6);
-            this.inkCanvasRT.Add(this.InkCanvasRT7);
-            this.inkCanvasRT.Add(this.InkCanvasRT8);
-            this.inkCanvasRT.Add(this.InkCanvasRT9);
-
-            this.NameTextBox.Text = string.Format("{0}_{1}", await UserInformation.GetLastNameAsync(), DateTime.Now.ToFileTime());
+            DefaultViewModel.CanvasList.Add(this.InkCanvasRT0);
+            DefaultViewModel.CanvasList.Add(this.InkCanvasRT1);
+            DefaultViewModel.CanvasList.Add(this.InkCanvasRT2);
+            DefaultViewModel.CanvasList.Add(this.InkCanvasRT3);
+            DefaultViewModel.CanvasList.Add(this.InkCanvasRT4);
+            DefaultViewModel.CanvasList.Add(this.InkCanvasRT5);
+            DefaultViewModel.CanvasList.Add(this.InkCanvasRT6);
+            DefaultViewModel.CanvasList.Add(this.InkCanvasRT7);
+            DefaultViewModel.CanvasList.Add(this.InkCanvasRT8);
+            DefaultViewModel.CanvasList.Add(this.InkCanvasRT9);
         }
 
         /// <summary>
@@ -156,72 +148,5 @@ namespace NumberRecognizer.App
         {
         }
 
-        /// <summary>
-        /// Handles the Click event of the NextButton control.
-        /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="Windows.UI.Xaml.RoutedEventArgs"/> instance containing the event data.</param>
-        private async void NextButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            foreach (InkCanvasRT inkCanvas in this.inkCanvasRT)
-            {
-                var renderTargetBitmap = new RenderTargetBitmap();
-                await renderTargetBitmap.RenderAsync(inkCanvas);
-
-                byte[] canvasRGBABytes = (await renderTargetBitmap.GetPixelsAsync()).ToArray();
-                byte[] canvasBytes = await ImageHelperRT.GetByteArrayFromRGBAByteArrayAsync(canvasRGBABytes, inkCanvas.ForegroundColor);
-
-                double canvasWidth = inkCanvas.ActualWidth;
-                double canvasHeight = inkCanvas.ActualHeight;
-                double[,] canvasPixels = await ImageHelperRT.Get2DPixelArrayFromByteArrayAsync(canvasBytes, canvasWidth, canvasHeight);
-
-                inkCanvas.ConnectedComponentLabeling = new ConnectedComponentLabeling(canvasPixels, 0.0);
-
-                foreach (ConnectedComponent connectedComponent in inkCanvas.ConnectedComponentLabeling.ConnectedComponents)
-                {
-                    MinimumBoundingRectangle mbr = connectedComponent.MinBoundingRect;
-                    Rectangle rectangle = new Rectangle()
-                    {
-                        Stroke = new SolidColorBrush(Colors.Blue),
-                        StrokeThickness = inkCanvas.StrokeThickness / 2,
-                        Width = mbr.Width,
-                        Height = mbr.Height,
-                        Margin = new Thickness() { Top = mbr.Top, Left = mbr.Left }
-                    };
-                    inkCanvas.Children.Add(rectangle);
-
-                    byte[] orgBytes = new byte[(int)(mbr.Width * mbr.Height)];
-                    byte[] scaBytes = new byte[(int)Math.Pow(mbr.Size, 2)];
-                    for (int y = 0; y < mbr.Height; y++)
-                    {
-                        for (int x = 0; x < mbr.Width; x++)
-                        {
-                            if (connectedComponent.Points.Exists(p => p.X == mbr.Left + x && p.Y == mbr.Top + y))
-                            {
-                                double row = (mbr.Top + y) * canvasWidth;
-                                double col = mbr.Left + x;
-                                byte val = canvasBytes[(int)(row + col)];
-
-                                int orgIdx = (int)(y * mbr.Width) + x;
-                                orgBytes[orgIdx] = val;
-
-                                int scaIdx = (int)(((y + mbr.PadTop) * mbr.Size) + (x + mbr.PadLeft));
-                                scaBytes[scaIdx] = val;
-                            }
-                        }
-                    }
-
-                    byte[] orgRGBABytes = ImageHelperRT.GetRGBAByteArrayFromByteArrayAsync(orgBytes, Colors.Black);
-                    await ImageHelperRT.SaveRGBAByteArrayAsBitmapImageAsync(orgRGBABytes, mbr.Width, mbr.Height, inkCanvas.Name + "_org");
-                    connectedComponent.Pixels = await ImageHelperRT.Get2DPixelArrayFromByteArrayAsync(orgBytes, mbr.Width, mbr.Height);
-
-                    byte[] scaRGBABytes = ImageHelperRT.GetRGBAByteArrayFromByteArrayAsync(scaBytes, Colors.Black);
-                    scaRGBABytes = await ImageHelperRT.ScaleRGBAByteArrayAsync(scaRGBABytes, mbr.Size, mbr.Size, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight);
-                    scaBytes = await ImageHelperRT.GetByteArrayFromRGBAByteArrayAsync(scaRGBABytes, inkCanvas.ForegroundColor);
-                    await ImageHelperRT.SaveRGBAByteArrayAsBitmapImageAsync(scaRGBABytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight, inkCanvas.Name + "_sca");
-                    connectedComponent.ScaledPixels = await ImageHelperRT.Get2DPixelArrayFromByteArrayAsync(scaBytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight);
-                }
-            }
-        }
     }
 }

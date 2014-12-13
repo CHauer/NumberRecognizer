@@ -34,7 +34,6 @@
     <Property Name="NetworkData" Type="varbinary(max)" Nullable="true" />
     <Property Name="CalculationStart" Type="datetime" Nullable="true" />
     <Property Name="CalculationEnd" Type="datetime" Nullable="true" />
-    <Property Name="Username" Type="nvarchar(max)" Nullable="false" />
     <Property Name="ErrorStatus" Type="nvarchar(max)" Nullable="true" />
   </EntityType>
   <EntityType Name="TrainingImageDataSet">
@@ -52,7 +51,7 @@
     </Key>
     <Property Name="TrainLogId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="GenerationNr" Type="int" Nullable="false" />
-    <Property Name="MultipleGenPoolIdentifier" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="MultipleGenPoolIdentifier" Type="nvarchar(max)" Nullable="true" />
     <Property Name="Fitness" Type="float" Nullable="false" />
     <Property Name="Network_NetworkId" Type="int" Nullable="false" />
   </EntityType>
@@ -136,7 +135,6 @@
           <NavigationProperty Name="TrainLogs" Relationship="NetworkDataModel.NetworkTrainLog" FromRole="Network" ToRole="TrainLog" />
           <Property Name="CalculationStart" Type="DateTime" Nullable="true" />
           <Property Name="CalculationEnd" Type="DateTime" Nullable="true" />
-          <Property Name="Username" Type="String" Nullable="false" />
           <Property Name="ErrorStatus" Type="String" Nullable="true" />
         </EntityType>
         <EntityType Name="TrainingImageData">
@@ -155,7 +153,7 @@
           <Property Name="TrainLogId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <NavigationProperty Name="Network" Relationship="NetworkDataModel.NetworkTrainLog" FromRole="TrainLog" ToRole="Network" />
           <Property Name="GenerationNr" Type="Int32" Nullable="false" />
-          <Property Name="MultipleGenPoolIdentifier" Type="String" Nullable="false" />
+          <Property Name="MultipleGenPoolIdentifier" Type="String" Nullable="true" />
           <Property Name="Fitness" Type="Double" Nullable="false" />
           <NavigationProperty Name="PatternFitnessSet" Relationship="NetworkDataModel.TrainLogPatternFitness" FromRole="TrainLog" ToRole="PatternFitness" />
         </EntityType>
@@ -202,7 +200,6 @@
           <ScalarProperty Name="NetworkData" ColumnName="NetworkData" />
           <ScalarProperty Name="CalculationStart" ColumnName="CalculationStart" />
           <ScalarProperty Name="CalculationEnd" ColumnName="CalculationEnd" />
-          <ScalarProperty Name="Username" ColumnName="Username" />
           <ScalarProperty Name="ErrorStatus" ColumnName="ErrorStatus" />
         </MappingFragment>
       </EntityTypeMapping>

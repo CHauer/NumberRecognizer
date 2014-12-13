@@ -58,12 +58,12 @@ namespace NumberRecognizer.App
         /// <param name="e">Event data that describes how the click was initiated.</param>
         public void Header_Click(object sender, RoutedEventArgs e)
         {
-            // Determine what group the Button instance represents
-            var group = (sender as FrameworkElement).DataContext;
+            //// Determine what group the Button instance represents
+            //var group = (sender as FrameworkElement).DataContext;
 
-            // Navigate to the appropriate destination page, configuring the new page
-            // by passing required information as a navigation parameter
-            this.Frame.Navigate(typeof(GroupDetailPage), ((NetworkDataGroup)group).UniqueId);
+            //// Navigate to the appropriate destination page, configuring the new page
+            //// by passing required information as a navigation parameter
+            //this.Frame.Navigate(typeof(GroupDetailPage), ((NetworkDataGroup)group).UniqueId);
         }
 
         /// <summary>

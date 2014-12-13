@@ -119,8 +119,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\CreateNetworkViewModel.cs" />
     <Compile Include="ViewModel\GroupedNetworksDesignViewModel.cs" />
     <Compile Include="ViewModel\GroupedNetworksViewModel.cs" />
+    <Compile Include="View\GroupedNetworksPage.xaml.cs">
+      <DependentUpon>GroupedNetworksPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\NetworkDetailPage.xaml.cs">
       <DependentUpon>NetworkDetailPage.xaml</DependentUpon>
     </Compile>
@@ -131,12 +135,6 @@
     <Compile Include="Common\SuspensionManager.cs" />
     <Compile Include="View\CreateNetworkPage.xaml.cs">
       <DependentUpon>CreateNetworkPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\GroupDetailPage.xaml.cs">
-      <DependentUpon>GroupDetailPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="View\GroupedNetworksPage.xaml.cs">
-      <DependentUpon>GroupedNetworksPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\RecognizePage.xaml.cs">
       <DependentUpon>RecognizePage.xaml</DependentUpon>
@@ -162,6 +160,7 @@
     <Content Include="Assets\LightGray.png" />
     <Content Include="Assets\MediumGray.png" />
     <Content Include="Assets\DarkGray.png" />
+    <Content Include="Lib\De.TorstenMandelkow.MetroChart.dll" />
     <None Include="Service References\NumberRecognizerService\NumberRecognizerService1.disco" />
     <None Include="Service References\NumberRecognizerService\NumberRecognizerService1.wsdl" />
     <None Include="Service References\NumberRecognizerService\NumberRecognizerService4.xsd">
@@ -193,19 +192,15 @@
       <Generator>MSBuild:Compile</Generator>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
+    <Page Include="View\GroupedNetworksPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\NetworkDetailPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\CreateNetworkPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\GroupDetailPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="View\GroupedNetworksPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -215,6 +210,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="De.TorstenMandelkow.MetroChart, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Lib\De.TorstenMandelkow.MetroChart.dll</HintPath>
+    </Reference>
     <Reference Include="GalaSoft.MvvmLight">
       <HintPath>..\packages\Portable.MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.dll</HintPath>
     </Reference>

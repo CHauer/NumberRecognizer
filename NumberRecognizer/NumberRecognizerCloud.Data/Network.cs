@@ -27,7 +27,6 @@ namespace NumberRecognizer.Cloud.Data
         public byte[] NetworkData { get; set; }
         public Nullable<System.DateTime> CalculationStart { get; set; }
         public Nullable<System.DateTime> CalculationEnd { get; set; }
-        public string Username { get; set; }
         public string ErrorStatus { get; set; }
     
         public virtual ICollection<TrainingImageData> TrainingImages { get; set; }
