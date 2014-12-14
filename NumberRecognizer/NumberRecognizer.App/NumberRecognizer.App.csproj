@@ -111,7 +111,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\BooleanToVisibilityConverter.cs" />
     <Compile Include="Control\InkCanvasRT.cs" />
+    <Compile Include="DataModel\LocalTrainingImage.cs" />
+    <Compile Include="DataModel\LocalTrainingImageGroup.cs" />
     <Compile Include="DataModel\NetworkDataGroup.cs" />
     <Compile Include="Help\ImageHelperRT.cs" />
     <Compile Include="Service References\NumberRecognizerService\Reference.cs">
@@ -122,6 +125,7 @@
     <Compile Include="ViewModel\CreateNetworkViewModel.cs" />
     <Compile Include="ViewModel\GroupedNetworksDesignViewModel.cs" />
     <Compile Include="ViewModel\GroupedNetworksViewModel.cs" />
+    <Compile Include="ViewModel\ValidateTrainingDataViewModel.cs" />
     <Compile Include="View\GroupedNetworksPage.xaml.cs">
       <DependentUpon>GroupedNetworksPage.xaml</DependentUpon>
     </Compile>
@@ -138,6 +142,9 @@
     </Compile>
     <Compile Include="View\RecognizePage.xaml.cs">
       <DependentUpon>RecognizePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ValidateTrainingDataPage.xaml.cs">
+      <DependentUpon>ValidateTrainingDataPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -205,6 +212,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\RecognizePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ValidateTrainingDataPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

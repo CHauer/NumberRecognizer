@@ -139,6 +139,14 @@ namespace NumberRecognizer.App.Control
         /// <param name="e">The <see cref="RightTappedRoutedEventArgs"/> instance containing the event data.</param>
         private void InkCanvasRT_RightTapped(object sender, RightTappedRoutedEventArgs e)
         {
+            ClearInk();
+        }
+
+        /// <summary>
+        /// Clears the ink canvas.
+        /// </summary>
+        public void ClearInk()
+        {
             this.Children.Clear();
             this.inkManager = new InkManager();
         }

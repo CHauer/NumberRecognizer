@@ -15,6 +15,8 @@
         <x:Double x:Key="StrokeThickness">4.0</x:Double>
         <x:Double x:Key="FontSize">40.0</x:Double>
         <x:Double x:Key="InkHeight">100</x:Double>
+        
+        <common:BooleanToVisibilityConverter x:Key="boolVisConverter"  />
     </Page.Resources>
 
     <!--
@@ -56,6 +58,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition/>
@@ -78,19 +81,18 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBox Grid.Row="0" Grid.Column="0" Name="NameTextBox" FontSize="{StaticResource FontSize}"/>
-                    <Button Grid.Column="1" Margin="10,0" Command="{Binding CreateNetwork}">Train Network</Button>
+                    <TextBox Grid.Row="0" Grid.Column="0" Name="NameTextBox" FontSize="{StaticResource FontSize}" Text="{Binding NetworkName}"/>
+                    <Button Grid.Column="1" Margin="10,0" Command="{Binding ValidateTrainingData}">Validate Training Images</Button>
                 </Grid>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Description:&#42;" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                
-                
-                <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="1" Text="Please write some Network Training Data Numbers on each Canvas."
+
+                <TextBlock Grid.Row="1" Grid.Column="1" Text="Please write at least one Network Training Data Number on each Canvas!"
                            Style="{StaticResource CustomTextBlockStyle}" Margin="0, 10"
-                           Foreground="OrangeRed" VerticalAlignment="Center"/>
+                           Foreground="OrangeRed" VerticalAlignment="Center" Visibility="{Binding IsValidationError, Converter={StaticResource boolVisConverter}}"/>
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="0" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <control:InkCanvasRT Grid.Row="2" Grid.Column="1" x:Name="InkCanvasRT0" 
                                      StrokeThickness="{StaticResource StrokeThickness}"
-                                     Height="{StaticResource InkHeight}" Margin="0,10" />
+                                     Height="{StaticResource InkHeight}" Margin="0,20,0,10" />
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="1" Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <control:InkCanvasRT Grid.Row="3" Grid.Column="1" x:Name="InkCanvasRT1" 
                                      StrokeThickness="{StaticResource StrokeThickness}"
@@ -127,6 +129,16 @@
                 <control:InkCanvasRT Grid.Row="11" Grid.Column="1" x:Name="InkCanvasRT9" 
                                      StrokeThickness="{StaticResource StrokeThickness}"
                                      Height="{StaticResource InkHeight}" Margin="0,10"/>
+                <Button Grid.Column="2" Grid.Row="2" Style="{StaticResource ClearButtonStyle}" Command="{Binding ClearInk}" CommandParameter="0" />
+                <Button Grid.Column="2" Grid.Row="3" Style="{StaticResource ClearButtonStyle}" Command="{Binding ClearInk}" CommandParameter="1"/>
+                <Button Grid.Column="2" Grid.Row="4" Style="{StaticResource ClearButtonStyle}" Command="{Binding ClearInk}" CommandParameter="2"/>
+                <Button Grid.Column="2" Grid.Row="5" Style="{StaticResource ClearButtonStyle}" Command="{Binding ClearInk}" CommandParameter="3"/>
+                <Button Grid.Column="2" Grid.Row="6" Style="{StaticResource ClearButtonStyle}" Command="{Binding ClearInk}" CommandParameter="4"/>
+                <Button Grid.Column="2" Grid.Row="7" Style="{StaticResource ClearButtonStyle}" Command="{Binding ClearInk}" CommandParameter="5"/>
+                <Button Grid.Column="2" Grid.Row="8" Style="{StaticResource ClearButtonStyle}" Command="{Binding ClearInk}" CommandParameter="6"/>
+                <Button Grid.Column="2" Grid.Row="9" Style="{StaticResource ClearButtonStyle}" Command="{Binding ClearInk}" CommandParameter="7"/>
+                <Button Grid.Column="2" Grid.Row="10" Style="{StaticResource ClearButtonStyle}" Command="{Binding ClearInk}" CommandParameter="8"/>
+                <Button Grid.Column="2" Grid.Row="11" Style="{StaticResource ClearButtonStyle}" Command="{Binding ClearInk}" CommandParameter="9"/>
             </Grid>
             
         </ScrollViewer>
