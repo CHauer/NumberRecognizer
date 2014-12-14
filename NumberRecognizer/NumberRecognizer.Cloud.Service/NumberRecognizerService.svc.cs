@@ -104,7 +104,7 @@ namespace NumberRecognizer.Cloud.Service
         /// <param name="username">The username.</param>
         /// <param name="individualTrainingsData">The individual trainings data.</param>
         /// <returns></returns>
-        public bool CreateNetwork(string networkName, string username,  IEnumerable<TrainingImage> individualTrainingsData)
+        public bool CreateNetwork(string networkName, IEnumerable<TrainingImage> individualTrainingsData)
         {
             bool status = true;
             DataSerializer<double[,]> serializer = new DataSerializer<double[,]>();
@@ -167,7 +167,7 @@ namespace NumberRecognizer.Cloud.Service
         /// <param name="copyTraindataFromNetworkId">The copy traindata from network identifier.</param>
         /// <returns></returns>
         /// <exception cref="System.NotImplementedException"></exception>
-        public bool CreateNetworkWithTrainingDataCopy(string networkName, string username, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId)
+        public bool CreateNetworkWithTrainingDataCopy(string networkName, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId)
         {
             bool status = true;
             DataSerializer<double[,]> serializer = new DataSerializer<double[,]>();

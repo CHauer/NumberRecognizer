@@ -32,15 +32,6 @@ namespace NumberRecognizer.Cloud.Contract.Data
         public string NetworkName{ get; set; }
 
         /// <summary>
-        /// Gets or sets the username.
-        /// </summary>
-        /// <value>
-        /// The username.
-        /// </value>
-        [DataMember]
-        public string Username{ get; set; }
-
-        /// <summary>
         /// Gets or sets a value indicating whether the network is 
         /// calculated/trained and can recognize numbers.
         /// </summary>
