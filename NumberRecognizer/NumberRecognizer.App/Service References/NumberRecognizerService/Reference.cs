@@ -21,7 +21,7 @@ namespace NumberRecognizer.App.NumberRecognizerService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/GetNetworks", ReplyAction="http://tempuri.org/INumberRecognizerService/GetNetworksResponse")]
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.NetworkInfo>> GetNetworksAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/ValidateTrainingData", ReplyAction="http://tempuri.org/INumberRecognizerService/CreateNetworkResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/CreateNetwork", ReplyAction="http://tempuri.org/INumberRecognizerService/CreateNetworkResponse")]
         System.Threading.Tasks.Task<bool> CreateNetworkAsync(string networkName, string username, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/CreateNetworkWithTrainingDataCopy", ReplyAction="http://tempuri.org/INumberRecognizerService/CreateNetworkWithTrainingDataCopyResp" +
@@ -113,7 +113,7 @@ namespace NumberRecognizer.App.NumberRecognizerService {
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration) {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_INumberRecognizerService)) {
-                return new System.ServiceModel.EndpointAddress("http://numberrecognizer.cloudapp.net/NumberRecognizerService.svc");
+                return new System.ServiceModel.EndpointAddress("http://4574b9813eec49b598955c6a87e643e2.cloudapp.net/NumberRecognizerService.svc");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
