@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import schemaLocation="http://numberrecognizer.cloudapp.net/NumberRecognizerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" />
   <xs:element name="GetNetworks">
@@ -13,7 +13,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CreateNetwork">
+  <xs:element name="ValidateTrainingData">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="networkName" nillable="true" type="xs:string" />
@@ -22,14 +22,14 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CreateNetworkResponse">
+  <xs:element name="ValidateTrainingDataResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="CreateNetworkResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="ValidateTrainingDataResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CreateNetworkWithTrainingDataCopy">
+  <xs:element name="ValidateTrainingDataWithTrainingDataCopy">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="networkName" nillable="true" type="xs:string" />
@@ -39,10 +39,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="CreateNetworkWithTrainingDataCopyResponse">
+  <xs:element name="ValidateTrainingDataWithTrainingDataCopyResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="CreateNetworkWithTrainingDataCopyResult" type="xs:boolean" />
+        <xs:element minOccurs="0" name="ValidateTrainingDataWithTrainingDataCopyResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

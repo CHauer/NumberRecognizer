@@ -81,7 +81,11 @@
                         AutomationProperties.Name="Back"
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
-            <TextBlock x:Name="pageTitle" Text="{Binding NetworkName}" Style="{StaticResource CustomHeaderTextBlockStyle}" Grid.Column="1"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" >
+                <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource CustomHeaderTextBlockStyle}" />
+                <TextBlock Text=" - " Foreground="OrangeRed" Style="{StaticResource CustomHeaderTextBlockStyle}" />
+                <TextBlock x:Name="pageSubTitle" Text="{Binding NetworkName}" Foreground="OrangeRed" Style="{StaticResource CustomHeaderTextBlockStyle}" />
+            </StackPanel>
         </Grid>
     </Grid>
 </Page>

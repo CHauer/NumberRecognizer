@@ -150,7 +150,7 @@ namespace NumberRecognizer.App.Help
         /// <returns>
         /// The red, green, blue, alpha byte array as bitmap image asynchronous.
         /// </returns>
-        public static async Task SaveRGBAByteArrayAsBitmapImageAsync(byte[] rgbaByteArray, double width, double height, string name)
+        public static async Task<string> SaveRGBAByteArrayAsBitmapImageAsync(byte[] rgbaByteArray, double width, double height, string name)
         {
             var storageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(name + ".png", CreationCollisionOption.ReplaceExisting);
 
@@ -161,6 +161,8 @@ namespace NumberRecognizer.App.Help
                 bitmapEncoder.BitmapTransform.InterpolationMode = BitmapInterpolationMode.NearestNeighbor;
                 await bitmapEncoder.FlushAsync();
             }
+
+            return storageFile.Path;
         }
 
         /// <summary>

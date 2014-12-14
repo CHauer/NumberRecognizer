@@ -24,8 +24,7 @@ using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
 namespace NumberRecognizer.App
-{
-  
+{  
     /// <summary>
     /// A basic page that provides characteristics common to most applications.
     /// </summary>
@@ -75,7 +74,7 @@ namespace NumberRecognizer.App
             get { return this.navigationHelper; }
         }
 
-        #region NavigationHelper registration
+        #region NavigationHelper-Registration
 
         /// <summary>
         /// Invoked when the Page is loaded and becomes the current source of a parent Frame.

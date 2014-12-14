@@ -21,7 +21,7 @@ namespace NumberRecognizer.App.NumberRecognizerService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/GetNetworks", ReplyAction="http://tempuri.org/INumberRecognizerService/GetNetworksResponse")]
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.NetworkInfo>> GetNetworksAsync();
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/CreateNetwork", ReplyAction="http://tempuri.org/INumberRecognizerService/CreateNetworkResponse")]
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/ValidateTrainingData", ReplyAction="http://tempuri.org/INumberRecognizerService/CreateNetworkResponse")]
         System.Threading.Tasks.Task<bool> CreateNetworkAsync(string networkName, string username, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/CreateNetworkWithTrainingDataCopy", ReplyAction="http://tempuri.org/INumberRecognizerService/CreateNetworkWithTrainingDataCopyResp" +

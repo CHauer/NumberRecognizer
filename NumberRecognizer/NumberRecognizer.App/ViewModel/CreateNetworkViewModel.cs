@@ -14,7 +14,9 @@ using Windows.UI.Xaml.Shapes;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using NumberRecognizer.App.Control;
+using NumberRecognizer.App.DataModel;
 using NumberRecognizer.App.Help;
+using NumberRecognizer.App.View;
 using NumberRecognizer.Cloud.Contract.Data;
 using NumberRecognizer.Labeling;
 
@@ -25,12 +27,13 @@ namespace NumberRecognizer.App.ViewModel
         /// <summary>
         /// The command create network
         /// </summary>
-        private ICommand cmdCreateNetwork;
+        private ICommand cmdValidateTrainingData;
 
         /// <summary>
         /// The command delete network
         /// </summary>
-        private ICommand cmdCancel;
+        private RelayCommand<string> cmdClearInk;
+
 
         /// <summary>
         /// The canvas list
@@ -42,6 +45,11 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private string networkName;
 
+        /// <summary>
+        /// The show error
+        /// </summary>
+        private bool isValidationError;
+
         #region Constructor
 
         /// <summary>
@@ -49,6 +57,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         public CreateNetworkViewModel()
         {
+            IsValidationError = false;
             canvasList = new List<InkCanvasRT>();
             InitializeNetworkName();
             LoadCommands();
@@ -63,7 +72,8 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void LoadCommands()
         {
-            CreateNetwork = new RelayCommand(() => App.Frame.Navigate(typeof(CreateNetworkPage)));
+            ValidateTrainingData = new RelayCommand(ExecuteValidateTrainingData);
+            ClearInk = new RelayCommand<string>((string inkCanvasIndex) => canvasList[Convert.ToInt32(inkCanvasIndex)].ClearInk());
         }
 
         /// <summary>
@@ -71,7 +81,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private async void InitializeNetworkName()
         {
-            NetworkName = string.Format("{0}_{1}", await UserInformation.GetLastNameAsync(), DateTime.Now.ToString("dd.MM.yyyy HH:mm:ss"));
+            NetworkName = string.Format("{0}_{1}", await UserInformation.GetLastNameAsync(), DateTime.Now.ToFileTime());
         }
 
         #endregion
@@ -115,6 +125,25 @@ namespace NumberRecognizer.App.ViewModel
             }
         }
 
+        /// <summary>
+        /// Gets or sets a value indicating whether [is validation error].
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [is validation error]; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsValidationError
+        {
+            get
+            {
+                return isValidationError;
+            }
+            set
+            {
+                isValidationError = value;
+                RaisePropertyChanged(() => IsValidationError);
+            }
+        }
+
         #endregion
 
         #region Commands
@@ -125,16 +154,16 @@ namespace NumberRecognizer.App.ViewModel
         /// <value>
         /// The add network.
         /// </value>
-        public ICommand CreateNetwork
+        public ICommand ValidateTrainingData
         {
             get
             {
-                return cmdCreateNetwork;
+                return cmdValidateTrainingData;
             }
             set
             {
-                cmdCreateNetwork = value;
-                RaisePropertyChanged(() => CreateNetwork);
+                cmdValidateTrainingData = value;
+                RaisePropertyChanged(() => ValidateTrainingData);
             }
         }
 
@@ -144,16 +173,16 @@ namespace NumberRecognizer.App.ViewModel
         /// <value>
         /// The refresh networks.
         /// </value>
-        public ICommand Cancel
+        public RelayCommand<string> ClearInk
         {
             get
             {
-                return cmdCancel;
+                return cmdClearInk;
             }
             set
             {
-                cmdCancel= value;
-                RaisePropertyChanged(() => Cancel);
+                cmdClearInk = value;
+                RaisePropertyChanged(() => ClearInk);
             }
         }
 
@@ -162,10 +191,12 @@ namespace NumberRecognizer.App.ViewModel
         /// <summary>
         /// Handles the Click event of the NextButton control.
         /// </summary>
-        /// <param name="sender">The source of the event.</param>
-        /// <param name="e">The <see cref="Windows.UI.Xaml.RoutedEventArgs"/> instance containing the event data.</param>
-        private async Task<Dictionary<int, TrainingImage>> GetTrainingData(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        /// <returns></returns>
+        private async Task<Dictionary<int, List<LocalTrainingImage>>> GetTrainingData()
         {
+            Dictionary<int, List<LocalTrainingImage>> trainingData = new Dictionary<int,List<LocalTrainingImage>>();
+            int pattern = 0; 
+
             foreach (InkCanvasRT inkCanvas in canvasList)
             {
                 var renderTargetBitmap = new RenderTargetBitmap();
@@ -177,6 +208,8 @@ namespace NumberRecognizer.App.ViewModel
                 double canvasWidth = inkCanvas.ActualWidth;
                 double canvasHeight = inkCanvas.ActualHeight;
                 double[,] canvasPixels = await ImageHelperRT.Get2DPixelArrayFromByteArrayAsync(canvasBytes, canvasWidth, canvasHeight);
+
+                trainingData.Add(pattern, new List<LocalTrainingImage>());
 
                 inkCanvas.ConnectedComponentLabeling = new ConnectedComponentLabeling(canvasPixels, 0.0);
 
@@ -214,21 +247,55 @@ namespace NumberRecognizer.App.ViewModel
                         }
                     }
 
-                    byte[] orgRGBABytes = ImageHelperRT.GetRGBAByteArrayFromByteArrayAsync(orgBytes, Colors.Black);
-                    await ImageHelperRT.SaveRGBAByteArrayAsBitmapImageAsync(orgRGBABytes, mbr.Width, mbr.Height, inkCanvas.Name + "_org");
-                    connectedComponent.Pixels = await ImageHelperRT.Get2DPixelArrayFromByteArrayAsync(orgBytes, mbr.Width, mbr.Height);
+                    //byte[] orgRGBABytes = ImageHelperRT.GetRGBAByteArrayFromByteArrayAsync(orgBytes, Colors.Black);
+                    //await ImageHelperRT.SaveRGBAByteArrayAsBitmapImageAsync(orgRGBABytes, mbr.Width, mbr.Height, inkCanvas.Name + "_org");
+                    //connectedComponent.Pixels = await ImageHelperRT.Get2DPixelArrayFromByteArrayAsync(orgBytes, mbr.Width, mbr.Height);
 
                     byte[] scaRGBABytes = ImageHelperRT.GetRGBAByteArrayFromByteArrayAsync(scaBytes, Colors.Black);
                     scaRGBABytes = await ImageHelperRT.ScaleRGBAByteArrayAsync(scaRGBABytes, mbr.Size, mbr.Size, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight);
                     scaBytes = await ImageHelperRT.GetByteArrayFromRGBAByteArrayAsync(scaRGBABytes, inkCanvas.ForegroundColor);
-                    await ImageHelperRT.SaveRGBAByteArrayAsBitmapImageAsync(scaRGBABytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight, inkCanvas.Name + "_sca");
-                    connectedComponent.ScaledPixels = await ImageHelperRT.Get2DPixelArrayFromByteArrayAsync(scaBytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight);
+                    double[,] pixels = await ImageHelperRT.Get2DPixelArrayFromByteArrayAsync(scaBytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight);
+                    connectedComponent.ScaledPixels = pixels;
+
+                    //save image to storage
+                    string imagename = string.Format("{0}_{1}", networkName, pattern);
+                    string path = await ImageHelperRT.SaveRGBAByteArrayAsBitmapImageAsync(scaRGBABytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight, imagename);
+
+                    var imageData = new TrainingImage(){
+                                    Height = Convert.ToInt32(ImageHelperRT.ImageHeight),
+                                    Width = Convert.ToInt32(ImageHelperRT.ImageWidth),
+                                    Pattern = pattern.ToString()
+                    };
+                            
+                    imageData.TransformFrom2DArrayToImageData(pixels);
+
+                    trainingData[pattern].Add(new LocalTrainingImage()
+                    {
+                        LocalImagePath = path,
+                        ImageData = imageData
+                    });    
                 }
+
+                pattern++;
             }
 
-            //TODO
-            return null;
+            return trainingData;
+        
         }
 
+        /// <summary>
+        /// Executes the validate training data.
+        /// </summary>
+        private async void ExecuteValidateTrainingData()
+        {
+            var trainData = await GetTrainingData();
+
+            IsValidationError = !trainData.All(keyvalpair => keyvalpair.Value.Count > 0);
+            
+            if(!IsValidationError)
+            {
+                App.Frame.Navigate(typeof(ValidateTrainingDataPage), trainData);
+            }
+        }
     }
 }
