@@ -22,11 +22,14 @@ namespace NumberRecognizer.App.NumberRecognizerService {
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.NetworkInfo>> GetNetworksAsync();
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/CreateNetwork", ReplyAction="http://tempuri.org/INumberRecognizerService/CreateNetworkResponse")]
-        System.Threading.Tasks.Task<bool> CreateNetworkAsync(string networkName, string username, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData);
+        System.Threading.Tasks.Task<bool> CreateNetworkAsync(string networkName, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/CreateNetworkWithTrainingDataCopy", ReplyAction="http://tempuri.org/INumberRecognizerService/CreateNetworkWithTrainingDataCopyResp" +
             "onse")]
-        System.Threading.Tasks.Task<bool> CreateNetworkWithTrainingDataCopyAsync(string networkName, string username, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId);
+        System.Threading.Tasks.Task<bool> CreateNetworkWithTrainingDataCopyAsync(string networkName, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/DeleteNetwork", ReplyAction="http://tempuri.org/INumberRecognizerService/DeleteNetworkResponse")]
+        System.Threading.Tasks.Task<bool> DeleteNetworkAsync(int networkId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/RecognizePhoneNumber", ReplyAction="http://tempuri.org/INumberRecognizerService/RecognizePhoneNumberResponse")]
         System.Threading.Tasks.Task<NumberRecognizer.Cloud.Contract.Data.NumberRecognitionResult> RecognizePhoneNumberAsync(int networkId, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.RecognitionImage> imageData);
@@ -79,12 +82,16 @@ namespace NumberRecognizer.App.NumberRecognizerService {
             return base.Channel.GetNetworksAsync();
         }
         
-        public System.Threading.Tasks.Task<bool> CreateNetworkAsync(string networkName, string username, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData) {
-            return base.Channel.CreateNetworkAsync(networkName, username, individualTrainingsData);
+        public System.Threading.Tasks.Task<bool> CreateNetworkAsync(string networkName, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData) {
+            return base.Channel.CreateNetworkAsync(networkName, individualTrainingsData);
         }
         
-        public System.Threading.Tasks.Task<bool> CreateNetworkWithTrainingDataCopyAsync(string networkName, string username, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId) {
-            return base.Channel.CreateNetworkWithTrainingDataCopyAsync(networkName, username, individualTrainingsData, copyTraindataFromNetworkId);
+        public System.Threading.Tasks.Task<bool> CreateNetworkWithTrainingDataCopyAsync(string networkName, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId) {
+            return base.Channel.CreateNetworkWithTrainingDataCopyAsync(networkName, individualTrainingsData, copyTraindataFromNetworkId);
+        }
+        
+        public System.Threading.Tasks.Task<bool> DeleteNetworkAsync(int networkId) {
+            return base.Channel.DeleteNetworkAsync(networkId);
         }
         
         public System.Threading.Tasks.Task<NumberRecognizer.Cloud.Contract.Data.NumberRecognitionResult> RecognizePhoneNumberAsync(int networkId, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.RecognitionImage> imageData) {
@@ -113,7 +120,7 @@ namespace NumberRecognizer.App.NumberRecognizerService {
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration) {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_INumberRecognizerService)) {
-                return new System.ServiceModel.EndpointAddress("http://4574b9813eec49b598955c6a87e643e2.cloudapp.net/NumberRecognizerService.svc");
+                return new System.ServiceModel.EndpointAddress("http://0d832919582344d9b6d490f5aca905d8.cloudapp.net/NumberRecognizerService.svc");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

@@ -65,6 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <DiagnosticsConfiguration Include="NumberRecognizer.Cloud.ServiceContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="NumberRecognizer.Cloud.WorkerContent\diagnostics.wadcfgx" />
+  </ItemGroup>
+  <ItemGroup>
+    <PublishProfile Include="Profiles\numberrecognizerStaging.azurePubxml" />
   </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>

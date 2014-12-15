@@ -74,12 +74,12 @@ namespace NumberRecognizer.Cloud.Service
                 var networks = db.NetworkSet.Select(network => new NetworkInfo()
                 {
                     Calculated = network.Calculated == CalculationType.Ready,
+                    Status = (NetworkStatusType)((int)network.Calculated),
                     NetworkFitness = network.Fitness,
                     NetworkId = network.NetworkId,
                     NetworkName = network.NetworkName,
-                    CalculationStart = network.CalculationStart.HasValue ? network.CalculationStart : null,
-                    CalculationEnd = network.CalculationEnd.HasValue ? network.CalculationEnd : null,
-
+                    CalculationStart = network.CalculationStart,
+                    CalculationEnd = network.CalculationEnd,
                 });
 
                 foreach (var network in networks)
@@ -101,7 +101,6 @@ namespace NumberRecognizer.Cloud.Service
         /// Creates the network.
         /// </summary>
         /// <param name="networkName">Name of the network.</param>
-        /// <param name="username">The username.</param>
         /// <param name="individualTrainingsData">The individual trainings data.</param>
         /// <returns></returns>
         public bool CreateNetwork(string networkName, IEnumerable<TrainingImage> individualTrainingsData)
@@ -162,11 +161,9 @@ namespace NumberRecognizer.Cloud.Service
         /// Creates the network and copies the training data from a previous network.
         /// </summary>
         /// <param name="networkName">Name of the network.</param>
-        /// <param name="username">The username.</param>
         /// <param name="individualTrainingsData">The individual trainings data.</param>
         /// <param name="copyTraindataFromNetworkId">The copy traindata from network identifier.</param>
         /// <returns></returns>
-        /// <exception cref="System.NotImplementedException"></exception>
         public bool CreateNetworkWithTrainingDataCopy(string networkName, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId)
         {
             bool status = true;
@@ -310,7 +307,7 @@ namespace NumberRecognizer.Cloud.Service
                 return null;
             }
 
-            var pools = network.TrainLogs.Select(tl => tl.MultipleGenPoolIdentifier).Distinct();
+            var pools = network.TrainLogs.Where(tl => tl.MultipleGenPoolIdentifier != null).Select(tl => tl.MultipleGenPoolIdentifier).Distinct();
 
             foreach (string poolId in pools)
             {
@@ -335,9 +332,34 @@ namespace NumberRecognizer.Cloud.Service
                 return null;
             }
 
-            var maxGeneration = network.TrainLogs
-                                       .Where(tl => tl.MultipleGenPoolIdentifier.Equals(poolId))
-                                       .Max(n => n.GenerationNr);
+            //Standard value
+            int maxGeneration = 0;
+
+            Func<TrainLog, bool> funcPoolCompare = tl =>
+                                         {
+                                             if (String.IsNullOrEmpty(poolId))
+                                             {
+                                                 return tl.MultipleGenPoolIdentifier == null;
+                                             }
+
+                                             return tl.MultipleGenPoolIdentifier.Equals(poolId);
+                                         };
+
+            Func<PatternFitness, bool> funcPatternPoolCompare = pf =>
+            {
+                if (String.IsNullOrEmpty(poolId))
+                {
+                    return pf.TrainLog.MultipleGenPoolIdentifier == null;
+                }
+
+                return pf.TrainLog.MultipleGenPoolIdentifier.Equals(poolId);
+            };
+
+
+            maxGeneration = network.TrainLogs
+                                     .Where(funcPoolCompare)
+                                     .Max(n => n.GenerationNr);
+
 
             List<string> patterns = network.TrainLogs.First()
                                            .PatternFitnessSet
@@ -348,22 +370,21 @@ namespace NumberRecognizer.Cloud.Service
             return new FitnessLog()
             {
                 FitnessTrend = network.TrainLogs
-                    .Where(tl => tl.MultipleGenPoolIdentifier.Equals(poolId))
+                    .Where(funcPoolCompare)
                     .OrderBy(tl => tl.GenerationNr)
                     .Select(tl => tl.Fitness)
                     .ToList<double>(),
 
                 FinalPatternFittness = network.TrainLogs
-                    .First(tl => tl.MultipleGenPoolIdentifier.Equals(poolId)
-                                    && tl.GenerationNr == maxGeneration)
+                    .Where(funcPoolCompare)
+                    .First(tl => tl.GenerationNr == maxGeneration)
                     .PatternFitnessSet.ToDictionary(i => i.Pattern, i => i.Fitness),
-
 
                 PatternTrends = patterns.ToDictionary(key => key,
                     value => db.PatternFitnessSet
-                            .Where(p => p.TrainLog.Network.NetworkId == networkId
-                                && p.TrainLog.MultipleGenPoolIdentifier.Equals(poolId)
-                                && p.Pattern.Equals(value))
+                            .Where(p => p.TrainLog.Network.NetworkId == networkId)
+                            .Where(funcPatternPoolCompare)
+                            .Where(p => p.Pattern.Equals(value))
                             .OrderBy(i => i.TrainLog.GenerationNr)
                             .Select(i => i.Fitness)
                             .ToList<double>())
