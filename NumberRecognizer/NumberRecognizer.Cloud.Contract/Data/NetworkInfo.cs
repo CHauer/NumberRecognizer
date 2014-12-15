@@ -42,6 +42,12 @@ namespace NumberRecognizer.Cloud.Contract.Data
         public bool Calculated { get; set; }
 
         /// <summary>
+        /// The status
+        /// </summary>
+        [DataMember]
+        public NetworkStatusType Status { get; set; }
+
+        /// <summary>
         /// Gets or sets the network fitness.
         /// </summary>
         /// <value>

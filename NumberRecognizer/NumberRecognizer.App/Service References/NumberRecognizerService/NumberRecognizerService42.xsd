@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://4574b9813eec49b598955c6a87e643e2.cloudapp.net/NumberRecognizerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" />
+  <xs:import schemaLocation="http://0d832919582344d9b6d490f5aca905d8.cloudapp.net/NumberRecognizerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" />
   <xs:element name="GetNetworks">
     <xs:complexType>
       <xs:sequence />
@@ -17,7 +17,6 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="networkName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
         <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="individualTrainingsData" nillable="true" type="q2:ArrayOfTrainingImage" />
       </xs:sequence>
     </xs:complexType>
@@ -33,7 +32,6 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="networkName" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="username" nillable="true" type="xs:string" />
         <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="individualTrainingsData" nillable="true" type="q3:ArrayOfTrainingImage" />
         <xs:element minOccurs="0" name="copyTraindataFromNetworkId" type="xs:int" />
       </xs:sequence>
@@ -43,6 +41,20 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="CreateNetworkWithTrainingDataCopyResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteNetwork">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="networkId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="DeleteNetworkResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="DeleteNetworkResult" type="xs:boolean" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

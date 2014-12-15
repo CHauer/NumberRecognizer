@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.microsoft.com/2003/10/Serialization/Arrays" elementFormDefault="qualified" targetNamespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://4574b9813eec49b598955c6a87e643e2.cloudapp.net/NumberRecognizerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" />
-  <xs:import schemaLocation="http://4574b9813eec49b598955c6a87e643e2.cloudapp.net/NumberRecognizerService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://0d832919582344d9b6d490f5aca905d8.cloudapp.net/NumberRecognizerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" />
+  <xs:import schemaLocation="http://0d832919582344d9b6d490f5aca905d8.cloudapp.net/NumberRecognizerService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:complexType name="ArrayOfKeyValueOfstringdouble">
     <xs:annotation>
       <xs:appinfo>

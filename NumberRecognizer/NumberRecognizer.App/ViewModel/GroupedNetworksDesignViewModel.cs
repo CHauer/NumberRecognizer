@@ -40,14 +40,14 @@ namespace NumberRecognizer.App.ViewModel
                 new NetworkDataGroup("Trained", "Trained"){
                     Items = new ObservableCollection<NetworkInfo>(){
                         new NetworkInfo(){
-                            Username = "MZytek",
+                            
                             NetworkFitness = 11.2,
                             NetworkId = 1,
                             NetworkName = "Test1",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "MZytek",
+                            
                             NetworkFitness = 67.2,
                             NetworkId = 1,
                             NetworkName = "Test2",
@@ -58,126 +58,126 @@ namespace NumberRecognizer.App.ViewModel
                 new NetworkDataGroup("Not Trained", "Not Trained"){
                     Items = new ObservableCollection<NetworkInfo>(){
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 54.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest1",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
                             Calculated = true,
                         },
                         new NetworkInfo(){
-                            Username = "CHauer",
+                            
                             NetworkFitness = 56.3,
                             NetworkId = 1,
                             NetworkName = "NetworkTest2",
