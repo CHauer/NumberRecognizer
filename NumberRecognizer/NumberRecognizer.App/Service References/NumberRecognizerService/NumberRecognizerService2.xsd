@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://0d832919582344d9b6d490f5aca905d8.cloudapp.net/NumberRecognizerService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:complexType name="ArrayOfNetworkInfo">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="NetworkInfo" nillable="true" type="tns:NetworkInfo" />
@@ -18,6 +19,7 @@
       <xs:element minOccurs="0" name="NetworkFitness" type="xs:double" />
       <xs:element minOccurs="0" name="NetworkId" type="xs:int" />
       <xs:element minOccurs="0" name="NetworkName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Status" type="tns:NetworkStatusType" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="NetworkInfo" nillable="true" type="tns:NetworkInfo" />
@@ -29,6 +31,39 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="FitnessLog" nillable="true" type="tns:FitnessLog" />
+  <xs:simpleType name="NetworkStatusType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="NotStarted">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Running">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Ready">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="Error">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">8</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="NetworkStatusType" nillable="true" type="tns:NetworkStatusType" />
   <xs:complexType name="ArrayOfTrainingImage">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="TrainingImage" nillable="true" type="tns:TrainingImage" />
