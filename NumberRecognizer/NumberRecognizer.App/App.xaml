@@ -1,0 +1,17 @@
+﻿<Application
+    x:Class="NumberRecognizer.App.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NumberRecognizer.App"
+    xmlns:localData="using:NumberRecognizer.App.DataModel">
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Style/AppStyle.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <!-- Application-specific resources -->
+            <x:String x:Key="AppName">Number Recognizer</x:String>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
