@@ -132,10 +132,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ConnectedComponentLabeling\NumberRecognizer.Labeling.csproj">
-      <Project>{73dab28e-ec91-469b-904e-9ec8123d155f}</Project>
-      <Name>NumberRecognizer.Labeling</Name>
-    </ProjectReference>
     <ProjectReference Include="..\NumberRecognizer.Cloud.Contract\NumberRecognizer.Cloud.Contract.csproj">
       <Project>{75663fb2-975a-4d29-816b-5750e61891dc}</Project>
       <Name>NumberRecognizer.Cloud.Contract</Name>

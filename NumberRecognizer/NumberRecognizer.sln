@@ -27,11 +27,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Data
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{E025DEED-3EEF-4F0B-BB37-AC445F1326D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Labeling", "ConnectedComponentLabeling\NumberRecognizer.Labeling.csproj", "{73DAB28E-EC91-469B-904E-9EC8123D155F}"
-EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
+		SccNumberOfProjects = 9
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://hauersoftwarenet.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -67,10 +65,6 @@ Global
 		SccProjectTopLevelParentUniqueName8 = NumberRecognizer.sln
 		SccProjectName8 = OcrTestApp
 		SccLocalPath8 = OcrTestApp
-		SccProjectUniqueName9 = ConnectedComponentLabeling\\NumberRecognizer.Labeling.csproj
-		SccProjectTopLevelParentUniqueName9 = NumberRecognizer.sln
-		SccProjectName9 = ConnectedComponentLabeling
-		SccLocalPath9 = ConnectedComponentLabeling
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -163,16 +157,6 @@ Global
 		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}.Release|ARM.ActiveCfg = Release|Any CPU
 		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}.Release|x64.ActiveCfg = Release|Any CPU
 		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}.Release|x86.ActiveCfg = Release|Any CPU
-		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Release|ARM.ActiveCfg = Release|Any CPU
-		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Release|x64.ActiveCfg = Release|Any CPU
-		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -187,6 +171,5 @@ Global
 		{A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279} = {D4C723FC-550D-4777-8559-165FFC379049}
 		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9} = {D4C723FC-550D-4777-8559-165FFC379049}
 		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F} = {D4C723FC-550D-4777-8559-165FFC379049}
-		{73DAB28E-EC91-469B-904E-9EC8123D155F} = {E025DEED-3EEF-4F0B-BB37-AC445F1326D9}
 	EndGlobalSection
 EndGlobal
