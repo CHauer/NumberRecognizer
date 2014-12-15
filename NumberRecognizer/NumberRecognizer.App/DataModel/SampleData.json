@@ -1,0 +1,32 @@
+{
+    "Groups": [
+        {
+            "UniqueId": "G1",
+            "Title": "MZYTEK",
+            "Items": [
+                {
+                    "UniqueId": "G1I1",
+                    "Title": "Network 1"
+                },
+                {
+                    "UniqueId": "G1I2",
+                    "Title": "Network 2"
+                }
+            ]
+        },
+        {
+            "UniqueId": "G2",
+            "Title": "CHAUER",
+            "Items": [
+                {
+                    "UniqueId": "G2I1",
+                    "Title": "Network 1"
+                },
+                {
+                    "UniqueId": "G2I2",
+                    "Title": "Network 2"
+                }
+            ]
+        }
+    ]
+}

@@ -27,9 +27,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.Cloud.Data
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{E025DEED-3EEF-4F0B-BB37-AC445F1326D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.App", "NumberRecognizer.App\NumberRecognizer.App.csproj", "{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognition.Labeling", "NumberRecognizer.Labeling\NumberRecognition.Labeling.csproj", "{73DAB28E-EC91-469B-904E-9EC8123D155F}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 9
+		SccNumberOfProjects = 11
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = https://hauersoftwarenet.visualstudio.com/defaultcollection
 		SccLocalPath0 = .
@@ -65,6 +69,14 @@ Global
 		SccProjectTopLevelParentUniqueName8 = NumberRecognizer.sln
 		SccProjectName8 = OcrTestApp
 		SccLocalPath8 = OcrTestApp
+		SccProjectUniqueName9 = NumberRecognizer.App\\NumberRecognizer.App.csproj
+		SccProjectTopLevelParentUniqueName9 = NumberRecognizer.sln
+		SccProjectName9 = NumberRecognizer.App
+		SccLocalPath9 = NumberRecognizer.App
+		SccProjectUniqueName10 = NumberRecognizer.Labeling\\NumberRecognition.Labeling.csproj
+		SccProjectTopLevelParentUniqueName10 = NumberRecognizer.sln
+		SccProjectName10 = NumberRecognizer.Labeling
+		SccLocalPath10 = NumberRecognizer.Labeling
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -157,6 +169,40 @@ Global
 		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}.Release|ARM.ActiveCfg = Release|Any CPU
 		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}.Release|x64.ActiveCfg = Release|Any CPU
 		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F}.Release|x86.ActiveCfg = Release|Any CPU
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|ARM.ActiveCfg = Debug|ARM
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|ARM.Build.0 = Debug|ARM
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|ARM.Deploy.0 = Debug|ARM
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|x64.ActiveCfg = Debug|x64
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|x64.Build.0 = Debug|x64
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|x64.Deploy.0 = Debug|x64
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|x86.ActiveCfg = Debug|x86
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|x86.Build.0 = Debug|x86
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Debug|x86.Deploy.0 = Debug|x86
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|ARM.ActiveCfg = Release|ARM
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|ARM.Build.0 = Release|ARM
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|ARM.Deploy.0 = Release|ARM
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|x64.ActiveCfg = Release|x64
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|x64.Build.0 = Release|x64
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|x64.Deploy.0 = Release|x64
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|x86.ActiveCfg = Release|x86
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|x86.Build.0 = Release|x86
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}.Release|x86.Deploy.0 = Release|x86
+		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Release|x64.ActiveCfg = Release|Any CPU
+		{73DAB28E-EC91-469B-904E-9EC8123D155F}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,5 +217,7 @@ Global
 		{A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279} = {D4C723FC-550D-4777-8559-165FFC379049}
 		{A30B1F52-719D-4F66-BB4A-0D0E38002EC9} = {D4C723FC-550D-4777-8559-165FFC379049}
 		{20EBD715-2C6F-4FDD-BA01-AC22803BAE0F} = {D4C723FC-550D-4777-8559-165FFC379049}
+		{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439} = {A87BC855-C41E-43F9-9A89-8EF3C8BB938D}
+		{73DAB28E-EC91-469B-904E-9EC8123D155F} = {E025DEED-3EEF-4F0B-BB37-AC445F1326D9}
 	EndGlobalSection
 EndGlobal
