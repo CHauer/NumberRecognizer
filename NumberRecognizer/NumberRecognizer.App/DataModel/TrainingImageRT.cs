@@ -5,9 +5,12 @@
 // <author>Markus Zytek</author>
 // <summary>Training Image RT.</summary>
 //-----------------------------------------------------------------------
+
+
 namespace NumberRecognizer.App.DataModel
 {
     using NumberRecognizer.App.NumberRecognizerService;
+    using NumberRecognizer.Cloud.Contract.Data;
     using Windows.UI.Xaml.Media.Imaging;
 
     /// <summary>

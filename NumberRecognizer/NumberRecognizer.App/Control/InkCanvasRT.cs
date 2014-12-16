@@ -171,7 +171,7 @@ namespace NumberRecognizer.App.Control
                 PointerPoint pointerPoint = e.GetCurrentPoint(this);
                 this.currentContactPoint = pointerPoint.Position;
 
-                if (Distance(this.previousContactPoint, this.currentContactPoint) > 1.0)
+                if (Distance(this.previousContactPoint, this.currentContactPoint) > 2.0)
                 {
                     Line line = new Line()
                     {

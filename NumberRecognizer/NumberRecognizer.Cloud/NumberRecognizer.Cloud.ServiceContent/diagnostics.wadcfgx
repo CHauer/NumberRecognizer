@@ -32,10 +32,10 @@
         <Logs scheduledTransferPeriod="PT1M" scheduledTransferLogLevelFilter="Verbose" />
       </DiagnosticMonitorConfiguration>
     </WadCfg>
-    <StorageAccount />
+    <StorageAccount>portalvhdshhq7tkqd8flfh</StorageAccount>
   </PublicConfig>
   <PrivateConfig xmlns="http://schemas.microsoft.com/ServiceHosting/2010/10/DiagnosticsConfiguration">
-    <StorageAccount endpoint="" />
+    <StorageAccount name="portalvhdshhq7tkqd8flfh" endpoint="https://core.windows.net/" />
   </PrivateConfig>
   <IsEnabled>true</IsEnabled>
 </DiagnosticsConfiguration>

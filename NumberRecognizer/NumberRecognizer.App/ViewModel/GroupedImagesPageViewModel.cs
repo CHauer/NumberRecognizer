@@ -5,6 +5,9 @@
 // <author>Markus Zytek</author>
 // <summary>Grouped Images Page ViewModel.</summary>
 //-----------------------------------------------------------------------
+
+using NumberRecognizer.Cloud.Contract.Data;
+
 namespace NumberRecognizer.App.ViewModel
 {
     using System.Collections.ObjectModel;

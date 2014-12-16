@@ -5,6 +5,9 @@
 // <author>Markus Zytek</author>
 // <summary>Create Network Page ViewModel.</summary>
 //-----------------------------------------------------------------------
+
+using NumberRecognizer.Cloud.Contract.Data;
+
 namespace NumberRecognizer.App.ViewModel
 {
     using System;
@@ -131,7 +134,7 @@ namespace NumberRecognizer.App.ViewModel
                     trainingImage.Height = (int)component.MinBoundingRect.Size;
                     trainingImage.Width = (int)component.MinBoundingRect.Size;
                     trainingImage.Pattern = inkCanvas.Name;
-                    trainingImage.ImageData = ImageHelperRT.GetObservableCollectionFrom2DPixelArray(component.ScaledPixels);
+                    trainingImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
 
                     TrainingImageRT trainingImageRT = new TrainingImageRT(trainingImage);
                     var scaRGBABytes = ImageHelperRT.GetRGBAByteArrayFromByteArrayAsync(component.ScaledBytes, inkCanvas.ForegroundColor);

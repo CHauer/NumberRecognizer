@@ -28,6 +28,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{E025DEED-3EEF-4F0B-BB37-AC445F1326D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognizer.App", "NumberRecognizer.App\NumberRecognizer.App.csproj", "{D7A7A48F-2A13-4CA4-A11D-B06EB30B4439}"
+	ProjectSection(ProjectDependencies) = postProject
+		{A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279} = {A7FEC5EA-31D4-45E8-9C3A-3F461AFD9279}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NumberRecognition.Labeling", "NumberRecognizer.Labeling\NumberRecognition.Labeling.csproj", "{73DAB28E-EC91-469B-904E-9EC8123D155F}"
 EndProject

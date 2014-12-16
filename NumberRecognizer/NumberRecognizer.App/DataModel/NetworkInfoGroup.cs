@@ -5,6 +5,9 @@
 // <author>Markus Zytek</author>
 // <summary>Network Info Group.</summary>
 //-----------------------------------------------------------------------
+
+using NumberRecognizer.Cloud.Contract.Data;
+
 namespace NumberRecognizer.App.DataModel
 {
     using System.Collections.ObjectModel;
@@ -62,7 +65,7 @@ namespace NumberRecognizer.App.DataModel
         /// <value>
         /// The networks.
         /// </value>
-        public ObservableCollection<NetworkInfoRT> Networks { get; set; }
+        public ObservableCollection<NetworkInfo> Networks { get; set; }
 
         /// <summary>
         /// Gets the click title command.
@@ -85,7 +88,7 @@ namespace NumberRecognizer.App.DataModel
         /// </summary>
         private void InitializeProperties()
         {
-            this.Networks = new ObservableCollection<NetworkInfoRT>();
+            this.Networks = new ObservableCollection<NetworkInfo>();
         }
 
         /// <summary>

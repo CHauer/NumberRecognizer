@@ -5,6 +5,7 @@
 // <author>Markus Zytek</author>
 // <summary>Network Detail Page ViewModel.</summary>
 //-----------------------------------------------------------------------
+
 namespace NumberRecognizer.App.ViewModel
 {
     using System;
@@ -13,6 +14,7 @@ namespace NumberRecognizer.App.ViewModel
     using GalaSoft.MvvmLight;
     using NumberRecognizer.App.Common;
     using NumberRecognizer.App.NumberRecognizerService;
+    using NumberRecognizer.Cloud.Contract.Data;
     using PropertyChanged;
     using System.Collections.ObjectModel;
     using NumberRecognizer.App.Help;
@@ -109,9 +111,9 @@ namespace NumberRecognizer.App.ViewModel
                     {
                         Width = (int)component.MinBoundingRect.Size,
                         Height = (int)component.MinBoundingRect.Size,
-                        ImageData = ImageHelperRT.GetObservableCollectionFrom2DPixelArray(component.ScaledPixels)
                     };
 
+                    recognitionImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
                     recognitionImages.Add(recognitionImage);
                 }
                 catch

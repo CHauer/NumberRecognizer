@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
@@ -11,8 +12,17 @@ namespace NumberRecognizer.Cloud.Contract.Data
     /// The network info class represents the information of one available network.
     /// </summary>
     [DataContract]
-    public class NetworkInfo
+    public partial class NetworkInfo
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NetworkInfo"/> class.
+        /// </summary>
+        public NetworkInfo()
+        {
+            MultiplePoolFitnessLog = new Dictionary<string, FitnessLog>();
+            FinalPoolFitnessLog = new FitnessLog();
+        }
+
         /// <summary>
         /// Gets or sets the network identifier.
         /// </summary>
@@ -29,7 +39,7 @@ namespace NumberRecognizer.Cloud.Contract.Data
         /// The name of the network.
         /// </value>
         [DataMember]
-        public string NetworkName{ get; set; }
+        public string NetworkName { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether the network is 
@@ -99,6 +109,26 @@ namespace NumberRecognizer.Cloud.Contract.Data
         ///   <c>true</c> if [multiple gen pool]; otherwise, <c>false</c>.
         /// </value>
         [DataMember]
-        public bool MultipleGenPool{ get; set; }
+        public bool MultipleGenPool { get; set; }
+
+        /// <summary>
+        /// Gets or sets the chart fittness trend.
+        /// </summary>
+        /// <value>
+        /// The chart fittness trend.
+        /// </value>
+        [IgnoreDataMember]
+        public IList<ChartPopulation> ChartFitnessTrend { get; set; }
+
+        /// <summary>
+        /// Gets or sets the chart fittness.
+        /// </summary>
+        /// <value>
+        /// The chart fittness.
+        /// </value>
+        [IgnoreDataMember]
+        public IList<ChartPopulation> ChartFitness { get; set; }
+
     }
+
 }
