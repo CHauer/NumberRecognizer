@@ -7,9 +7,23 @@ using System.Threading.Tasks;
 
 namespace NumberRecognizer.Cloud.Contract.Data
 {
+    /// <summary>
+    /// 
+    /// </summary>
     [DataContract]
     public class FitnessLog
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="FitnessLog"/> class.
+        /// </summary>
+        public FitnessLog()
+        {
+            FinalPatternFittness = new Dictionary<string, double>();
+            FitnessTrend = new List<double>();
+            PatternTrends = new Dictionary<string, List<double>>();
+
+        }
+
         /// <summary>
         /// Gets or sets the fitness trend from generation 0 to n.
         /// </summary>
@@ -39,7 +53,7 @@ namespace NumberRecognizer.Cloud.Contract.Data
         /// The final pattern fittness.
         /// </value>
         [DataMember]
-        public Dictionary<string, double>  FinalPatternFittness { get; set; }
+        public Dictionary<string, double> FinalPatternFittness { get; set; }
 
     }
 }

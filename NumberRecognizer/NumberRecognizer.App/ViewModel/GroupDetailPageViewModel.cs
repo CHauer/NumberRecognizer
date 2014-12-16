@@ -5,6 +5,8 @@
 // <author>Markus Zytek</author>
 // <summary>Group Detail Page ViewModel.</summary>
 //-----------------------------------------------------------------------
+
+
 namespace NumberRecognizer.App.ViewModel
 {
     using System;
@@ -13,6 +15,7 @@ namespace NumberRecognizer.App.ViewModel
     using Mutzl.MvvmLight;
     using NumberRecognizer.App.DataModel;
     using NumberRecognizer.App.NumberRecognizerService;
+    using NumberRecognizer.Cloud.Contract.Data;
     using PropertyChanged;
     using Windows.UI.Popups;
 
@@ -25,7 +28,7 @@ namespace NumberRecognizer.App.ViewModel
         /// <summary>
         /// The selected network.
         /// </summary>
-        private NetworkInfoRT selectedNetwork = null;
+        private NetworkInfo selectedLocalNetwork = null;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GroupDetailPageViewModel"/> class.
@@ -68,16 +71,16 @@ namespace NumberRecognizer.App.ViewModel
         /// <value>
         /// The selected network.
         /// </value>
-        public NetworkInfoRT SelectedNetwork
+        public NetworkInfo SelectedLocalNetwork
         {
             get
             {
-                return this.selectedNetwork;
+                return this.selectedLocalNetwork;
             }
 
             set
             {
-                this.SelectedNetwork = value;
+                this.SelectedLocalNetwork = value;
             }
         }
 
@@ -91,7 +94,7 @@ namespace NumberRecognizer.App.ViewModel
         {
             get
             {
-                return this.selectedNetwork != null;
+                return this.selectedLocalNetwork != null;
             }
         }
 
@@ -100,7 +103,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void InitializeCommands()
         {
-            this.DeleteNetworkCommand = new DependentRelayCommand(this.DeleteNetwork, () => this.SelectedNetwork != null, this, () => this);
+            this.DeleteNetworkCommand = new DependentRelayCommand(this.DeleteNetwork, () => this.SelectedLocalNetwork != null, this, () => this);
         }
 
         /// <summary>
@@ -108,15 +111,15 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private async void DeleteNetwork()
         {
-            MessageDialog msgDialog = new MessageDialog("Do you really want to delete this Network?", this.SelectedNetwork.Network.NetworkName);
+            MessageDialog msgDialog = new MessageDialog("Do you really want to delete this Network?", this.SelectedLocalNetwork.NetworkName);
 
             UICommand ok = new UICommand("OK");
             ok.Invoked = async delegate(IUICommand command)
             {
                 NumberRecognizerServiceClient serviceClient = new NumberRecognizerServiceClient();
-                await serviceClient.DeleteNetworkAsync(this.SelectedNetwork.Network.NetworkId);
-                this.NetworkGroup.Networks.Remove(this.SelectedNetwork);
-                this.SelectedNetwork = null;
+                await serviceClient.DeleteNetworkAsync(this.SelectedLocalNetwork.NetworkId);
+                this.NetworkGroup.Networks.Remove(this.SelectedLocalNetwork);
+                this.SelectedLocalNetwork = null;
             };
             msgDialog.Commands.Add(ok);
 

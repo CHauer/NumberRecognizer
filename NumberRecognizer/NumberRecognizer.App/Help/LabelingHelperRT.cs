@@ -5,10 +5,13 @@
 // <author>Markus Zytek</author>
 // <summary>Labeling Helper for RT.</summary>
 //-----------------------------------------------------------------------
+
+
 namespace NumberRecognizer.App.Help
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.Runtime.InteropServices.WindowsRuntime;
     using System.Threading.Tasks;
     using NumberRecognition.Labeling;
@@ -93,6 +96,7 @@ namespace NumberRecognizer.App.Help
                 }
                 catch (Exception ex)
                 {
+                    Debug.WriteLine(ex.Message);
                 }
             }
         }

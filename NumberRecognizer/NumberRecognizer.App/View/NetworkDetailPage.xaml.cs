@@ -5,6 +5,9 @@
 // <author>Markus Zytek</author>
 // <summary>Item Detail Page.</summary>
 //-----------------------------------------------------------------------
+
+using NumberRecognizer.Cloud.Contract.Data;
+
 namespace NumberRecognizer.App.View
 {
     using System;

@@ -37,6 +37,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Data\ChartPopulation.cs" />
     <Compile Include="Data\NetworkStatusType.cs" />
     <Compile Include="Data\NetworkInfo.cs" />
     <Compile Include="Data\FitnessLog.cs" />
@@ -46,9 +47,6 @@
     <Compile Include="Data\NumberRecognitionResult.cs" />
     <Compile Include="Data\NumberRecognitionResultItem.cs" />
     <Compile Include="Data\RecognitionImage.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Data\Contract.Data.ClassDiagram.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

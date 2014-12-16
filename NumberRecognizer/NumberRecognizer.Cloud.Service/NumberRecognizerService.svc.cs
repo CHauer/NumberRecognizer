@@ -22,7 +22,7 @@ namespace NumberRecognizer.Cloud.Service
     /// <summary>
     /// 
     /// </summary>
-    public class NumberRecognizerService :  INumberRecognizerService
+    public class NumberRecognizerService : INumberRecognizerService
     {
         /// <summary>
         /// The queue client
@@ -45,7 +45,7 @@ namespace NumberRecognizer.Cloud.Service
         private void InitializeServiceBusQueue()
         {
             string queueName = CloudConfigurationManager.GetSetting("QueueName");
-            
+
             // Die maximale Anzahl gleichzeitiger Verbindungen setzen 
             ServicePointManager.DefaultConnectionLimit = 12;
 
@@ -69,9 +69,12 @@ namespace NumberRecognizer.Cloud.Service
         /// <returns>A list of current available networks.</returns>
         public IList<NetworkInfo> GetNetworks()
         {
+            List<NetworkInfo> networks;
+
             using (var db = new NetworkDataModelContainer())
             {
-                var networks = db.NetworkSet.Select(network => new NetworkInfo()
+                //load networks
+                networks = db.NetworkSet.Select(network => new NetworkInfo()
                 {
                     Calculated = network.Calculated == CalculationType.Ready,
                     Status = (NetworkStatusType)((int)network.Calculated),
@@ -79,22 +82,25 @@ namespace NumberRecognizer.Cloud.Service
                     NetworkId = network.NetworkId,
                     NetworkName = network.NetworkName,
                     CalculationStart = network.CalculationStart,
-                    CalculationEnd = network.CalculationEnd,
-                });
+                    CalculationEnd = network.CalculationEnd
+                }).ToList();
 
-                foreach (var network in networks)
+                //load trainlog data 
+                foreach (var network in networks.Where(network => network.Calculated))
                 {
-                    if (network.Calculated)
+                    try
                     {
                         network.FinalPoolFitnessLog = GetFitnessLog(network.NetworkId, null, db);
                         network.MultiplePoolFitnessLog = GetMultiplePoolFitnessLog(network.NetworkId, db);
                     }
+                    catch (Exception ex)
+                    {
+                        Trace.TraceError(ex.Message);
+                    }
                 }
-
-                return networks.ToList();
             }
 
-            
+            return networks;
         }
 
         /// <summary>
@@ -107,7 +113,7 @@ namespace NumberRecognizer.Cloud.Service
         {
             bool status = true;
             DataSerializer<double[,]> serializer = new DataSerializer<double[,]>();
-            int networkId = -1; 
+            int networkId = -1;
 
             using (var db = new NetworkDataModelContainer())
             {
@@ -134,7 +140,7 @@ namespace NumberRecognizer.Cloud.Service
                 {
                     db.SaveChanges();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Trace.TraceError(ex.Message);
                     status = false;
@@ -230,9 +236,16 @@ namespace NumberRecognizer.Cloud.Service
         {
             using (var db = new NetworkDataModelContainer())
             {
-                var delNetwork = db.NetworkSet.First(n => n.NetworkId == networkId);
+                var delNetwork = db.NetworkSet.FirstOrDefault(n => n.NetworkId == networkId);
+
+                if (delNetwork == null)
+                {
+                    throw new FaultException<ArgumentException>
+                        (new ArgumentException(String.Format("The network with the ID {0} was not found!", networkId)));
+                }
 
                 db.PatternFitnessSet.RemoveRange(db.PatternFitnessSet.Where(pfs => pfs.TrainLog.Network.NetworkId == networkId));
+                db.TrainingImageDataSet.RemoveRange(delNetwork.TrainingImages);
                 db.TrainLogSet.RemoveRange(delNetwork.TrainLogs);
                 db.NetworkSet.Remove(delNetwork);
 
@@ -240,7 +253,7 @@ namespace NumberRecognizer.Cloud.Service
                 {
                     db.SaveChanges();
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Trace.TraceError(ex.Message);
                     return false;
@@ -325,25 +338,27 @@ namespace NumberRecognizer.Cloud.Service
         /// <returns></returns>
         private FitnessLog GetFitnessLog(int networkId, string poolId, NetworkDataModelContainer db)
         {
-            var network = db.NetworkSet.First(n => n.NetworkId == networkId);
-
-            if (network.TrainLogs.Count == 0)
-            {
-                return null;
-            }
-
             //Standard value
             int maxGeneration = 0;
 
-            Func<TrainLog, bool> funcPoolCompare = tl =>
-                                         {
-                                             if (String.IsNullOrEmpty(poolId))
-                                             {
-                                                 return tl.MultipleGenPoolIdentifier == null;
-                                             }
+            //load network
+            var network = db.NetworkSet.First(n => n.NetworkId == networkId);
 
-                                             return tl.MultipleGenPoolIdentifier.Equals(poolId);
-                                         };
+            if (network == null || network.TrainLogs.Count == 0)
+            {
+                //return empty standard value
+                return new FitnessLog();
+            }
+
+            Func<TrainLog, bool> funcPoolCompare = tl =>
+            {
+                if (String.IsNullOrEmpty(poolId))
+                {
+                    return tl.MultipleGenPoolIdentifier == null;
+                }
+
+                return tl.MultipleGenPoolIdentifier.Equals(poolId);
+            };
 
             Func<PatternFitness, bool> funcPatternPoolCompare = pf =>
             {
@@ -355,40 +370,50 @@ namespace NumberRecognizer.Cloud.Service
                 return pf.TrainLog.MultipleGenPoolIdentifier.Equals(poolId);
             };
 
-
+            //load max training generation of network
             maxGeneration = network.TrainLogs
                                      .Where(funcPoolCompare)
                                      .Max(n => n.GenerationNr);
 
-
+            //load distinct patterns
             List<string> patterns = network.TrainLogs.First()
                                            .PatternFitnessSet
                                            .Select(p => p.Pattern)
                                            .Distinct()
                                            .ToList();
 
-            return new FitnessLog()
+            try
             {
-                FitnessTrend = network.TrainLogs
-                    .Where(funcPoolCompare)
-                    .OrderBy(tl => tl.GenerationNr)
-                    .Select(tl => tl.Fitness)
-                    .ToList<double>(),
+                return new FitnessLog()
+                {
+                    FitnessTrend = network.TrainLogs
+                        .Where(funcPoolCompare)
+                        .OrderBy(tl => tl.GenerationNr)
+                        .Select(tl => tl.Fitness)
+                        .ToList<double>(),
 
-                FinalPatternFittness = network.TrainLogs
-                    .Where(funcPoolCompare)
-                    .First(tl => tl.GenerationNr == maxGeneration)
-                    .PatternFitnessSet.ToDictionary(i => i.Pattern, i => i.Fitness),
+                    FinalPatternFittness = network.TrainLogs
+                        .Where(funcPoolCompare)
+                        .First(tl => tl.GenerationNr == maxGeneration)
+                        .PatternFitnessSet.ToDictionary(i => i.Pattern, i => i.Fitness),
 
-                PatternTrends = patterns.ToDictionary(key => key,
-                    value => db.PatternFitnessSet
-                            .Where(p => p.TrainLog.Network.NetworkId == networkId)
-                            .Where(funcPatternPoolCompare)
-                            .Where(p => p.Pattern.Equals(value))
-                            .OrderBy(i => i.TrainLog.GenerationNr)
-                            .Select(i => i.Fitness)
-                            .ToList<double>())
-            };
+                    PatternTrends = patterns.ToDictionary(key => key,
+                        value => db.PatternFitnessSet
+                                .Where(p => p.TrainLog.Network.NetworkId == networkId)
+                                .Where(funcPatternPoolCompare)
+                                .Where(p => p.Pattern.Equals(value))
+                                .OrderBy(i => i.TrainLog.GenerationNr)
+                                .Select(i => i.Fitness)
+                                .ToList<double>())
+                };
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError(ex.Message);
+
+                //return empty standard value
+                return new FitnessLog();
+            }
         }
     }
 }

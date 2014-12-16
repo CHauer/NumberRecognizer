@@ -110,6 +110,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Common\ItemClickCommand.cs" />
     <Compile Include="Common\LoadStateEventArgs.cs" />
     <Compile Include="Common\SaveStateEventArgs.cs" />
     <Compile Include="Common\SuspensionManagerException.cs" />
@@ -119,7 +120,6 @@
     <Compile Include="Converter\BooleanToVisibilityConverter.cs" />
     <Compile Include="Converter\DateTimeToStringConverter.cs" />
     <Compile Include="DataModel\NetworkInfoGroup.cs" />
-    <Compile Include="DataModel\NetworkInfoRT.cs" />
     <Compile Include="DataModel\TrainingImageGroup.cs" />
     <Compile Include="DataModel\TrainingImageRT.cs" />
     <Compile Include="Help\LabelingHelperRT.cs" />
@@ -129,6 +129,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\CreateNetworkPageViewModel.cs" />
+    <Compile Include="ViewModel\Design\DesignGroupedNetworksPageViewModel.cs" />
     <Compile Include="ViewModel\GroupDetailPageViewModel.cs" />
     <Compile Include="ViewModel\GroupedImagesPageViewModel.cs" />
     <Compile Include="ViewModel\GroupedNetworksPageViewModel.cs" />
@@ -166,26 +167,21 @@
       <SubType>Designer</SubType>
     </AppxManifest>
     <Content Include="FodyWeavers.xml" />
-    <Content Include="Lib\De.TorstenMandelkow.MetroChart.dll" />
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService1.disco" />
+    <None Include="Properties\DataSources\NumberRecognizer.Cloud.Contract.Data.NetworkInfo.datasource" />
+    <None Include="Properties\DataSources\NumberRecognizer.Cloud.Contract.Data.NumberRecognitionResult.datasource" />
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService.disco" />
     <None Include="NumberRecognizer.App_TemporaryKey.pfx" />
-    <None Include="Service References\NumberRecognizerService\NumberRecognizer.App.NumberRecognizerService.NetworkInfo.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\NumberRecognizerService\NumberRecognizer.App.NumberRecognizerService.NumberRecognitionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService1.wsdl" />
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService4.xsd">
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService.wsdl" />
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService41.xsd">
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService42.xsd">
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\NumberRecognizerService\NumberRecognizerService43.xsd">
+    <None Include="Service References\NumberRecognizerService\NumberRecognizerService3.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\NumberRecognizerService\Reference.svcmap">
@@ -238,6 +234,10 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\NumberRecognizer.Cloud.Contract\NumberRecognizer.Cloud.Contract.csproj">
+      <Project>{75663fb2-975a-4d29-816b-5750e61891dc}</Project>
+      <Name>NumberRecognizer.Cloud.Contract</Name>
+    </ProjectReference>
     <ProjectReference Include="..\NumberRecognizer.Labeling\NumberRecognition.Labeling.csproj">
       <Project>{73dab28e-ec91-469b-904e-9ec8123d155f}</Project>
       <Name>NumberRecognition.Labeling</Name>
@@ -246,7 +246,7 @@
   <ItemGroup>
     <Reference Include="De.TorstenMandelkow.MetroChart, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>Lib\De.TorstenMandelkow.MetroChart.dll</HintPath>
+      <HintPath>..\packages\ModernChart.1.0.0\lib\netcore45\De.TorstenMandelkow.MetroChart.dll</HintPath>
     </Reference>
     <Reference Include="GalaSoft.MvvmLight">
       <HintPath>..\packages\Portable.MvvmLightLibs.5.0.2.0\lib\netcore451\GalaSoft.MvvmLight.dll</HintPath>
@@ -271,7 +271,11 @@
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\NumberRecognizerService\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <SDKReference Include="BehaviorsXamlSDKManaged, Version=12.0">
+      <Name>Behaviors SDK %28XAML%29</Name>
+    </SDKReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>
   </PropertyGroup>

@@ -26,16 +26,6 @@ namespace NumberRecognizer.App.View
         private NavigationHelper navigationHelper;
 
         /// <summary>
-        /// The default view model.
-        /// </summary>
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
-        /// <summary>
-        /// The view model.
-        /// </summary>
-        private GroupedNetworksPageViewModel viewModel;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="GroupedNetworksPage"/> class.
         /// </summary>
         public GroupedNetworksPage()
@@ -58,17 +48,6 @@ namespace NumberRecognizer.App.View
         }
 
         /// <summary>
-        /// Gets This can be changed to a strongly typed view model.
-        /// </summary>
-        /// <value>
-        /// The default view model.
-        /// </value>
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
-        }
-
-        /// <summary>
         /// Invoked when the Page is loaded and becomes the current source of a parent Frame.
         /// </summary>
         /// <param name="e">Event data that can be examined by overriding code. The event data is representative of the pending navigation that will load the current Page. Usually the most relevant property to examine is Parameter.</param>
@@ -87,19 +66,12 @@ namespace NumberRecognizer.App.View
         }
 
         /// <summary>
-        /// Populates the page with content passed during navigation.  Any saved state is also
-        /// provided when recreating a page from a prior session.
+        /// Handles the LoadState event of the NavigationHelper control.
         /// </summary>
-        /// <param name="sender">
-        /// The source of the event; typically <see cref="NavigationHelper"/>
-        /// </param>
-        /// <param name="e">Event data that provides both the navigation parameter passed to
-        /// <see cref="Frame.Navigate(Type, Object)"/> when this page was initially requested and
-        /// a dictionary of state preserved by this page during an earlier
-        /// session.  The state will be null the first time a page is visited.</param>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="LoadStateEventArgs"/> instance containing the event data.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            this.viewModel = (GroupedNetworksPageViewModel)this.DataContext;
         }
     }
 }
