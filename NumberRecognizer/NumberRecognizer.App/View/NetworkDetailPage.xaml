@@ -40,21 +40,22 @@
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="0">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <chart:ClusteredBarChart
+                    <chart:ClusteredColumnChart
 									Background="Transparent"
 									Style="{StaticResource ChartStyleVariableSize}"
 									ChartTitle=""
 									ChartTitleVisibility="Collapsed"
 									ChartLegendVisibility="Collapsed"
+                                    Palette="{StaticResource CustomColors}"
 									ChartSubTitle="">
-                        <chart:ClusteredBarChart.Series>
+                        <chart:ClusteredColumnChart.Series>
                             <chart:ChartSeries 
 											SeriesTitle="Fitness"
 											ItemsSource="{Binding FinalPoolFitnessTrend}" 
 											DisplayMember="Name" 
 											ValueMember="Value" />
-                        </chart:ClusteredBarChart.Series>
-                    </chart:ClusteredBarChart>
+                        </chart:ClusteredColumnChart.Series>
+                    </chart:ClusteredColumnChart>
                 </ScrollViewer>
             </Grid>
             <Grid Grid.Column="1" Margin="2">

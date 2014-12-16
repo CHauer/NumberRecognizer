@@ -1,5 +1,5 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="TrainingImageRT.cs" company="FH Wr.Neustadt">
+// <copyright file="LocalTrainingImage.cs" company="FH Wr.Neustadt">
 //     Copyright Markus Zytek. All rights reserved.
 // </copyright>
 // <author>Markus Zytek</author>
@@ -16,21 +16,21 @@ namespace NumberRecognizer.App.DataModel
     /// <summary>
     /// Training Image RT.
     /// </summary>
-    public class TrainingImageRT
+    public class LocalTrainingImage
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="TrainingImageRT"/> class.
+        /// Initializes a new instance of the <see cref="LocalTrainingImage"/> class.
         /// </summary>
-        public TrainingImageRT()
+        public LocalTrainingImage()
         {
             this.Image = new TrainingImage();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TrainingImageRT"/> class.
+        /// Initializes a new instance of the <see cref="LocalTrainingImage"/> class.
         /// </summary>
         /// <param name="image">The image.</param>
-        public TrainingImageRT(TrainingImage image)
+        public LocalTrainingImage(TrainingImage image)
             : this()
         {
             this.Image = image;

@@ -6,15 +6,11 @@
 // <summary>Create Network Page ViewModel.</summary>
 //-----------------------------------------------------------------------
 
+using System.Linq;
 using NumberRecognizer.Cloud.Contract.Data;
 
 namespace NumberRecognizer.App.ViewModel
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Runtime.InteropServices.WindowsRuntime;
-    using System.Windows.Input;
     using GalaSoft.MvvmLight;
     using Mutzl.MvvmLight;
     using NumberRecognition.Labeling;
@@ -24,6 +20,11 @@ namespace NumberRecognizer.App.ViewModel
     using NumberRecognizer.App.NumberRecognizerService;
     using NumberRecognizer.App.View;
     using PropertyChanged;
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Runtime.InteropServices.WindowsRuntime;
+    using System.Windows.Input;
     using Windows.System.UserProfile;
     using Windows.UI;
     using Windows.UI.Xaml;
@@ -40,7 +41,7 @@ namespace NumberRecognizer.App.ViewModel
         /// <summary>
         /// The training images.
         /// </summary>
-        private ObservableCollection<TrainingImageRT> trainingImagesRT = new ObservableCollection<TrainingImageRT>();
+        private ObservableCollection<LocalTrainingImage> trainingImagesRT = new ObservableCollection<LocalTrainingImage>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CreateNetworkPageViewModel"/> class.
@@ -84,18 +85,12 @@ namespace NumberRecognizer.App.ViewModel
         public ICommand LabelingCommand { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether this instance is next command not executable.
+        /// Gets or sets a value indicating whether [is error].
         /// </summary>
         /// <value>
-        /// <c>true</c> if this instance is next command not executable; otherwise, <c>false</c>.
+        ///   <c>true</c> if [is error]; otherwise, <c>false</c>.
         /// </value>
-        public bool IsNextCommandNotExecutable
-        {
-            get
-            {
-                return !this.CanExecuteNextCommand();
-            }
-        }
+        public bool IsShowHint { get; set; }
 
         /// <summary>
         /// Initializes the commands.
@@ -112,9 +107,18 @@ namespace NumberRecognizer.App.ViewModel
         /// <returns>Can execute next command.</returns>
         private bool CanExecuteNextCommand()
         {
-            ////int networkNameLength = this.NetworkName.Length;
-            ////int inkCanvasCollectonsWithComponents = this.InkCanvasRTCollection.Count(p => p.Labeling.ComponentCount > 0);
-            ////return (networkNameLength > 0 && inkCanvasCollectonsWithComponents == 10);
+            if(String.IsNullOrEmpty(NetworkName))
+            {
+                return false;
+            }
+
+            if (!this.InkCanvasRTCollection.All(p => p.Labeling.ComponentCount > 0))
+            {
+                IsShowHint = true;
+                return false;
+            }
+
+            IsShowHint = false;
             return true;
         }
 
@@ -123,7 +127,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private async void LabelingAsync()
         {
-            this.trainingImagesRT = new ObservableCollection<TrainingImageRT>();
+            this.trainingImagesRT = new ObservableCollection<LocalTrainingImage>();
 
             foreach (InkCanvasRT inkCanvas in this.InkCanvasRTCollection)
             {
@@ -136,13 +140,13 @@ namespace NumberRecognizer.App.ViewModel
                     trainingImage.Pattern = inkCanvas.Name;
                     trainingImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
 
-                    TrainingImageRT trainingImageRT = new TrainingImageRT(trainingImage);
+                    LocalTrainingImage localTrainingImage = new LocalTrainingImage(trainingImage);
                     var scaRGBABytes = ImageHelperRT.GetRGBAByteArrayFromByteArrayAsync(component.ScaledBytes, inkCanvas.ForegroundColor);
                     var memoryStream = await ImageHelperRT.SaveRGBAByteArrayAsMemoryStream(scaRGBABytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight);
-                    trainingImageRT.Bitmap = new WriteableBitmap((int)ImageHelperRT.ImageWidth, (int)ImageHelperRT.ImageHeight);
-                    await trainingImageRT.Bitmap.SetSourceAsync(memoryStream);
+                    localTrainingImage.Bitmap = new WriteableBitmap((int)ImageHelperRT.ImageWidth, (int)ImageHelperRT.ImageHeight);
+                    await localTrainingImage.Bitmap.SetSourceAsync(memoryStream);
 
-                    this.trainingImagesRT.Add(trainingImageRT);
+                    this.trainingImagesRT.Add(localTrainingImage);
                 }
             }
         }
@@ -152,7 +156,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void NextPage()
         {
-            KeyValuePair<string, ObservableCollection<TrainingImageRT>> keyValuePair = new KeyValuePair<string, ObservableCollection<TrainingImageRT>>(this.NetworkName, this.trainingImagesRT);
+            KeyValuePair<string, ObservableCollection<LocalTrainingImage>> keyValuePair = new KeyValuePair<string, ObservableCollection<LocalTrainingImage>>(this.NetworkName, this.trainingImagesRT);
             App.RootFrame.Navigate(typeof(GroupedImagesPage), keyValuePair);
         }
 
@@ -161,6 +165,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private async void InitializeProperties()
         {
+            this.IsShowHint = false;
             this.NetworkName = string.Format("{0}_{1}", await UserInformation.GetLastNameAsync(), DateTime.Now.ToFileTime());
             this.InkCanvasRTCollection = new ObservableCollection<InkCanvasRT>();
             for (int i = 0; i < 10; i++)

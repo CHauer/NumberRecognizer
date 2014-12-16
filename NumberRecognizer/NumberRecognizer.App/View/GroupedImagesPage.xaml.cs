@@ -111,7 +111,7 @@ namespace NumberRecognizer.App.View
         {
             // TODO: Assign a collection of bindable groups to this.DefaultViewModel["Groups"]
             this.viewModel = (GroupedImagesPageViewModel)this.DataContext;
-            KeyValuePair<string, ObservableCollection<TrainingImageRT>> keyValuePair = (KeyValuePair<string, ObservableCollection<TrainingImageRT>>)e.NavigationParameter;
+            KeyValuePair<string, ObservableCollection<LocalTrainingImage>> keyValuePair = (KeyValuePair<string, ObservableCollection<LocalTrainingImage>>)e.NavigationParameter;
             this.viewModel.NetworkName = keyValuePair.Key;
             this.viewModel.Images = keyValuePair.Value;
         }

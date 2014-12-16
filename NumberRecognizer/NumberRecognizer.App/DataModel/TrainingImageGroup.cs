@@ -22,7 +22,7 @@ namespace NumberRecognizer.App.DataModel
         /// </summary>
         public TrainingImageGroup()
         {
-            this.Images = new ObservableCollection<TrainingImageRT>();
+            this.Images = new ObservableCollection<LocalTrainingImage>();
         }
 
         /// <summary>
@@ -58,6 +58,6 @@ namespace NumberRecognizer.App.DataModel
         /// <value>
         /// The images.
         /// </value>
-        public ObservableCollection<TrainingImageRT> Images { get; set; }
+        public ObservableCollection<LocalTrainingImage> Images { get; set; }
     }
 }
