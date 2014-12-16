@@ -6,7 +6,9 @@
 // <summary>Grouped Images Page ViewModel.</summary>
 //-----------------------------------------------------------------------
 
-using NumberRecognizer.Cloud.Contract.Data;
+
+using System;
+using System.Diagnostics;
 
 namespace NumberRecognizer.App.ViewModel
 {
@@ -16,6 +18,7 @@ namespace NumberRecognizer.App.ViewModel
     using GalaSoft.MvvmLight;
     using Mutzl.MvvmLight;
     using NumberRecognizer.App.DataModel;
+    using NumberRecognizer.Cloud.Contract.Data;
     using NumberRecognizer.App.NumberRecognizerService;
     using NumberRecognizer.App.View;
     using PropertyChanged;
@@ -29,19 +32,19 @@ namespace NumberRecognizer.App.ViewModel
         /// <summary>
         /// The images.
         /// </summary>
-        private ObservableCollection<TrainingImageRT> images;
+        private ObservableCollection<LocalTrainingImage> images;
 
         /// <summary>
         /// The selected image.
         /// </summary>
-        private TrainingImageRT selectedImage;
+        private LocalTrainingImage selectedImage;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GroupedImagesPageViewModel"/> class.
         /// </summary>
         public GroupedImagesPageViewModel()
         {
-            this.Images = new ObservableCollection<TrainingImageRT>();
+            this.Images = new ObservableCollection<LocalTrainingImage>();
             this.ImageGroups = new ObservableCollection<TrainingImageGroup>();
             this.NextCommand = new DependentRelayCommand(this.CreateNetwork, () => this.ImageGroups.Count == 10, this, () => this);
             this.DeleteImageCommand = new DependentRelayCommand(this.DeleteImage, () => this.SelectedImage != null, this, () => this);
@@ -51,7 +54,7 @@ namespace NumberRecognizer.App.ViewModel
         /// Initializes a new instance of the <see cref="GroupedImagesPageViewModel" /> class.
         /// </summary>
         /// <param name="images">The images.</param>
-        public GroupedImagesPageViewModel(ObservableCollection<TrainingImageRT> images)
+        public GroupedImagesPageViewModel(ObservableCollection<LocalTrainingImage> images)
             : this()
         {
             this.Images = images;
@@ -85,7 +88,7 @@ namespace NumberRecognizer.App.ViewModel
         /// <value>
         /// The images.
         /// </value>
-        public ObservableCollection<TrainingImageRT> Images
+        public ObservableCollection<LocalTrainingImage> Images
         {
             get
             {
@@ -129,7 +132,7 @@ namespace NumberRecognizer.App.ViewModel
         /// <value>
         /// The selected image.
         /// </value>
-        public TrainingImageRT SelectedImage
+        public LocalTrainingImage SelectedImage
         {
             get
             {
@@ -152,7 +155,7 @@ namespace NumberRecognizer.App.ViewModel
             foreach (string pattern in this.Images.OrderBy(p => p.Image.Pattern).Select(p => p.Image.Pattern).Distinct().ToList())
             {
                 TrainingImageGroup trainingImageGroup = new TrainingImageGroup(pattern, pattern);
-                foreach (TrainingImageRT trainingImageRT in this.images.Where(p => p.Image.Pattern.Equals(pattern)).ToList())
+                foreach (LocalTrainingImage trainingImageRT in this.images.Where(p => p.Image.Pattern.Equals(pattern)).ToList())
                 {
                     trainingImageGroup.Images.Add(trainingImageRT);
                 }
@@ -167,13 +170,20 @@ namespace NumberRecognizer.App.ViewModel
         private async void CreateNetwork()
         {
             ObservableCollection<TrainingImage> trainingImages = new ObservableCollection<TrainingImage>();
-            foreach (TrainingImageRT trainingImageRT in this.Images)
+            foreach (LocalTrainingImage trainingImageRT in this.Images)
             {
                 trainingImages.Add(trainingImageRT.Image);
             }
 
-            NumberRecognizerServiceClient serviceClient = new NumberRecognizerServiceClient();
-            await serviceClient.CreateNetworkAsync(this.NetworkName, trainingImages);
+            try
+            {
+                NumberRecognizerServiceClient serviceClient = new NumberRecognizerServiceClient();
+                await serviceClient.CreateNetworkAsync(this.NetworkName, trainingImages);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
 
             App.RootFrame.Navigate(typeof(GroupedNetworksPage));
         }

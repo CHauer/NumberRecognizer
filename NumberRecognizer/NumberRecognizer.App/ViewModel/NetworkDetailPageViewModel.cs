@@ -56,6 +56,14 @@ namespace NumberRecognizer.App.ViewModel
         public ObservableCollection<ChartPopulation> FinalPoolFitnessTrend { get; set; }
 
         /// <summary>
+        /// Gets or sets the multiple pool fitness trends.
+        /// </summary>
+        /// <value>
+        /// The multiple pool fitness trends.
+        /// </value>
+        public ObservableCollection<ObservableCollection<ChartPopulation>> MultiplePoolFitnessTrends { get; set; }
+
+        /// <summary>
         /// Initializes the commands.
         /// </summary>
         private void InitializeCommands()
@@ -75,6 +83,17 @@ namespace NumberRecognizer.App.ViewModel
                 for (int generationNr = 0; generationNr < Network.FinalPoolFitnessLog.FitnessTrend.Count; generationNr++)
                 {
                     FinalPoolFitnessTrend.Add(new ChartPopulation() { Name = generationNr.ToString(), Value = Network.FinalPoolFitnessLog.FitnessTrend[generationNr] });
+                }
+            }
+
+            if (Network.Calculated && Network.MultiplePoolFitnessLog != null && Network.MultiplePoolFitnessLog.Count > 0)
+            {
+                foreach (var pool in Network.MultiplePoolFitnessLog.Values)
+                {
+                    for (int generationNr = 0; generationNr < pool.FitnessTrend.Count; generationNr++)
+                    {
+                        FinalPoolFitnessTrend.Add(new ChartPopulation() { Name = generationNr.ToString(), Value = pool.FitnessTrend[generationNr] });
+                    }
                 }
             }
         }

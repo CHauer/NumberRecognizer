@@ -6,6 +6,8 @@
 // <summary>Network Data Source.</summary>
 //-----------------------------------------------------------------------
 
+using Windows.UI.Xaml.Controls;
+
 namespace NumberRecognizer.App.ViewModel
 {
     using System;
@@ -34,11 +36,6 @@ namespace NumberRecognizer.App.ViewModel
     {
 
         /// <summary>
-        /// The selected network.
-        /// </summary>
-        private NetworkInfo selectedLocalNetwork;
-
-        /// <summary>
         /// Initializes a new instance of the <see cref="GroupedNetworksPageViewModel"/> class.
         /// </summary>
         public GroupedNetworksPageViewModel()
@@ -57,9 +54,17 @@ namespace NumberRecognizer.App.ViewModel
         {
             get
             {
-                return this.selectedLocalNetwork != null;
+                return this.SelectedNetwork != null;
             }
         }
+
+        /// <summary>
+        /// Gets a value indicating whether this instance is network selected.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is network selected; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsAppBarOpen { get; set; }
 
         /// <summary>
         /// Gets or sets the networks.
@@ -102,6 +107,14 @@ namespace NumberRecognizer.App.ViewModel
         public ICommand RefreshCommand { get; private set; }
 
         /// <summary>
+        /// Gets the toggle synchronize command.
+        /// </summary>
+        /// <value>
+        /// The toggle synchronize command.
+        /// </value>
+        public RelayCommand<SelectionChangedEventArgs> SelectionChanged { get; private set; }
+
+        /// <summary>
         /// Gets the network clicked command.
         /// </summary>
         /// <value>
@@ -110,24 +123,21 @@ namespace NumberRecognizer.App.ViewModel
         public RelayCommand<NetworkInfo> NetworkClicked { get; private set; }
 
         /// <summary>
+        /// Gets the network clicked command.
+        /// </summary>
+        /// <value>
+        /// The network clicked.
+        /// </value>
+        public DependentRelayCommand NetworkDetails { get; private set; }
+
+        /// <summary>
         /// Gets or sets the selected network.
         /// </summary>
         /// <value>
         /// The selected network.
         /// </value>
-        public NetworkInfo SelectedLocalNetwork
-        {
-            get
-            {
-                return this.selectedLocalNetwork;
-            }
-
-            set
-            {
-                this.selectedLocalNetwork = value;
-                this.RaisePropertyChanged(() => this.IsNetworkSelected);
-            }
-        }
+        [AlsoNotifyFor("IsNetworkSelected")]
+        public NetworkInfo SelectedNetwork { get; set; }
 
         /// <summary>
         /// Initializes the properties.
@@ -135,6 +145,7 @@ namespace NumberRecognizer.App.ViewModel
         private async void InitializeProperties()
         {
             await this.LoadNetworksAsync();
+            this.SelectedNetwork = null;
         }
 
         /// <summary>
@@ -186,13 +197,28 @@ namespace NumberRecognizer.App.ViewModel
         private void InitializeCommands()
         {
             this.CreateNetworkCommand = new DependentRelayCommand(() => App.RootFrame.Navigate(typeof(CreateNetworkPage)),
-                                                                  () => this.SelectedLocalNetwork == null, this,
-                                                                  () => this.SelectedLocalNetwork);
+                                                                  () => this.SelectedNetwork == null, this,
+                                                                  () => this.SelectedNetwork);
             this.DeleteNetworkCommand = new DependentRelayCommand(this.DeleteNetwork,
-                                                                  () => this.SelectedLocalNetwork != null, this,
-                                                                  () => this.SelectedLocalNetwork);
+                                                                  () => this.SelectedNetwork != null, this,
+                                                                  () => this.SelectedNetwork);
             this.RefreshCommand = new RelayCommand(() => LoadNetworksAsync());
-            this.NetworkClicked = new RelayCommand<NetworkInfo>((item) => App.RootFrame.Navigate(typeof(NetworkDetailPage), item));
+            this.NetworkClicked = new RelayCommand<NetworkInfo>((item) => App.RootFrame.Navigate(typeof(NetworkRecognizePage), item));
+            this.NetworkDetails = new DependentRelayCommand(() => App.RootFrame.Navigate(typeof(NetworkDetailPage), SelectedNetwork),
+                                                                  () => this.SelectedNetwork != null, this,
+                                                                  () => this.SelectedNetwork);
+
+            this.SelectionChanged = new RelayCommand<SelectionChangedEventArgs>((args) =>
+            {
+                if (args.AddedItems.Count > 0)
+                {
+                    IsAppBarOpen = true;
+                }
+                if (args.RemovedItems.Count > 0)
+                {
+                    IsAppBarOpen = false;
+                }
+            });
         }
 
         /// <summary>
@@ -200,22 +226,25 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private async void DeleteNetwork()
         {
-            MessageDialog msgDialog = new MessageDialog("Do you really want to delete this Network?", this.SelectedLocalNetwork.NetworkName);
+            MessageDialog msgDialog = new MessageDialog("Do you really want to delete this Network?", this.SelectedNetwork.NetworkName);
 
             UICommand ok = new UICommand("OK");
             ok.Invoked = async delegate(IUICommand command)
             {
                 NumberRecognizerServiceClient serviceClient = new NumberRecognizerServiceClient();
-                await serviceClient.DeleteNetworkAsync(this.SelectedLocalNetwork.NetworkId);
-                this.SelectedLocalNetwork = null;
+                await serviceClient.DeleteNetworkAsync(this.SelectedNetwork.NetworkId);
+                this.SelectedNetwork = null;
+
+                //refresh data
+                await this.LoadNetworksAsync();
             };
+
             msgDialog.Commands.Add(ok);
 
             UICommand cancel = new UICommand("Cancel");
             msgDialog.Commands.Add(cancel);
 
             await msgDialog.ShowAsync();
-            await this.LoadNetworksAsync();
         }
     }
 }

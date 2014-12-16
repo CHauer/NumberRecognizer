@@ -61,4 +61,26 @@
         <Setter Property="Height" Value="40" />
         <Setter Property="Width" Value="50" />
     </Style>
+
+    <chart:ResourceDictionaryCollection x:Key="CustomColors">
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush1" Color="#FFFDC87A" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush2" Color="#FFFD954F" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush3" Color="#FFFFC45C" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush4" Color="#FFFFC000" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush5" Color="#FFFDA018" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush6" Color="#FFFFC018" />
+        </ResourceDictionary>
+    </chart:ResourceDictionaryCollection>
+
 </ResourceDictionary>

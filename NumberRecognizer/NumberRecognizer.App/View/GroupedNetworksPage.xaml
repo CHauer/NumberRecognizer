@@ -10,7 +10,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:chart="using:De.TorstenMandelkow.MetroChart"
     xmlns:design="using:NumberRecognizer.App.ViewModel.Design"
-    xmlns:Interactivity="using:Microsoft.Xaml.Interactivity" xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+    xmlns:interactivity="using:Microsoft.Xaml.Interactivity"
+    xmlns:core="using:Microsoft.Xaml.Interactions.Core"
     x:Name="pageRoot"
     x:Class="NumberRecognizer.App.View.GroupedNetworksPage"
     d:DataContext="{d:DesignInstance IsDesignTimeCreatable=True, Type=design:DesignGroupedNetworksPageViewModel}"
@@ -34,8 +35,8 @@
     <Page.DataContext>
         <mv:GroupedNetworksPageViewModel/>
     </Page.DataContext>
-    <Page.BottomAppBar>
-        <AppBar Background="Orange" IsSticky="{Binding IsNetworkSelected, Mode=OneWay}" IsOpen="{Binding IsNetworkSelected, Mode=OneWay}">
+    <Page.BottomAppBar >
+        <AppBar x:Name="appBar" Background="Orange" IsOpen="{Binding IsAppBarOpen, Mode=TwoWay}" Closed="AppBar_Closed"  >
             <Grid HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -71,19 +72,20 @@
 		</Grid.RowDefinitions>
 
         <!-- Horizontal scrolling grid -->
-		<GridView
+        <GridView
 			x:Name="networkGridView"
-			common:ItemClickCommand.Command="{Binding NetworkClicked}" 
             AutomationProperties.AutomationId="NetworkGridView"
 			AutomationProperties.Name="Grouped Networks"
+			common:ItemClickCommand.Command="{Binding NetworkClicked}"
+            common:SelectionChangedCommand.Command="{Binding SelectionChanged}"
 			Grid.RowSpan="2"
 			Padding="116,137,40,46"
 			ItemsSource="{Binding Mode=TwoWay, Source={StaticResource GroupedNetworksViewSource}}"
 			SelectionMode="Single"
-			SelectedItem="{Binding SelectedLocalNetwork, Mode=TwoWay}"
-			IsSwipeEnabled="false"
-			IsItemClickEnabled="True">
-			<GridView.ItemTemplate>
+			SelectedItem="{Binding SelectedNetwork, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+			IsSwipeEnabled="true"
+			IsItemClickEnabled="True" >
+            <GridView.ItemTemplate>
 				<DataTemplate>
 					<Grid HorizontalAlignment="Left" Width="300" Height="300"
 						Background="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}" >
@@ -94,6 +96,7 @@
 									Background="Transparent"
 									Style="{StaticResource ChartStyleVariableSize}"
 									ChartTitle=""
+                                    Palette="{StaticResource CustomColors}"
 									ChartTitleVisibility="Collapsed"
 									ChartLegendVisibility="Collapsed"
 									ChartSubTitle="">
@@ -144,8 +147,6 @@
                         <DataTemplate>
                             <Grid Margin="0,0,0,2">
                                 <Button Foreground="OrangeRed"
-									AutomationProperties.Name="Group Title"
-									Command="{Binding ClickTitleCommand}"
 									Style="{StaticResource TextBlockButtonStyle}" >
                                     <StackPanel Orientation="Horizontal">
                                         <TextBlock Text="{Binding Title}" Margin="0,-11,10,10" Style="{StaticResource SubheaderTextBlockStyle}" TextWrapping="NoWrap" />

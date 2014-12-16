@@ -27,8 +27,7 @@ namespace NumberRecognizer.App.DataModel
         /// </summary>
         public NetworkInfoGroup()
         {
-            this.InitializeProperties();
-            this.InitializeCommands();
+            this.Networks = new ObservableCollection<NetworkInfo>();
         }
 
         /// <summary>
@@ -67,36 +66,5 @@ namespace NumberRecognizer.App.DataModel
         /// </value>
         public ObservableCollection<NetworkInfo> Networks { get; set; }
 
-        /// <summary>
-        /// Gets the click title command.
-        /// </summary>
-        /// <value>
-        /// The click title command.
-        /// </value>
-        public ICommand ClickTitleCommand { get; private set; }
-
-        /// <summary>
-        /// Initializes the commands.
-        /// </summary>
-        private void InitializeCommands()
-        {
-            this.ClickTitleCommand = new RelayCommand(this.TitleClicked);
-        }
-
-        /// <summary>
-        /// Initializes the properties.
-        /// </summary>
-        private void InitializeProperties()
-        {
-            this.Networks = new ObservableCollection<NetworkInfo>();
-        }
-
-        /// <summary>
-        /// Titles the clicked.
-        /// </summary>
-        private void TitleClicked()
-        {
-            App.RootFrame.Navigate(typeof(GroupDetailPage), this);
-        }
     }
 }
