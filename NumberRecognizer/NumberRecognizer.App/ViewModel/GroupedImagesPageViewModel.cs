@@ -46,9 +46,10 @@ namespace NumberRecognizer.App.ViewModel
         {
             this.Images = new ObservableCollection<LocalTrainingImage>();
             this.ImageGroups = new ObservableCollection<TrainingImageGroup>();
-            this.NextCommand = new DependentRelayCommand(this.CreateNetwork, () => this.ImageGroups.Count == 10, this, () => this);
-            this.DeleteImageCommand = new DependentRelayCommand(this.DeleteImage, () => this.SelectedImage != null, this, () => this);
+            this.InitializeCommands();
         }
+
+
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GroupedImagesPageViewModel" /> class.
@@ -58,6 +59,19 @@ namespace NumberRecognizer.App.ViewModel
             : this()
         {
             this.Images = images;
+        }
+
+        /// <summary>
+        /// Initializes the commands.
+        /// </summary>
+        private void InitializeCommands()
+        {
+            this.UploadCommand = new DependentRelayCommand(this.CreateNetwork,
+                                                           () => this.ImageGroups.Count == 10, this,
+                                                           () => this);
+            this.DeleteImageCommand = new DependentRelayCommand(this.DeleteImage,
+                                                           () => this.SelectedImage != null, this,
+                                                           () => this);
         }
 
         /// <summary>
@@ -124,7 +138,7 @@ namespace NumberRecognizer.App.ViewModel
         /// <value>
         /// The next command.
         /// </value>
-        public ICommand NextCommand { get; set; }
+        public ICommand UploadCommand { get; set; }
 
         /// <summary>
         /// Gets or sets the selected image.
@@ -170,6 +184,7 @@ namespace NumberRecognizer.App.ViewModel
         private async void CreateNetwork()
         {
             ObservableCollection<TrainingImage> trainingImages = new ObservableCollection<TrainingImage>();
+
             foreach (LocalTrainingImage trainingImageRT in this.Images)
             {
                 trainingImages.Add(trainingImageRT.Image);
@@ -178,12 +193,15 @@ namespace NumberRecognizer.App.ViewModel
             try
             {
                 NumberRecognizerServiceClient serviceClient = new NumberRecognizerServiceClient();
+
                 await serviceClient.CreateNetworkAsync(this.NetworkName, trainingImages);
+                await serviceClient.CloseAsync();
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
             }
+
 
             App.RootFrame.Navigate(typeof(GroupedNetworksPage));
         }

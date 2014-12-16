@@ -112,6 +112,17 @@ namespace NumberRecognizer.Cloud.Contract.Data
         public bool MultipleGenPool { get; set; }
 
         /// <summary>
+        /// Gets or sets the final pattern fittness.
+        /// The key represents the pattern (eg. 0-9)
+        /// The value represents the fittness for the final generation of the network.
+        /// </summary>
+        /// <value>
+        /// The final pattern fittness.
+        /// </value>
+        [DataMember]
+        public Dictionary<string, double> FinalPatternFittness { get; set; }
+
+        /// <summary>
         /// Gets or sets the chart fittness.
         /// </summary>
         /// <value>

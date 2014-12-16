@@ -24,6 +24,14 @@ namespace NumberRecognizer.Cloud.Contract
         IList<NetworkInfo> GetNetworks();
 
         /// <summary>
+        /// Gets the network detail.
+        /// </summary>
+        /// <param name="networkId">The network identifier.</param>
+        /// <returns>A current available network.</returns>
+        [OperationContract]
+        NetworkInfo GetNetworkDetail(int networkId);
+
+        /// <summary>
         /// Creates the network.
         /// </summary>
         /// <param name="networkName">Name of the network.</param>
@@ -49,6 +57,14 @@ namespace NumberRecognizer.Cloud.Contract
         /// <returns></returns>
         [OperationContract]
         bool DeleteNetwork(int networkId);
+
+        /// <summary>
+        /// Res the train network.
+        /// </summary>
+        /// <param name="networkId">The network identifier.</param>
+        /// <returns></returns>
+        [OperationContract]
+        bool ReTrainNetwork(int networkId);
 
         /// <summary>
         /// Recognizes the phone number from image.

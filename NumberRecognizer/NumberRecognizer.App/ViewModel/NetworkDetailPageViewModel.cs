@@ -6,11 +6,14 @@
 // <summary>Network Detail Page ViewModel.</summary>
 //-----------------------------------------------------------------------
 
+using WinRTXamlToolkit.Controls.DataVisualization.Charting;
+
 namespace NumberRecognizer.App.ViewModel
 {
     using System;
     using System.Linq;
     using System.Windows.Input;
+    using System.Diagnostics;
     using GalaSoft.MvvmLight;
     using NumberRecognizer.App.Common;
     using NumberRecognizer.App.NumberRecognizerService;
@@ -20,6 +23,7 @@ namespace NumberRecognizer.App.ViewModel
     using NumberRecognizer.App.Help;
     using NumberRecognizer.App.Control;
     using NumberRecognition.Labeling;
+    using System.Threading.Tasks;
 
     /// <summary>
     /// Network Detail Page ViewModel.
@@ -35,6 +39,9 @@ namespace NumberRecognizer.App.ViewModel
         public NetworkDetailPageViewModel(NetworkInfo network)
         {
             this.Network = network;
+            
+            FinalPoolFitnessTrend = new ObservableCollection<ChartPopulation>();
+            MultiplePoolFitnessTrends = new ObservableCollection<ObservableCollection<ChartPopulation>>();
             this.InitializeProperties();
             this.InitializeCommands();
         }
@@ -72,28 +79,53 @@ namespace NumberRecognizer.App.ViewModel
         }
 
         /// <summary>
+        /// Loads the network details.
+        /// </summary>
+        private async Task<NetworkInfo> LoadNetworkDetails()
+        {
+            try
+            {
+                NumberRecognizerServiceClient proxyClient = new NumberRecognizerServiceClient();
+
+                return await proxyClient.GetNetworkDetailAsync(Network.NetworkId);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
+            return null;
+        }
+
+        /// <summary>
         /// Initializes the properties.
         /// </summary>
-        private void InitializeProperties()
+        private async void InitializeProperties()
         {
-            FinalPoolFitnessTrend = new ObservableCollection<ChartPopulation>();
+            Network = await this.LoadNetworkDetails();
 
             if (Network.Calculated && Network.FinalPoolFitnessLog != null)
             {
                 for (int generationNr = 0; generationNr < Network.FinalPoolFitnessLog.FitnessTrend.Count; generationNr++)
                 {
-                    FinalPoolFitnessTrend.Add(new ChartPopulation() { Name = generationNr.ToString(), Value = Network.FinalPoolFitnessLog.FitnessTrend[generationNr] });
+                    FinalPoolFitnessTrend.Add(new ChartPopulation() { Name = generationNr.ToString(), Value = Network.FinalPoolFitnessLog.FitnessTrend[generationNr] * 100});
                 }
             }
 
             if (Network.Calculated && Network.MultiplePoolFitnessLog != null && Network.MultiplePoolFitnessLog.Count > 0)
             {
+                
                 foreach (var pool in Network.MultiplePoolFitnessLog.Values)
                 {
-                    for (int generationNr = 0; generationNr < pool.FitnessTrend.Count; generationNr++)
+                    ObservableCollection<ChartPopulation> list = new ObservableCollection<ChartPopulation>();
+
+                    //todo change to count (bugfix service)
+                    for (int generationNr = 0; generationNr < 50; generationNr++)
                     {
-                        FinalPoolFitnessTrend.Add(new ChartPopulation() { Name = generationNr.ToString(), Value = pool.FitnessTrend[generationNr] });
+                        list.Add(new ChartPopulation() { Name = generationNr.ToString(), Value = pool.FitnessTrend[generationNr] * 100 });
                     }
+
+                    MultiplePoolFitnessTrends.Add(list);
                 }
             }
         }

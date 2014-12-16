@@ -28,14 +28,9 @@ namespace NumberRecognizer.App.View
         private NavigationHelper navigationHelper;
 
         /// <summary>
-        /// The default view model.
-        /// </summary>
-        private ObservableDictionary defaultViewModel = new ObservableDictionary();
-
-        /// <summary>
         /// The view model.
         /// </summary>
-        private NetworkDetailPageViewModel viewModel;
+        private NetworkRecognizeViewModel viewModel;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkDetailPage"/> class.
@@ -57,17 +52,6 @@ namespace NumberRecognizer.App.View
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
-        }
-
-        /// <summary>
-        /// Gets This can be changed to a strongly typed view model.
-        /// </summary>
-        /// <value>
-        /// The default view model.
-        /// </value>
-        public ObservableDictionary DefaultViewModel
-        {
-            get { return this.defaultViewModel; }
         }
 
         /// <summary>
@@ -101,10 +85,9 @@ namespace NumberRecognizer.App.View
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: Create an appropriate data model for your problem domain to replace the sample data
-            //this.viewModel = (NetworkDetailPageViewModel)this.DataContext;
-            //this.viewModel.Network = (NetworkInfo)e.NavigationParameter;
-            //this.viewModel.InkCanvas = this.RecognitionInkCanvas;
+            this.viewModel = new NetworkRecognizeViewModel(e.NavigationParameter as NetworkInfo);
+            this.viewModel.InkCanvas = this.inkCanvas;
+            this.DataContext = viewModel;
         }
     }
 }

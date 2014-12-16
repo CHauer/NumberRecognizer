@@ -6,6 +6,8 @@
 // <summary>Item Detail Page.</summary>
 //-----------------------------------------------------------------------
 
+
+
 namespace NumberRecognizer.App.View
 {
     using System;
@@ -15,6 +17,7 @@ namespace NumberRecognizer.App.View
     using NumberRecognizer.Cloud.Contract.Data;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Navigation;
+    using WinRTXamlToolkit.Controls.DataVisualization.Charting;
 
     /// <summary>
     /// A page that displays details for a single item within a group.

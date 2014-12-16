@@ -155,7 +155,7 @@ namespace NumberRecognizer.Cloud.Worker
                 if (reTrainNetwork)
                 {
                     //prepare network for new training (delete logs)
-                    if (PrepareNetworkForReTraining(networkId, dbNetwork, db)) return;
+                    if (!PrepareNetworkForReTraining(networkId, dbNetwork, db)) return;
                 }
                 else
                 {
@@ -269,6 +269,7 @@ namespace NumberRecognizer.Cloud.Worker
         /// <param name="networkId">The network identifier.</param>
         private void Trainer_GenerationChanged(object sender, GenerationChangedEventArgs e, int networkId)
         {
+            NetworkDataSerializer networkDataSerializer = new NetworkDataSerializer();
             string genPool = null;
 
             if (e is MultipleGenPoolGenerationChangedEventArgs)
@@ -279,6 +280,9 @@ namespace NumberRecognizer.Cloud.Worker
             using (var db = new NetworkDataModelContainer())
             {
                 var dbNetwork = db.NetworkSet.First(n => n.NetworkId == networkId);
+
+                dbNetwork.Fitness = e.CurrentFittestNetwork.Fitness;
+                dbNetwork.NetworkData = networkDataSerializer.TransformToBinary(e.CurrentFittestNetwork);
 
                 var newTrainLog = db.TrainLogSet.Add(new TrainLog()
                 {

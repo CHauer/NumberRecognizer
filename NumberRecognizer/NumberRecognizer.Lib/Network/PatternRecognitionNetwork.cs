@@ -471,7 +471,7 @@ namespace NumberRecognizer.Lib.Network
         /// </summary>
         /// <param name="pixelValues">The pixel values.</param>
         /// <returns></returns>
-		public IEnumerable<RecognitionResult> RecognizeCharacter(double[,] pixelValues)
+		public ICollection<RecognitionResult> RecognizeCharacter(double[,] pixelValues)
 		{
 			SetInputData(pixelValues);
 
@@ -482,7 +482,9 @@ namespace NumberRecognizer.Lib.Network
 						{
 							Propability = outputNeuron.Value.ActivationValue,
 							RecognizedCharacter = outputNeuron.Key
-						});
+						})
+                        .OrderBy(i => i.Propability)
+                        .ToList();
         }
 
     }

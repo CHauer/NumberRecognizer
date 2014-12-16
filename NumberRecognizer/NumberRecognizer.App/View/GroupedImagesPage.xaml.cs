@@ -109,7 +109,6 @@ namespace NumberRecognizer.App.View
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            // TODO: Assign a collection of bindable groups to this.DefaultViewModel["Groups"]
             this.viewModel = (GroupedImagesPageViewModel)this.DataContext;
             KeyValuePair<string, ObservableCollection<LocalTrainingImage>> keyValuePair = (KeyValuePair<string, ObservableCollection<LocalTrainingImage>>)e.NavigationParameter;
             this.viewModel.NetworkName = keyValuePair.Key;

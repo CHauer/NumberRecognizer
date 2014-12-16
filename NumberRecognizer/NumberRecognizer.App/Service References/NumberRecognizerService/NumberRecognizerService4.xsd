@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" />
+  <xs:import schemaLocation="http://numberrecognizer.cloudapp.net/NumberRecognizerService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" />
   <xs:element name="GetNetworks">
     <xs:complexType>
       <xs:sequence />
@@ -13,11 +13,25 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="GetNetworkDetail">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="networkId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetNetworkDetailResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="GetNetworkDetailResult" nillable="true" type="q2:NetworkInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="CreateNetwork">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="networkName" nillable="true" type="xs:string" />
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="individualTrainingsData" nillable="true" type="q2:ArrayOfTrainingImage" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="individualTrainingsData" nillable="true" type="q3:ArrayOfTrainingImage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -32,7 +46,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="networkName" nillable="true" type="xs:string" />
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="individualTrainingsData" nillable="true" type="q3:ArrayOfTrainingImage" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="individualTrainingsData" nillable="true" type="q4:ArrayOfTrainingImage" />
         <xs:element minOccurs="0" name="copyTraindataFromNetworkId" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -58,18 +72,32 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="ReTrainNetwork">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="networkId" type="xs:int" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ReTrainNetworkResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="ReTrainNetworkResult" type="xs:boolean" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="RecognizePhoneNumber">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="networkId" type="xs:int" />
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="imageData" nillable="true" type="q4:ArrayOfRecognitionImage" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="imageData" nillable="true" type="q5:ArrayOfRecognitionImage" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="RecognizePhoneNumberResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="RecognizePhoneNumberResult" nillable="true" type="q5:NumberRecognitionResult" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" minOccurs="0" name="RecognizePhoneNumberResult" nillable="true" type="q6:NumberRecognitionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

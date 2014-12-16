@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/NumberRecognizer.Cloud.Contract.Data" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import schemaLocation="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-  <xs:import schemaLocation="http://localhost:8644/NumberRecognizerService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:import schemaLocation="http://numberrecognizer.cloudapp.net/NumberRecognizerService.svc?xsd=xsd3" namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import schemaLocation="http://numberrecognizer.cloudapp.net/NumberRecognizerService.svc?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:complexType name="ArrayOfNetworkInfo">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="NetworkInfo" nillable="true" type="tns:NetworkInfo" />
@@ -13,9 +13,10 @@
       <xs:element minOccurs="0" name="Calculated" type="xs:boolean" />
       <xs:element minOccurs="0" name="CalculationEnd" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="CalculationStart" nillable="true" type="xs:dateTime" />
+      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="FinalPatternFittness" nillable="true" type="q1:ArrayOfKeyValueOfstringdouble" />
       <xs:element minOccurs="0" name="FinalPoolFitnessLog" nillable="true" type="tns:FitnessLog" />
       <xs:element minOccurs="0" name="MultipleGenPool" type="xs:boolean" />
-      <xs:element xmlns:q1="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="MultiplePoolFitnessLog" nillable="true" type="q1:ArrayOfKeyValueOfstringFitnessLoge_SR2wgmj" />
+      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="MultiplePoolFitnessLog" nillable="true" type="q2:ArrayOfKeyValueOfstringFitnessLoge_SR2wgmj" />
       <xs:element minOccurs="0" name="NetworkFitness" type="xs:double" />
       <xs:element minOccurs="0" name="NetworkId" type="xs:int" />
       <xs:element minOccurs="0" name="NetworkName" nillable="true" type="xs:string" />
@@ -25,9 +26,7 @@
   <xs:element name="NetworkInfo" nillable="true" type="tns:NetworkInfo" />
   <xs:complexType name="FitnessLog">
     <xs:sequence>
-      <xs:element xmlns:q2="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="FinalPatternFittness" nillable="true" type="q2:ArrayOfKeyValueOfstringdouble" />
       <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="FitnessTrend" nillable="true" type="q3:ArrayOfdouble" />
-      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="PatternTrends" nillable="true" type="q4:ArrayOfKeyValueOfstringArrayOfdoublety7Ep6D1" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="FitnessLog" nillable="true" type="tns:FitnessLog" />
@@ -83,7 +82,7 @@
   <xs:complexType name="RecognitionImage">
     <xs:sequence>
       <xs:element minOccurs="0" name="Height" type="xs:int" />
-      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ImageData" nillable="true" type="q5:ArrayOfdouble" />
+      <xs:element xmlns:q4="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="ImageData" nillable="true" type="q4:ArrayOfdouble" />
       <xs:element minOccurs="0" name="Width" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
@@ -110,7 +109,7 @@
   <xs:complexType name="NumberRecognitionResultItem">
     <xs:sequence>
       <xs:element minOccurs="0" name="NumericCharacter" type="xs:int" />
-      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Probabilities" nillable="true" type="q6:ArrayOfKeyValueOfchardouble" />
+      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Probabilities" nillable="true" type="q5:ArrayOfKeyValueOfchardouble" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="NumberRecognitionResultItem" nillable="true" type="tns:NumberRecognitionResultItem" />
