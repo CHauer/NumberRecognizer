@@ -166,6 +166,7 @@
 				<ColumnDefinition Width="120"/>
 				<ColumnDefinition Width="Auto"/>
 				<ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
 			</Grid.ColumnDefinitions>
 			<Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
 				Style="{StaticResource NavigationBackButtonNormalStyle}"
@@ -177,6 +178,9 @@
 			<StackPanel Orientation="Horizontal" Grid.Column="2">
 				<TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource CustomHeaderTextBlockStyle}" />
 			</StackPanel>
+            <ProgressRing Grid.Column="2" x:Name="processRingObj" Height="100" Width="100" Foreground="Orange" 
+                           Visibility="{Binding IsLoading, Converter={StaticResource booleanVisibiltyConverter}, ConverterParameter=False}"  
+                          IsActive="{Binding IsLoading}" />
 		</Grid>
 	</Grid>
 </Page>

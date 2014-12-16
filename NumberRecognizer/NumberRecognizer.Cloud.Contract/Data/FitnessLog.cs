@@ -18,10 +18,8 @@ namespace NumberRecognizer.Cloud.Contract.Data
         /// </summary>
         public FitnessLog()
         {
-            FinalPatternFittness = new Dictionary<string, double>();
             FitnessTrend = new List<double>();
-            PatternTrends = new Dictionary<string, List<double>>();
-
+            //PatternTrends = new Dictionary<string, List<double>>();
         }
 
         /// <summary>
@@ -33,27 +31,16 @@ namespace NumberRecognizer.Cloud.Contract.Data
         [DataMember]
         public IList<double> FitnessTrend { get; set; }
 
-        /// <summary>
-        /// Gets or sets the pattern trends.
-        /// The Key of the dictionary represents the pattern (eg. 0-9)
-        /// The list of double values the generations from 0 - n.
-        /// </summary>
-        /// <value>
-        /// The pattern trends.
-        /// </value>
-        [DataMember]
-        public Dictionary<string, List<double>> PatternTrends { get; set; }
-
-        /// <summary>
-        /// Gets or sets the final pattern fittness.
-        /// The key represents the pattern (eg. 0-9)
-        /// The value represents the fittness for the final generation of the network.
-        /// </summary>
-        /// <value>
-        /// The final pattern fittness.
-        /// </value>
-        [DataMember]
-        public Dictionary<string, double> FinalPatternFittness { get; set; }
+        ///// <summary>
+        ///// Gets or sets the pattern trends.
+        ///// The Key of the dictionary represents the pattern (eg. 0-9)
+        ///// The list of double values the generations from 0 - n.
+        ///// </summary>
+        ///// <value>
+        ///// The pattern trends.
+        ///// </value>
+        //[DataMember]
+        //public Dictionary<string, List<double>> PatternTrends { get; set; }
 
     }
 }

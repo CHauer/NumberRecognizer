@@ -41,15 +41,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="0">
-                <ListView>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </Grid>
+            
+            <!-- Input -->
             <Grid Grid.Column="0" Margin="20,2,2,2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -61,18 +54,47 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="100"/>
-                    <RowDefinition Height="70"/>
+                    <RowDefinition Height="110"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Please write your phone number on the canvas." Style="{StaticResource CustomTextBlockStyle}" VerticalAlignment="Center"/>
-                <control:InkCanvasRT Grid.Column="0" Grid.Row="1" x:Name="RecognitionInkCanvas"/>
-                <AppBarButton Command="{Binding RecognizeNumberCommand}" Grid.Column="1" Grid.Row="1" Icon="Accept" Padding="0" Margin="0" Height="100"/>
+                <control:InkCanvasRT x:Name="inkCanvas" Grid.Column="0" Grid.Row="1" />
+                <AppBarButton Command="{Binding RecognizeNumber}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Icon="Globe" 
+                              Padding="0" Margin="0" Height="110" Label="Recognize Number"/>
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Recognized Number" Style="{StaticResource CustomTextBlockStyle}" VerticalAlignment="Center"/>
-                <TextBox Text="{Binding RecognizedNumber}" IsEnabled="False" FontSize="50" Grid.Column="0" Grid.Row="4" TextAlignment="Center" CharacterSpacing="500"/>
+                <TextBox Text="{Binding Result.Number}" IsEnabled="False" FontSize="50" Grid.Column="0" Grid.Row="4" TextAlignment="Center" CharacterSpacing="500"/>
                 <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
-                    <AppBarButton Icon="Accept" Foreground="Green"/>
-                    <AppBarButton Icon="Cancel" Foreground="Red"/>
+                    <AppBarButton Icon="Clear" Command="{Binding ClearPage}"  Label="Clear Result" Height="110"/>
+                    <!--<AppBarButton Icon="Cancel" Foreground="Red"/>-->
                 </StackPanel>
+            </Grid>
+
+            <!-- Result View -->
+            <Grid Grid.Column="1">
+                <ListView ItemsSource="{Binding ChartResult}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Viewbox Height="300">
+                                <chart:RadialGaugeChart
+									    Background="Transparent"
+									    Style="{StaticResource ChartStyleVariableSize}"
+									    ChartTitle=""
+                                        Palette="{StaticResource CustomColors}"
+									    ChartTitleVisibility="Collapsed"
+									    ChartLegendVisibility="Collapsed"
+									    ChartSubTitle="">
+                                    <chart:RadialGaugeChart.Series>
+                                        <chart:ChartSeries 
+											    SeriesTitle="Fitness"
+											    ItemsSource="{Binding}" 
+											    DisplayMember="Name" 
+											    ValueMember="Value" />
+                                    </chart:RadialGaugeChart.Series>
+                                </chart:RadialGaugeChart>
+                            </Viewbox>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </Grid>
         </Grid>
 
@@ -89,7 +111,7 @@
                         AutomationProperties.AutomationId="BackButton"
                         AutomationProperties.ItemType="Navigation Button"/>
             <StackPanel Orientation="Horizontal" Grid.Column="1">
-                <TextBlock x:Name="pageTitle" Text="{Binding NetworkName}"  Style="{StaticResource CustomHeaderTextBlockStyle }" />
+                <TextBlock x:Name="pageTitle" Text="{Binding Network.NetworkName}"  Style="{StaticResource CustomHeaderTextBlockStyle }" />
                 <TextBlock x:Name="pageSubtitle" Text="- Recognize" Style="{StaticResource CustomSecondaryHeaderTextBlockStyle}" />
             </StackPanel>
         </Grid>

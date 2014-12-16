@@ -6,8 +6,6 @@
 // <summary>Create Network Page ViewModel.</summary>
 //-----------------------------------------------------------------------
 
-using System.Linq;
-using NumberRecognizer.Cloud.Contract.Data;
 
 namespace NumberRecognizer.App.ViewModel
 {
@@ -31,6 +29,9 @@ namespace NumberRecognizer.App.ViewModel
     using Windows.UI.Xaml.Media;
     using Windows.UI.Xaml.Media.Imaging;
     using Windows.UI.Xaml.Shapes;
+    using System.Linq;
+    using GalaSoft.MvvmLight.Command;
+    using NumberRecognizer.Cloud.Contract.Data;
 
     /// <summary>
     /// Create Network Page ViewModel.
@@ -74,7 +75,7 @@ namespace NumberRecognizer.App.ViewModel
         /// <value>
         /// The next command.
         /// </value>
-        public ICommand NextCommand { get; private set; }
+        public RelayCommand NextCommand { get; private set; }
 
         /// <summary>
         /// Gets or sets the labeling command.
@@ -97,8 +98,8 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void InitializeCommands()
         {
-            this.LabelingCommand = new DependentRelayCommand(this.LabelingAsync, () => true == true, this, () => this);
-            this.NextCommand = new DependentRelayCommand(this.NextPage, this.CanExecuteNextCommand, this, () => this);
+            this.LabelingCommand = new RelayCommand(this.LabelingAsync);
+            this.NextCommand = new RelayCommand(this.NextPage, this.CanExecuteNextCommand);
         }
 
         /// <summary>
@@ -149,6 +150,8 @@ namespace NumberRecognizer.App.ViewModel
                     this.trainingImagesRT.Add(localTrainingImage);
                 }
             }
+
+            NextCommand.RaiseCanExecuteChanged();
         }
 
         /// <summary>

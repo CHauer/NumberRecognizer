@@ -21,6 +21,9 @@ namespace NumberRecognizer.App.NumberRecognizerService {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/GetNetworks", ReplyAction="http://tempuri.org/INumberRecognizerService/GetNetworksResponse")]
         System.Threading.Tasks.Task<System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.NetworkInfo>> GetNetworksAsync();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/GetNetworkDetail", ReplyAction="http://tempuri.org/INumberRecognizerService/GetNetworkDetailResponse")]
+        System.Threading.Tasks.Task<NumberRecognizer.Cloud.Contract.Data.NetworkInfo> GetNetworkDetailAsync(int networkId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/CreateNetwork", ReplyAction="http://tempuri.org/INumberRecognizerService/CreateNetworkResponse")]
         System.Threading.Tasks.Task<bool> CreateNetworkAsync(string networkName, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData);
         
@@ -30,6 +33,9 @@ namespace NumberRecognizer.App.NumberRecognizerService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/DeleteNetwork", ReplyAction="http://tempuri.org/INumberRecognizerService/DeleteNetworkResponse")]
         System.Threading.Tasks.Task<bool> DeleteNetworkAsync(int networkId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/ReTrainNetwork", ReplyAction="http://tempuri.org/INumberRecognizerService/ReTrainNetworkResponse")]
+        System.Threading.Tasks.Task<bool> ReTrainNetworkAsync(int networkId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/INumberRecognizerService/RecognizePhoneNumber", ReplyAction="http://tempuri.org/INumberRecognizerService/RecognizePhoneNumberResponse")]
         System.Threading.Tasks.Task<NumberRecognizer.Cloud.Contract.Data.NumberRecognitionResult> RecognizePhoneNumberAsync(int networkId, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.RecognitionImage> imageData);
@@ -82,6 +88,10 @@ namespace NumberRecognizer.App.NumberRecognizerService {
             return base.Channel.GetNetworksAsync();
         }
         
+        public System.Threading.Tasks.Task<NumberRecognizer.Cloud.Contract.Data.NetworkInfo> GetNetworkDetailAsync(int networkId) {
+            return base.Channel.GetNetworkDetailAsync(networkId);
+        }
+        
         public System.Threading.Tasks.Task<bool> CreateNetworkAsync(string networkName, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.TrainingImage> individualTrainingsData) {
             return base.Channel.CreateNetworkAsync(networkName, individualTrainingsData);
         }
@@ -92,6 +102,10 @@ namespace NumberRecognizer.App.NumberRecognizerService {
         
         public System.Threading.Tasks.Task<bool> DeleteNetworkAsync(int networkId) {
             return base.Channel.DeleteNetworkAsync(networkId);
+        }
+        
+        public System.Threading.Tasks.Task<bool> ReTrainNetworkAsync(int networkId) {
+            return base.Channel.ReTrainNetworkAsync(networkId);
         }
         
         public System.Threading.Tasks.Task<NumberRecognizer.Cloud.Contract.Data.NumberRecognitionResult> RecognizePhoneNumberAsync(int networkId, System.Collections.ObjectModel.ObservableCollection<NumberRecognizer.Cloud.Contract.Data.RecognitionImage> imageData) {
@@ -120,7 +134,7 @@ namespace NumberRecognizer.App.NumberRecognizerService {
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration) {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_INumberRecognizerService)) {
-                return new System.ServiceModel.EndpointAddress("http://localhost:8644/NumberRecognizerService.svc");
+                return new System.ServiceModel.EndpointAddress("http://numberrecognizer.cloudapp.net/NumberRecognizerService.svc");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

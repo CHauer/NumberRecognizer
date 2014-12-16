@@ -142,9 +142,7 @@ namespace NumberRecognizer.App.ViewModel.Design
                 NetworkFitness = 0.99,
                 NetworkName = "TestCalculated",
                 Status = NetworkStatusType.Ready,
-                FinalPoolFitnessLog = new FitnessLog()
-                {
-                    FinalPatternFittness = new Dictionary<string, double>()
+                 FinalPatternFittness = new Dictionary<string, double>()
                     {
                         {"0",0.99},
                         {"1",0.99},
@@ -156,7 +154,10 @@ namespace NumberRecognizer.App.ViewModel.Design
                         {"7",0.99},
                         {"8",0.99},
                         {"9",0.99}
-                    }
+                    },
+                FinalPoolFitnessLog = new FitnessLog()
+                {
+                   
                 },
                 ChartFitness = new ObservableCollection<ChartPopulation>()
                 {
@@ -182,9 +183,7 @@ namespace NumberRecognizer.App.ViewModel.Design
                 NetworkFitness = 0.99,
                 NetworkName = "TestCalculated",
                 Status = NetworkStatusType.Ready,
-                FinalPoolFitnessLog = new FitnessLog()
-                {
-                    FinalPatternFittness = new Dictionary<string, double>()
+                FinalPatternFittness = new Dictionary<string, double>()
                     {
                         {"0",0.99},
                         {"1",0.99},
@@ -196,7 +195,10 @@ namespace NumberRecognizer.App.ViewModel.Design
                         {"7",0.99},
                         {"8",0.99},
                         {"9",0.99}
-                    }
+                    },
+                FinalPoolFitnessLog = new FitnessLog()
+                {
+                    
                 },
                 ChartFitness = new ObservableCollection<ChartPopulation>()
                 {

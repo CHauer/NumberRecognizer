@@ -6,12 +6,14 @@
 // <summary>Network Data Source.</summary>
 //-----------------------------------------------------------------------
 
-using Windows.UI.Xaml.Controls;
+
+using Windows.UI.Core;
 
 namespace NumberRecognizer.App.ViewModel
 {
     using System;
     using System.Collections.ObjectModel;
+    using Windows.UI.Xaml.Controls;
     using System.Diagnostics;
     using System.Linq;
     using System.Threading.Tasks;
@@ -65,6 +67,14 @@ namespace NumberRecognizer.App.ViewModel
         /// <c>true</c> if this instance is network selected; otherwise, <c>false</c>.
         /// </value>
         public bool IsAppBarOpen { get; set; }
+
+        /// <summary>
+        /// Gets a value indicating whether is loading networks.
+        /// </summary>
+        /// <value>
+        ///   <c>true</c> if [is loading]; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLoading { get; private set; }
 
         /// <summary>
         /// Gets or sets the networks.
@@ -154,6 +164,8 @@ namespace NumberRecognizer.App.ViewModel
         /// <returns>The networks asynchronous.</returns>
         private async Task LoadNetworksAsync()
         {
+            this.IsLoading = true;
+
             try
             {
                 NumberRecognizerServiceClient serviceClient = new NumberRecognizerServiceClient();
@@ -170,12 +182,12 @@ namespace NumberRecognizer.App.ViewModel
             foreach (NetworkInfo network in this.Networks.Where(p => p.Calculated))
             {
                 network.ChartFitness = new List<ChartPopulation>();
-                foreach (string key in network.FinalPoolFitnessLog.FinalPatternFittness.Keys)
+                foreach (string key in network.FinalPatternFittness.Keys)
                 {
                     network.ChartFitness.Add(new ChartPopulation()
                     {
                         Name = key,
-                        Value = network.FinalPoolFitnessLog.FinalPatternFittness[key] * 100
+                        Value = network.FinalPatternFittness[key] * 100
                     });
                 }
                 calculated.Networks.Add(network);
@@ -189,6 +201,8 @@ namespace NumberRecognizer.App.ViewModel
 
             this.NetworkGroups.Add(calculated);
             this.NetworkGroups.Add(uncalculated);
+
+            this.IsLoading = true;
         }
 
         /// <summary>
@@ -204,9 +218,13 @@ namespace NumberRecognizer.App.ViewModel
                                                                   () => this.SelectedNetwork);
             this.RefreshCommand = new RelayCommand(() => LoadNetworksAsync());
             this.NetworkClicked = new RelayCommand<NetworkInfo>((item) => App.RootFrame.Navigate(typeof(NetworkRecognizePage), item));
-            this.NetworkDetails = new DependentRelayCommand(() => App.RootFrame.Navigate(typeof(NetworkDetailPage), SelectedNetwork),
-                                                                  () => this.SelectedNetwork != null, this,
-                                                                  () => this.SelectedNetwork);
+            this.NetworkDetails = new DependentRelayCommand(() =>
+            {
+                App.RootFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
+                            () => App.RootFrame.Navigate(typeof(NetworkDetailPage), SelectedNetwork));
+            },
+            () => this.SelectedNetwork != null && this.SelectedNetwork.Calculated, this,
+            () => this.SelectedNetwork);
 
             this.SelectionChanged = new RelayCommand<SelectionChangedEventArgs>((args) =>
             {

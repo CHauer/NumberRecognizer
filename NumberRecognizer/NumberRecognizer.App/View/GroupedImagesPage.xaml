@@ -105,15 +105,13 @@
                 <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource CustomHeaderTextBlockStyle}" />
                 <TextBlock x:Name="pageSubtitle" Text="- Training Images" Style="{StaticResource CustomSecondaryHeaderTextBlockStyle}" />
             </StackPanel>
-            <Button Grid.Column="2" Command="{Binding NextCommand}" Margin="39,59,39,0" Style="{StaticResource NavigationBackButtonNormalStyle}" RenderTransformOrigin="0.5,0.5">
-                <Button.RenderTransform>
-                    <CompositeTransform Rotation="180"/>
-                </Button.RenderTransform>
-            </Button>
+            <AppBarButton Grid.Column="2" Command="{Binding UploadCommand}"  HorizontalAlignment="Center"
+                          VerticalAlignment="Center" Icon="Accept" Label="Create Network">
+            </AppBarButton>
         </Grid>
     </Grid>
     <Page.BottomAppBar>
-        <AppBar Background="OrangeRed" IsOpen="{Binding IsImageSelected, Mode=TwoWay}" IsSticky="{Binding IsImageSelected, Mode=TwoWay}">
+        <AppBar Background="Orange" IsOpen="{Binding IsImageSelected, Mode=TwoWay}" IsSticky="{Binding IsImageSelected, Mode=TwoWay}">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                 <AppBarButton Label="Delete selected Image" Command="{Binding DeleteImageCommand}" Icon="Delete"/>
             </StackPanel>
