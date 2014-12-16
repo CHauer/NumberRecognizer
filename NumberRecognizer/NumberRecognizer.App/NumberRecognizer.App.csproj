@@ -151,6 +151,9 @@
     <Compile Include="Help\ImageHelperRT.cs">
       <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
     </Compile>
+    <Compile Include="View\NetworkRecognizePage.xaml.cs">
+      <DependentUpon>NetworkRecognizePage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\NetworkDetailPage.xaml.cs">
       <DependentUpon>NetworkDetailPage.xaml</DependentUpon>
     </Compile>
@@ -222,6 +225,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="View\GroupDetailPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="View\NetworkRecognizePage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

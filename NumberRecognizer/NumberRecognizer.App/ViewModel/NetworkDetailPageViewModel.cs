@@ -27,23 +27,16 @@ namespace NumberRecognizer.App.ViewModel
     [ImplementPropertyChanged]
     public class NetworkDetailPageViewModel : ViewModelBase
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NetworkDetailPageViewModel"/> class.
-        /// </summary>
-        public NetworkDetailPageViewModel()
-        {
-            this.InitializeProperties();
-            this.InitializeCommands();
-        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkDetailPageViewModel"/> class.
         /// </summary>
         /// <param name="network">The network.</param>
         public NetworkDetailPageViewModel(NetworkInfo network)
-            : this()
         {
             this.Network = network;
+            this.InitializeProperties();
+            this.InitializeCommands();
         }
 
         /// <summary>
@@ -54,37 +47,20 @@ namespace NumberRecognizer.App.ViewModel
         /// </value>
         public NetworkInfo Network { get; set; }
 
-
         /// <summary>
-        /// Gets or sets the ink canvas.
+        /// Gets or sets the chart fittness trend.
         /// </summary>
         /// <value>
-        /// The ink canvas.
+        /// The chart fittness trend.
         /// </value>
-        public InkCanvasRT InkCanvas { get; set; }
-
-        /// <summary>
-        /// Gets or sets the recognize number command.
-        /// </summary>
-        /// <value>
-        /// The recognize number command.
-        /// </value>
-        public ICommand RecognizeNumberCommand { get; set; }
-
-        /// <summary>
-        /// Gets or sets the recognized number.
-        /// </summary>
-        /// <value>
-        /// The recognized number.
-        /// </value>
-        public string RecognizedNumber { get; set; }
+        public ObservableCollection<ChartPopulation> FinalPoolFitnessTrend { get; set; }
 
         /// <summary>
         /// Initializes the commands.
         /// </summary>
         private void InitializeCommands()
         {
-            this.RecognizeNumberCommand = new RelayCommand(this.RecognizePhoneNumber);
+            
         }
 
         /// <summary>
@@ -92,38 +68,15 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void InitializeProperties()
         {
-            this.Network = new NetworkInfo();
-        }
+            FinalPoolFitnessTrend = new ObservableCollection<ChartPopulation>();
 
-        /// <summary>
-        /// Recognizes the number.
-        /// </summary>
-        private async void RecognizePhoneNumber()
-        {
-            ObservableCollection<RecognitionImage> recognitionImages = new ObservableCollection<RecognitionImage>();
-
-            await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(this.InkCanvas);
-            foreach (ConnectedComponent component in InkCanvas.Labeling.ConnectedComponents.OrderBy(p => p.MinBoundingRect.Left))
+            if (Network.Calculated && Network.FinalPoolFitnessLog != null)
             {
-                try
+                for (int generationNr = 0; generationNr < Network.FinalPoolFitnessLog.FitnessTrend.Count; generationNr++)
                 {
-                    RecognitionImage recognitionImage = new RecognitionImage()
-                    {
-                        Width = (int)component.MinBoundingRect.Size,
-                        Height = (int)component.MinBoundingRect.Size,
-                    };
-
-                    recognitionImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
-                    recognitionImages.Add(recognitionImage);
-                }
-                catch
-                {
+                    FinalPoolFitnessTrend.Add(new ChartPopulation() { Name = generationNr.ToString(), Value = Network.FinalPoolFitnessLog.FitnessTrend[generationNr] });
                 }
             }
-
-            NumberRecognizerServiceClient serviceClient = new NumberRecognizerServiceClient();
-            NumberRecognitionResult numberRecognitionResult = await serviceClient.RecognizePhoneNumberAsync(this.Network.NetworkId, recognitionImages);
-            this.RecognizedNumber = numberRecognitionResult.Number;
         }
     }
 }

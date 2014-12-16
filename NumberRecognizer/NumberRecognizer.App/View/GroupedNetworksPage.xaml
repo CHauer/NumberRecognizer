@@ -36,12 +36,21 @@
     </Page.DataContext>
     <Page.BottomAppBar>
         <AppBar Background="Orange" IsSticky="{Binding IsNetworkSelected, Mode=OneWay}" IsOpen="{Binding IsNetworkSelected, Mode=OneWay}">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <AppBarButton Label="Create new Network" Icon="Add" Command="{Binding CreateNetworkCommand}"/>
-                <AppBarButton Label="Delete selected Network" Icon="Delete" Command="{Binding DeleteNetworkCommand}"/>
-                <AppBarSeparator/>
-                <AppBarButton Icon="Sync" Label="Refresh" Command="{Binding RefreshCommand}"/>
-            </StackPanel>
+            <Grid HorizontalAlignment="Stretch">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Orientation="Horizontal"  Grid.Column="0" HorizontalAlignment="Left">
+                    <AppBarButton Label="Network Details" Icon="More" Command="{Binding NetworkDetails}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"  Grid.Column="1" HorizontalAlignment="Right">
+                    <AppBarButton Label="Create new Network" Icon="Add" Command="{Binding CreateNetworkCommand}"/>
+                    <AppBarButton Label="Delete selected Network" Icon="Delete" Command="{Binding DeleteNetworkCommand}"/>
+                    <AppBarSeparator/>
+                    <AppBarButton Icon="Sync" Label="Refresh" Command="{Binding RefreshCommand}"/>
+                </StackPanel>
+            </Grid>
         </AppBar>
     </Page.BottomAppBar>
 

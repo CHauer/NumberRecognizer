@@ -112,15 +112,6 @@ namespace NumberRecognizer.Cloud.Contract.Data
         public bool MultipleGenPool { get; set; }
 
         /// <summary>
-        /// Gets or sets the chart fittness trend.
-        /// </summary>
-        /// <value>
-        /// The chart fittness trend.
-        /// </value>
-        [IgnoreDataMember]
-        public IList<ChartPopulation> ChartFitnessTrend { get; set; }
-
-        /// <summary>
         /// Gets or sets the chart fittness.
         /// </summary>
         /// <value>

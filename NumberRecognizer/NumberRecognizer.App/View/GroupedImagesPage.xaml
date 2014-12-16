@@ -104,7 +104,7 @@
             <StackPanel Orientation="Horizontal" Grid.Column="1">
                 <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource CustomHeaderTextBlockStyle}"
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
-                <TextBlock x:Name="pageSubtitle" Text="- Training Images" Style="{StaticResource CustomHeaderTextBlockStyle}"
+                <TextBlock x:Name="pageSubtitle" Text="- Training Images" Style="{StaticResource CustomSecondaryHeaderTextBlockStyle}"
                         IsHitTestVisible="false" TextWrapping="NoWrap" VerticalAlignment="Bottom" Margin="0,0,30,40"/>
             </StackPanel>
             <Button Grid.Column="2" Command="{Binding NextCommand}" Margin="39,59,39,0" Style="{StaticResource NavigationBackButtonNormalStyle}" RenderTransformOrigin="0.5,0.5">
