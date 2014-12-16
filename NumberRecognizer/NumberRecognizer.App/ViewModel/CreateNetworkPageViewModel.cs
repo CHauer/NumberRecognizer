@@ -131,8 +131,8 @@ namespace NumberRecognizer.App.ViewModel
                 foreach (ConnectedComponent component in inkCanvas.Labeling.ConnectedComponents)
                 {
                     TrainingImage trainingImage = new TrainingImage();
-                    trainingImage.Height = (int)component.MinBoundingRect.Size;
-                    trainingImage.Width = (int)component.MinBoundingRect.Size;
+                    trainingImage.Height = (int)ImageHelperRT.ImageHeight;
+                    trainingImage.Width = (int)ImageHelperRT.ImageWidth;
                     trainingImage.Pattern = inkCanvas.Name;
                     trainingImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
 

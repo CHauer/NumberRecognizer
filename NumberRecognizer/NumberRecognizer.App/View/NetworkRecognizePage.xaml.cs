@@ -6,25 +6,31 @@
 // <summary>Item Detail Page.</summary>
 //-----------------------------------------------------------------------
 
+using NumberRecognizer.Cloud.Contract.Data;
+
 namespace NumberRecognizer.App.View
 {
     using System;
     using NumberRecognizer.App.Common;
     using NumberRecognizer.App.NumberRecognizerService;
     using NumberRecognizer.App.ViewModel;
-    using NumberRecognizer.Cloud.Contract.Data;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Navigation;
 
     /// <summary>
     /// A page that displays details for a single item within a group.
     /// </summary>
-    public sealed partial class NetworkDetailPage : Page
+    public sealed partial class NetworkRecognizePage : Page
     {
         /// <summary>
         /// The navigation helper.
         /// </summary>
         private NavigationHelper navigationHelper;
+
+        /// <summary>
+        /// The default view model.
+        /// </summary>
+        private ObservableDictionary defaultViewModel = new ObservableDictionary();
 
         /// <summary>
         /// The view model.
@@ -34,7 +40,7 @@ namespace NumberRecognizer.App.View
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkDetailPage"/> class.
         /// </summary>
-        public NetworkDetailPage()
+        public NetworkRecognizePage()
         {
             this.InitializeComponent();
             this.navigationHelper = new NavigationHelper(this);
@@ -51,6 +57,17 @@ namespace NumberRecognizer.App.View
         public NavigationHelper NavigationHelper
         {
             get { return this.navigationHelper; }
+        }
+
+        /// <summary>
+        /// Gets This can be changed to a strongly typed view model.
+        /// </summary>
+        /// <value>
+        /// The default view model.
+        /// </value>
+        public ObservableDictionary DefaultViewModel
+        {
+            get { return this.defaultViewModel; }
         }
 
         /// <summary>
@@ -84,8 +101,10 @@ namespace NumberRecognizer.App.View
         /// session.  The state will be null the first time a page is visited.</param>
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
-            this.viewModel = new NetworkDetailPageViewModel(e.NavigationParameter as NetworkInfo);
-            this.DataContext = viewModel;
+            // TODO: Create an appropriate data model for your problem domain to replace the sample data
+            //this.viewModel = (NetworkDetailPageViewModel)this.DataContext;
+            //this.viewModel.Network = (NetworkInfo)e.NavigationParameter;
+            //this.viewModel.InkCanvas = this.RecognitionInkCanvas;
         }
     }
 }

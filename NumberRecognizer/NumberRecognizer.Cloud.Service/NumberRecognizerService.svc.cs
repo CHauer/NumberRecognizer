@@ -124,6 +124,18 @@ namespace NumberRecognizer.Cloud.Service
                     Calculated = CalculationType.NotStarted
                 });
 
+                try
+                {
+                    db.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError(ex.Message);
+                    status = false;
+                }
+
+                //update the local copy of new created entity with database values
+                db.Entry(newNetwork).GetDatabaseValues();
                 networkId = newNetwork.NetworkId;
 
                 var newTrainigData = new List<TrainingImageData>();

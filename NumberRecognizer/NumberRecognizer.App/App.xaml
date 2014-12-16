@@ -11,7 +11,7 @@
                 <ResourceDictionary Source="Style/AppStyle.xaml"/>
             </ResourceDictionary.MergedDictionaries>
             <!-- Application-specific resources -->
-            <x:String x:Key="AppName">Number Recognizer</x:String>
+            <x:String x:Key="AppName">NumberRecognizer</x:String>
         </ResourceDictionary>
     </Application.Resources>
 </Application>
