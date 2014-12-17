@@ -5,15 +5,10 @@
 // <author>Markus Zytek</author>
 // <summary>Network Info Group.</summary>
 //-----------------------------------------------------------------------
-
-using NumberRecognizer.Cloud.Contract.Data;
-
 namespace NumberRecognizer.App.DataModel
 {
     using System.Collections.ObjectModel;
-    using System.Windows.Input;
-    using NumberRecognizer.App.Common;
-    using NumberRecognizer.App.View;
+    using NumberRecognizer.Cloud.Contract.Data;
     using PropertyChanged;
 
     /// <summary>
@@ -65,6 +60,5 @@ namespace NumberRecognizer.App.DataModel
         /// The networks.
         /// </value>
         public ObservableCollection<NetworkInfo> Networks { get; set; }
-
     }
 }

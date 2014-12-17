@@ -1,35 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using Windows.UI.Xaml.Media.Imaging;
-using GalaSoft.MvvmLight;
-using NumberRecognizer.Cloud.Contract.Data;
-using PropertyChanged;
-using NumberRecognition.Labeling;
-using NumberRecognizer.App.Common;
-using NumberRecognizer.App.Control;
-using NumberRecognizer.App.DataModel;
-using NumberRecognizer.App.Help;
-using NumberRecognizer.App.NumberRecognizerService;
-using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="NetworkRecognizeViewModel.cs" company="FH Wr.Neustadt">
+//     Copyright Markus Zytek. All rights reserved.
+// </copyright>
+// <author>Markus Zytek</author>
+// <summary>Network Recognize ViewModel.</summary>
+//-----------------------------------------------------------------------
 namespace NumberRecognizer.App.ViewModel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Windows.Input;
+    using GalaSoft.MvvmLight;
+    using NumberRecognition.Labeling;
+    using NumberRecognizer.App.Control;
+    using NumberRecognizer.App.Help;
+    using NumberRecognizer.App.NumberRecognizerService;
+    using NumberRecognizer.Cloud.Contract.Data;
+    using PropertyChanged;
+    using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
+
     /// <summary>
-    /// 
+    /// Network Recognize ViewModel.
     /// </summary>
     [ImplementPropertyChanged]
     public class NetworkRecognizeViewModel : ViewModelBase
     {
-
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkRecognizeViewModel"/> class.
         /// </summary>
+        /// <param name="networkInfo">The network information.</param>
         public NetworkRecognizeViewModel(NetworkInfo networkInfo)
         {
             this.Network = networkInfo;
@@ -37,20 +39,10 @@ namespace NumberRecognizer.App.ViewModel
         }
 
         /// <summary>
-        /// Initializes the commands.
-        /// </summary>
-        private void InitializeCommands()
-        {
-            this.RecognizeNumber = new RelayCommand(this.ExecuteRecognizeNumber);
-            this.ClearResult = new RelayCommand(this.ClearPage);
-            this.ResetInkCanvasCommand = new RelayCommand(this.ResetInkCanvas);
-        }
-
-        /// <summary>
-        /// Gets or sets the network identifier.
+        /// Gets or sets the network.
         /// </summary>
         /// <value>
-        /// The network identifier.
+        /// The network.
         /// </value>
         public NetworkInfo Network { get; set; }
 
@@ -111,6 +103,16 @@ namespace NumberRecognizer.App.ViewModel
         public ObservableCollection<RecognitionImage> RecognitionImages { get; set; }
 
         /// <summary>
+        /// Initializes the commands.
+        /// </summary>
+        private void InitializeCommands()
+        {
+            this.RecognizeNumber = new RelayCommand(this.ExecuteRecognizeNumber);
+            this.ClearResult = new RelayCommand(this.ClearPage);
+            this.ResetInkCanvasCommand = new RelayCommand(this.ResetInkCanvas);
+        }
+
+        /// <summary>
         /// Resets the ink canvas.
         /// </summary>
         private void ResetInkCanvas()
@@ -126,15 +128,15 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private async void ExecuteRecognizeNumber()
         {
-            if (InkCanvas == null)
+            if (this.InkCanvas == null)
             {
                 return;
             }
 
-            RecognitionImages = new ObservableCollection<RecognitionImage>();
+            this.RecognitionImages = new ObservableCollection<RecognitionImage>();
 
-            await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(InkCanvas);
-            foreach (ConnectedComponent component in InkCanvas.Labeling.ConnectedComponents.OrderBy(p => p.MinBoundingRect.Left).ToList())
+            await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(this.InkCanvas);
+            foreach (ConnectedComponent component in this.InkCanvas.Labeling.ConnectedComponents.OrderBy(p => p.MinBoundingRect.Left).ToList())
             {
                 try
                 {
@@ -156,7 +158,7 @@ namespace NumberRecognizer.App.ViewModel
             try
             {
                 NumberRecognizerServiceClient serviceProxy = new NumberRecognizerServiceClient();
-                Result = await serviceProxy.RecognizePhoneNumberAsync(Network.NetworkId, RecognitionImages);
+                this.Result = await serviceProxy.RecognizePhoneNumberAsync(this.Network.NetworkId, this.RecognitionImages);
 
                 this.CreateChartData();
             }
@@ -164,7 +166,6 @@ namespace NumberRecognizer.App.ViewModel
             {
                 Debug.WriteLine(ex.Message);
             }
-
         }
 
         /// <summary>
@@ -172,9 +173,9 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void CreateChartData()
         {
-            ChartResult = new ObservableCollection<object>();
+            this.ChartResult = new ObservableCollection<object>();
 
-            foreach (NumberRecognitionResultItem item in Result.Items)
+            foreach (NumberRecognitionResultItem item in this.Result.Items)
             {
                 var numberPropabilities = new ObservableCollection<ChartPopulation>();
                 foreach (KeyValuePair<char, double> pair in item.Probabilities)
@@ -185,14 +186,15 @@ namespace NumberRecognizer.App.ViewModel
                         Value = pair.Value < 0 ? 0 : pair.Value * 100,
                     });
                 }
-                ChartResult.Add(new
+
+                this.ChartResult.Add(new
                 {
                     Number = item.NumericCharacter.ToString(),
                     Values = numberPropabilities
                 });
             }
 
-            RaisePropertyChanged(() => ChartResult);
+            this.RaisePropertyChanged(() => this.ChartResult);
         }
 
         /// <summary>

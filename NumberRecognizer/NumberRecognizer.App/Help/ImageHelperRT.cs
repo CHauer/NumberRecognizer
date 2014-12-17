@@ -5,13 +5,11 @@
 // <author>Markus Zytek</author>
 // <summary>ImageHelper for RT.</summary>
 //-----------------------------------------------------------------------
-
-using System.Diagnostics;
-
 namespace NumberRecognizer.App.Help
 {
     using System;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.Runtime.InteropServices.WindowsRuntime;
     using System.Threading.Tasks;
     using Windows.Graphics.Imaging;

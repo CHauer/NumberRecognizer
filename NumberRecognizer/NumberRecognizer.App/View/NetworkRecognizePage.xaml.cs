@@ -1,19 +1,16 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="NetworkDetailPage.xaml.cs" company="FH Wr.Neustadt">
+// <copyright file="NetworkRecognizePage.xaml.cs" company="FH Wr.Neustadt">
 //     Copyright Markus Zytek. All rights reserved.
 // </copyright>
 // <author>Markus Zytek</author>
-// <summary>Item Detail Page.</summary>
+// <summary>Network Recognize Page.</summary>
 //-----------------------------------------------------------------------
-
-using NumberRecognizer.Cloud.Contract.Data;
-
 namespace NumberRecognizer.App.View
 {
     using System;
     using NumberRecognizer.App.Common;
-    using NumberRecognizer.App.NumberRecognizerService;
     using NumberRecognizer.App.ViewModel;
+    using NumberRecognizer.Cloud.Contract.Data;
     using Windows.UI.Xaml.Controls;
     using Windows.UI.Xaml.Navigation;
 
@@ -33,7 +30,7 @@ namespace NumberRecognizer.App.View
         private NetworkRecognizeViewModel viewModel;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="NetworkDetailPage"/> class.
+        /// Initializes a new instance of the <see cref="NetworkRecognizePage"/> class.
         /// </summary>
         public NetworkRecognizePage()
         {
@@ -87,7 +84,7 @@ namespace NumberRecognizer.App.View
         {
             this.viewModel = new NetworkRecognizeViewModel(e.NavigationParameter as NetworkInfo);
             this.viewModel.InkCanvas = this.InkCanvas;
-            this.DataContext = viewModel;
+            this.DataContext = this.viewModel;
         }
     }
 }
