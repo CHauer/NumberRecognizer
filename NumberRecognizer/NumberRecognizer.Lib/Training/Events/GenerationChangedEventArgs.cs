@@ -1,13 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NumberRecognizer.Lib.Network;
+﻿//-----------------------------------------------------------------------
+// <copyright file="GenerationChangedEventArgs.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>GenerationChangedEventArgs for EventHandler.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Training.Events
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using NumberRecognizer.Lib.Network;
+
     /// <summary>
-    /// 
+    /// GenerationChangedEventArgs for EventHandler.
     /// </summary>
     public class GenerationChangedEventArgs : EventArgs
     {
@@ -46,6 +54,6 @@ namespace NumberRecognizer.Lib.Training.Events
         /// <value>
         /// The current fittest network.
         /// </value>
-        public Dictionary<string, double> PatternFitness{ get; private set; }
+        public Dictionary<string, double> PatternFitness { get; private set; }
     }
 }

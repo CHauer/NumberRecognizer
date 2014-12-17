@@ -1,20 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NumberRecognizer.Lib.Network;
-using NumberRecognizer.Lib.Training.Contract;
+﻿//-----------------------------------------------------------------------
+// <copyright file="UniformCrossover.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>UniformCrossover - Genetic Parameter.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Training.GeneticOperator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using NumberRecognizer.Lib.Network;
+    using NumberRecognizer.Lib.Training.Contract;
+
+    /// <summary>
+    /// UniformCrossover - Genetic Parameter.
+    /// </summary>
     public class UniformCrossover : ICrossover 
     {
         /// <summary>
         /// Executes the one point crossover.
         /// </summary>
         /// <param name="networks">The networks.</param>
-        /// <returns></returns>
+        /// <returns>The modified networks.</returns>
         public IEnumerable<PatternRecognitionNetwork> ExecuteCrossover(IList<PatternRecognitionNetwork> networks)
         {
             ThreadSafeRandom random = new ThreadSafeRandom();

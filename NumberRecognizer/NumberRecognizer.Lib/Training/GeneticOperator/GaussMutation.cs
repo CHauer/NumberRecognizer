@@ -1,13 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NumberRecognizer.Lib.Network;
-using NumberRecognizer.Lib.Training.Contract;
+﻿//-----------------------------------------------------------------------
+// <copyright file="GaussMutation.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>GaussMutation - Genetic Parameter.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Training.GeneticOperator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using NumberRecognizer.Lib.Network;
+    using NumberRecognizer.Lib.Training.Contract;
+
+    /// <summary>
+    /// GaussMutation - Genetic Parameter.
+    /// </summary>
     public class GaussMutation : IMutation
     {
         /// <summary>
@@ -16,7 +27,7 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
         public GaussMutation()
         {
             MinMutationRange = -0.5;
-            MaxMutationRange =  0.5;
+            MaxMutationRange = 0.5;
             GaussStandardDeviation = 1;
             MutationRatio = 0.95;
             MinNetworkFitness = 0.90;
@@ -44,7 +55,7 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
         /// <value>
         /// The gauss standard deviation.
         /// </value>
-        public double GaussStandardDeviation{ get; set; }
+        public double GaussStandardDeviation { get; set; }
 
         /// <summary>
         /// Gets or sets the mutation ratio.
@@ -52,7 +63,7 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
         /// <value>
         /// The mutation ratio.
         /// </value>
-        public double MutationRatio{ get; set; }
+        public double MutationRatio { get; set; }
 
         /// <summary>
         /// Gets or sets the minimum network fitness for he usage of this mutation operator.
@@ -66,7 +77,7 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
         /// Executes the mutation.
         /// </summary>
         /// <param name="network">The network.</param>
-        /// <returns></returns>
+        /// <returns>The modified network.</returns>
         public PatternRecognitionNetwork ExecuteMutation(PatternRecognitionNetwork network)
         {
             ThreadSafeRandom random = new ThreadSafeRandom();
@@ -88,6 +99,5 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
             return network;
         }
 
-        
     }
 }

@@ -1,16 +1,23 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NumberRecognizer.Lib.Network;
-using NumberRecognizer.Lib.Training.Contract;
-using NumberRecognizer.Lib.Training.Events;
+﻿//-----------------------------------------------------------------------
+// <copyright file="NetworkTrainer.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>NetworkTrainer - Genection Algorithm Trainer.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Training
 {
-    
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using NumberRecognizer.Lib.Network;
+    using NumberRecognizer.Lib.Training.Contract;
+    using NumberRecognizer.Lib.Training.Events;
+
     /// <summary>
     /// The genetic algorithm trainer class.
     /// Provides functionality to train a neuronal network with 
@@ -23,7 +30,8 @@ namespace NumberRecognizer.Lib.Training
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkTrainer"/> class.
         /// </summary>
-        public NetworkTrainer() : this(null, null)
+        public NetworkTrainer()
+            : this(null, null)
         {
         }
 
@@ -32,7 +40,8 @@ namespace NumberRecognizer.Lib.Training
         /// </summary>
         /// <param name="trainingData">The training data.</param>
         /// <exception cref="System.ArgumentOutOfRangeException">Wrong ImageHeight or Width of PatternTrainingImage</exception>
-        public NetworkTrainer(IEnumerable<PatternTrainingImage> trainingData) : this(trainingData, null)
+        public NetworkTrainer(IEnumerable<PatternTrainingImage> trainingData)
+            : this(trainingData, null)
         {
         }
 
@@ -98,7 +107,7 @@ namespace NumberRecognizer.Lib.Training
 
         /// <summary>
         /// Occurs when a new "best" network is calculated.
-        /// Occures on each generation change.
+        /// Occurs on each generation change.
         /// </summary>
         public event EventHandler<PatternRecognitionNetwork> FittestNetworkChanged;
 
@@ -171,13 +180,13 @@ namespace NumberRecognizer.Lib.Training
         /// </summary>
         /// <exception cref="System.ArgumentException" />
         /// <exception cref="System.ArgumentOutOfRangeException" />
-        /// <returns></returns>
+        /// <returns>The trained network object.</returns>
         public IEnumerable<PatternRecognitionNetwork> TrainNetwork()
         {
             ConcurrentBag<PatternRecognitionNetwork> startPopulation = null;
             IList<PatternRecognitionNetwork> finalPopulation = null;
 
-            ValidateTrainingData(checkTrainDataExists:true);
+            ValidateTrainingData(checkTrainDataExists: true);
             TrainingParameter.CheckGeneticOperators();
 
             if (TrainingParameter.GenPoolTrainingMode == GenPoolType.MultipleGenPool)
@@ -188,7 +197,7 @@ namespace NumberRecognizer.Lib.Training
             //if startPopulation is null - Single Pool with random initialized population
             //else - Mutiple GenPool Merge Start Population
             GenPool finalPool = new GenPool(TrainingData, TrainingParameter, startPopulation);
-            
+
             //Event forwarding
             finalPool.GenerationChanged += (sender, e) =>
             {

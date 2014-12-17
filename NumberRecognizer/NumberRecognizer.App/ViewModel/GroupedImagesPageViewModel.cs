@@ -155,7 +155,7 @@ namespace NumberRecognizer.App.ViewModel
         private void InitializeCommands()
         {
             this.UploadCommand = new DependentRelayCommand(this.CreateNetwork, () => this.ImageGroups.Count == 10 && this.IsLoading == false, this, () => this.ImageGroups, () => this.IsLoading);
-            this.DeleteImageCommand = new DependentRelayCommand(this.DeleteImage, () => this.SelectedImage != null && this.IsLoading == false, this, () => this.selectedImage, () => this.IsLoading);
+            this.DeleteImageCommand = new DependentRelayCommand(this.DeleteImage, () => this.SelectedImage != null && this.IsLoading == false, this, () => this.SelectedImage, () => this.IsLoading);
         }
 
         /// <summary>

@@ -1,38 +1,35 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="NetworkRecognizeViewModel.cs" company="FH Wr.Neustadt">
-//     Copyright Markus Zytek. All rights reserved.
-// </copyright>
-// <author>Markus Zytek</author>
-// <summary>Network Recognize ViewModel.</summary>
-//-----------------------------------------------------------------------
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Input;
+using Windows.UI.Xaml.Media.Imaging;
+using GalaSoft.MvvmLight;
+using NumberRecognizer.Cloud.Contract.Data;
+using PropertyChanged;
+using NumberRecognition.Labeling;
+using NumberRecognizer.App.Common;
+using NumberRecognizer.App.Control;
+using NumberRecognizer.App.DataModel;
+using NumberRecognizer.App.Help;
+using NumberRecognizer.App.NumberRecognizerService;
+using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
+
 namespace NumberRecognizer.App.ViewModel
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Windows.Input;
-    using GalaSoft.MvvmLight;
-    using Mutzl.MvvmLight;
-    using NumberRecognition.Labeling;
-    using NumberRecognizer.App.Control;
-    using NumberRecognizer.App.Help;
-    using NumberRecognizer.App.NumberRecognizerService;
-    using NumberRecognizer.Cloud.Contract.Data;
-    using PropertyChanged;
-    using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
-
     /// <summary>
-    /// Network Recognize ViewModel.
+    /// 
     /// </summary>
     [ImplementPropertyChanged]
     public class NetworkRecognizeViewModel : ViewModelBase
     {
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NetworkRecognizeViewModel"/> class.
         /// </summary>
-        /// <param name="networkInfo">The network information.</param>
         public NetworkRecognizeViewModel(NetworkInfo networkInfo)
         {
             this.Network = networkInfo;
@@ -40,10 +37,20 @@ namespace NumberRecognizer.App.ViewModel
         }
 
         /// <summary>
-        /// Gets or sets the network.
+        /// Initializes the commands.
+        /// </summary>
+        private void InitializeCommands()
+        {
+            this.RecognizeNumber = new RelayCommand(this.ExecuteRecognizeNumber);
+            this.ClearResult = new RelayCommand(this.ClearPage);
+            this.ResetInkCanvasCommand = new RelayCommand(this.ResetInkCanvas);
+        }
+
+        /// <summary>
+        /// Gets or sets the network identifier.
         /// </summary>
         /// <value>
-        /// The network.
+        /// The network identifier.
         /// </value>
         public NetworkInfo Network { get; set; }
 
@@ -62,14 +69,6 @@ namespace NumberRecognizer.App.ViewModel
         /// The result.
         /// </value>
         public NumberRecognitionResult Result { get; private set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is loading.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance is loading; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsLoading { get; set; }
 
         /// <summary>
         /// Gets or sets the recognize number.
@@ -112,16 +111,6 @@ namespace NumberRecognizer.App.ViewModel
         public ObservableCollection<RecognitionImage> RecognitionImages { get; set; }
 
         /// <summary>
-        /// Initializes the commands.
-        /// </summary>
-        private void InitializeCommands()
-        {
-            this.RecognizeNumber = new DependentRelayCommand(this.ExecuteRecognizeNumber, () => this.IsLoading == false, this, () => this.IsLoading);
-            this.ClearResult = new RelayCommand(this.ClearPage);
-            this.ResetInkCanvasCommand = new RelayCommand(this.ResetInkCanvas);
-        }
-
-        /// <summary>
         /// Resets the ink canvas.
         /// </summary>
         private void ResetInkCanvas()
@@ -137,49 +126,45 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private async void ExecuteRecognizeNumber()
         {
-            if (this.InkCanvas == null)
+            if (InkCanvas == null)
             {
                 return;
             }
-            else
+
+            RecognitionImages = new ObservableCollection<RecognitionImage>();
+
+            await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(InkCanvas);
+            foreach (ConnectedComponent component in InkCanvas.Labeling.ConnectedComponents.OrderBy(p => p.MinBoundingRect.Left).ToList())
             {
-                this.IsLoading = true;
-                this.RecognitionImages = new ObservableCollection<RecognitionImage>();
-
-                await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(this.InkCanvas);
-                foreach (ConnectedComponent component in this.InkCanvas.Labeling.ConnectedComponents.OrderBy(p => p.MinBoundingRect.Left).ToList())
-                {
-                    try
-                    {
-                        RecognitionImage recognitionImage = new RecognitionImage
-                        {
-                            Height = (int)ImageHelperRT.ImageHeight,
-                            Width = (int)ImageHelperRT.ImageWidth
-                        };
-                        recognitionImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
-
-                        this.RecognitionImages.Add(recognitionImage);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine(ex.Message);
-                    }
-                }
-
                 try
                 {
-                    NumberRecognizerServiceClient serviceProxy = new NumberRecognizerServiceClient();
-                    this.Result = await serviceProxy.RecognizePhoneNumberAsync(this.Network.NetworkId, this.RecognitionImages);
+                    RecognitionImage recognitionImage = new RecognitionImage
+                    {
+                        Height = (int)ImageHelperRT.ImageHeight,
+                        Width = (int)ImageHelperRT.ImageWidth
+                    };
+                    recognitionImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
 
-                    this.CreateChartData();
+                    this.RecognitionImages.Add(recognitionImage);
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.Message);
                 }
-
-                this.IsLoading = false;
             }
+
+            try
+            {
+                NumberRecognizerServiceClient serviceProxy = new NumberRecognizerServiceClient();
+                Result = await serviceProxy.RecognizePhoneNumberAsync(Network.NetworkId, RecognitionImages);
+
+                this.CreateChartData();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
+
         }
 
         /// <summary>
@@ -187,28 +172,44 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void CreateChartData()
         {
-            this.ChartResult = new ObservableCollection<object>();
+            bool first = false;
 
-            foreach (NumberRecognitionResultItem item in this.Result.Items)
+            ChartResult = new ObservableCollection<object>();
+
+            foreach (NumberRecognitionResultItem item in Result.Items)
             {
-                var numberPropabilities = new ObservableCollection<ChartPopulation>();
+                var posNumberPropabilities = new ObservableCollection<ChartPopulation>();
+                var negNumberPropabilities = new ObservableCollection<ChartPopulation>();
+
                 foreach (KeyValuePair<char, double> pair in item.Probabilities)
                 {
-                    numberPropabilities.Add(new ChartPopulation()
+                    if (pair.Value < 0)
                     {
-                        Name = pair.Key.ToString(),
-                        Value = pair.Value < 0 ? 0 : pair.Value * 100,
-                    });
+                        negNumberPropabilities.Add(new ChartPopulation()
+                        {
+                            Name = pair.Key.ToString(),
+                            Value = Math.Abs(pair.Value * 100),
+                        });
+                    }
+                    else
+                    {
+                        posNumberPropabilities.Add(new ChartPopulation()
+                        {
+                            Name = pair.Key.ToString(),
+                            Value = pair.Value * 100
+                        });
+                    }
                 }
 
-                this.ChartResult.Add(new
+                ChartResult.Add(new
                 {
                     Number = item.NumericCharacter.ToString(),
-                    Values = numberPropabilities
+                    Values = posNumberPropabilities,
+                    NegValues = negNumberPropabilities
                 });
             }
 
-            this.RaisePropertyChanged(() => this.ChartResult);
+            RaisePropertyChanged(() => ChartResult);
         }
 
         /// <summary>

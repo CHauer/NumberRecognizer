@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿//-----------------------------------------------------------------------
+// <copyright file="HiddenNeuron.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>HiddenNeuron Network Neuron.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Network
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+
     /// <summary>
-    /// 
+    /// HiddenNeuron Network Neuron.
     /// </summary>
     [Serializable]
     public class HiddenNeuron : INeuron, ICacheable
@@ -65,7 +73,7 @@ namespace NumberRecognizer.Lib.Network
         public List<WeightedLink> InputLayer { get; private set; }
 
         /// <summary>
-        /// Resets the cached activiation value.
+        /// Resets the cached activation value.
         /// </summary>
         public void ResetCachedValue()
         {

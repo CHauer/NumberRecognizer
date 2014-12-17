@@ -1,12 +1,20 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿//-----------------------------------------------------------------------
+// <copyright file="PatternRecognitionNetwork.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>PatternRecognitionResult - Neuronal Network.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Network
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// The neuronal network class with input, middle/hidden and output layer.
     /// </summary>
@@ -44,8 +52,7 @@ namespace NumberRecognizer.Lib.Network
         /// <param name="patterns">The patterns.</param>
         /// <param name="hiddenLayerType">Type of the hidden layer.</param>
         public PatternRecognitionNetwork(int width, int height, IEnumerable<string> patterns,
-                                            HiddenLayerType hiddenLayerType = HiddenLayerType.OverlayedLining |
-                                                                                HiddenLayerType.OverlayedBoxing)
+                                            HiddenLayerType hiddenLayerType = HiddenLayerType.OverlayedLining | HiddenLayerType.OverlayedBoxing | HiddenLayerType.Striping)
         {
             InitializeNetworkParameters(width, height, patterns, hiddenLayerType);
 
@@ -66,7 +73,7 @@ namespace NumberRecognizer.Lib.Network
         /// <exception cref="System.ArgumentException">The Height or Width parameters of the Network are invalid.</exception>
         private void InitializeNetworkParameters(int width, int height, IEnumerable<string> patterns, HiddenLayerType hiddenLayerType)
         {
-            const int divChecker = 2;
+            int divChecker = 2;
 
             if (height % divChecker != 0 || width % divChecker != 0)
             {
@@ -214,6 +221,18 @@ namespace NumberRecognizer.Lib.Network
             //Hidden/Middle Neurons
             HiddenNeurons = new HashSet<HiddenNeuron>();
 
+            CreateLining();
+
+            CreateBoxing();
+
+            CreateStripeing();
+        }
+
+        /// <summary>
+        /// Creates the lining hidden neurons if hidden layer mode is set.
+        /// </summary>
+        private void CreateLining()
+        {
             if (HiddenLayerMode.HasFlag(HiddenLayerType.Lining) ||
                 HiddenLayerMode.HasFlag(HiddenLayerType.OverlayedLining))
             {
@@ -272,8 +291,13 @@ namespace NumberRecognizer.Lib.Network
                     HiddenNeurons.Add(hiddenNeuron);
                 }
             }
+        }
 
-
+        /// <summary>
+        /// Creates the boxing hidden neurons if hidden layer mode is set.
+        /// </summary>
+        private void CreateBoxing()
+        {
             if (HiddenLayerMode.HasFlag(HiddenLayerType.Boxing) ||
                 HiddenLayerMode.HasFlag(HiddenLayerType.OverlayedBoxing))
             {
@@ -300,13 +324,77 @@ namespace NumberRecognizer.Lib.Network
                         WeightedLink weightedLinkRo = new WeightedLink() { Neuron = InputNeurons[y, x + 1] };
                         WeightedLink weightedLinkRu = new WeightedLink() { Neuron = InputNeurons[y + 1, x + 1] };
 
-                        hiddenNeuron.InputLayer.AddRange(new List<WeightedLink>() { weightedLinkLo, weightedLinkLu,
-                                                                                    weightedLinkRo, weightedLinkRu});
+                        hiddenNeuron.InputLayer.AddRange(new List<WeightedLink>()
+                        {
+                            weightedLinkLo,
+                            weightedLinkLu,
+                            weightedLinkRo,
+                            weightedLinkRu
+                        });
 
                         Genomes.Add(weightedLinkLo);
                         Genomes.Add(weightedLinkLu);
                         Genomes.Add(weightedLinkRo);
                         Genomes.Add(weightedLinkRu);
+
+                        HiddenNeurons.Add(hiddenNeuron);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Creates the striping hidden neurons if hidden layer mode is set.
+        /// </summary>
+        private void CreateStripeing()
+        {
+            if (HiddenLayerMode.HasFlag(HiddenLayerType.Striping))
+            {
+                int divider = 4;
+
+                ////left right lines and "height" of 2 and stripe with width of divider 4
+                for (int y = 0; y < InputHeight - 1; y += 2)
+                {
+                    for (int x = 0; x < InputWidth - 1; x += divider)
+                    {
+                        HiddenNeuron hiddenNeuron = new HiddenNeuron();
+
+                        for (int d = 0; d < divider - 1; d++)
+                        {
+                            WeightedLink weightedLinkA = new WeightedLink() { Neuron = InputNeurons[y, x + d] };
+                            WeightedLink weightedLinkB = new WeightedLink() { Neuron = InputNeurons[y + 1, x + d] };
+
+                            hiddenNeuron.InputLayer.Add(weightedLinkA);
+                            hiddenNeuron.InputLayer.Add(weightedLinkB);
+
+                            // Add to Genomes
+                            Genomes.Add(weightedLinkA);
+                            Genomes.Add(weightedLinkB);
+                        }
+
+                        HiddenNeurons.Add(hiddenNeuron);
+                    }
+                }
+
+                ////top down lines and "width" of 2 and stripe with width of divider 4
+                for (int x = 0; x < InputWidth - 1; x += 2)
+                {
+                    for (int y = 0; y < InputHeight - 1; y += divider)
+                    {
+                        HiddenNeuron hiddenNeuron = new HiddenNeuron();
+
+                        for (int d = 0; d < divider - 1; d++)
+                        {
+                            WeightedLink weightedLinkA = new WeightedLink() { Neuron = InputNeurons[y + d, x] };
+                            WeightedLink weightedLinkB = new WeightedLink() { Neuron = InputNeurons[y + d, x + 1] };
+
+                            hiddenNeuron.InputLayer.Add(weightedLinkA);
+                            hiddenNeuron.InputLayer.Add(weightedLinkB);
+
+                            // Add to Genomes
+                            Genomes.Add(weightedLinkA);
+                            Genomes.Add(weightedLinkB);
+                        }
 
                         HiddenNeurons.Add(hiddenNeuron);
                     }
@@ -374,7 +462,7 @@ namespace NumberRecognizer.Lib.Network
         /// Gets the fitness detail.
         /// </summary>
         /// <param name="trainingData">The training data.</param>
-        /// <returns></returns>
+        /// <returns>Fitness Detail.</returns>
         public Dictionary<string, double> GetFitnessDetail(ICollection<PatternTrainingImage> trainingData)
         {
             Dictionary<string, double> results = new Dictionary<string, double>();
@@ -473,7 +561,7 @@ namespace NumberRecognizer.Lib.Network
         /// Recognizes the character.
         /// </summary>
         /// <param name="pixelValues">The pixel values.</param>
-        /// <returns></returns>
+        /// <returns>Recognition Result,</returns>
         public ICollection<RecognitionResult> RecognizeCharacter(double[,] pixelValues)
         {
             SetInputData(pixelValues);

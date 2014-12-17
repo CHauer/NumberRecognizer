@@ -1,4 +1,12 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="NetworkDataSerializer.cs" company="FH Wr.Neustadt">
+//     Copyright (c) Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>NetworkDataSerializer - Data Serializer for Binary Serializing Network Data.</summary>
+//-----------------------------------------------------------------------
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -12,7 +20,7 @@ namespace NumberRecognizer.Lib.DataManagement
 {
     /// <summary>
     /// The NetworkDataSerializer Class provides
-    /// functionalty to Save/Load a Network to/from file
+    /// functionality to Save/Load a Network to/from file
     /// and Serialize a network to/from a byte array of data.
     /// </summary>
     public class NetworkDataSerializer : DataSerializer<PatternRecognitionNetwork>

@@ -83,4 +83,13 @@
         </ResourceDictionary>
     </chart:ResourceDictionaryCollection>
 
+    <chart:ResourceDictionaryCollection x:Key="CustomNegativColors">
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush1" Color="#FFFF5858" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush2" Color="#FFFF1212" />
+        </ResourceDictionary>
+    </chart:ResourceDictionaryCollection>
+
 </ResourceDictionary>

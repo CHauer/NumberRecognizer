@@ -1,19 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
-using NumberRecognizer.Lib.Network;
-
+﻿//-----------------------------------------------------------------------
+// <copyright file="DataSerializer.cs" company="FH Wr.Neustadt">
+//     Copyright (c) Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>Data Serializer for Binary Serializing Data.</summary>
+//-----------------------------------------------------------------------
 namespace NumberRecognizer.Lib.DataManagement
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Text;
+    using System.Threading.Tasks;
+    using NumberRecognizer.Lib.Network;
+
     /// <summary>
     /// The DataSerializer Class provides
-    /// functionalty to Save/Load a instance of T to/from file
+    /// functionality to Save/Load a instance of T to/from file
     /// and Serialize a instance to/from a byte array of data.
     /// </summary>
     public class DataSerializer<T> where T : class
@@ -23,7 +30,7 @@ namespace NumberRecognizer.Lib.DataManagement
         /// Loads the binary data from file into object T instance.
         /// </summary>
         /// <param name="path">The path.</param>
-        /// <returns></returns>
+        /// <returns>Object Type of T</returns>
         public T LoadFromFile(string path)
         {
             BinaryFormatter serializationBinFormatter = new BinaryFormatter();
@@ -56,7 +63,7 @@ namespace NumberRecognizer.Lib.DataManagement
         /// </summary>
         /// <param name="path">The path.</param>
         /// <param name="transformObj">The transform object.</param>
-        /// <returns></returns>
+        /// <returns>Status of Save To File Operation.</returns>
         public bool SaveToFile(string path, T transformObj)
         {
             BinaryFormatter serializationBinFormatter = new BinaryFormatter();
@@ -90,7 +97,7 @@ namespace NumberRecognizer.Lib.DataManagement
         /// Transforms the instance of T to binary data.
         /// </summary>
         /// <param name="transformObj">The transform object.</param>
-        /// <returns></returns>
+        /// <returns>Return Byte Array of Object.</returns>
         public Byte[] TransformToBinary(T transformObj)
         {
             BinaryFormatter serializationBinFormatter = new BinaryFormatter();
@@ -121,7 +128,7 @@ namespace NumberRecognizer.Lib.DataManagement
         /// Transforms the binary to instance of T.
         /// </summary>
         /// <param name="data">The data.</param>
-        /// <returns></returns>
+        /// <returns>Returns Object from Type of T.</returns>
         public T TransformFromBinary(Byte[] data)
         {
             BinaryFormatter serializationBinFormatter = new BinaryFormatter();
@@ -132,8 +139,14 @@ namespace NumberRecognizer.Lib.DataManagement
 
                 return (T)serializationBinFormatter.Deserialize(stream);
             }
-            catch (SerializationException seEx) { ;}
-            catch (Exception ex) { ;}
+            catch (SerializationException seEx)
+            {
+                Debug.WriteLine(seEx.Message);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
 
             return null;
         }

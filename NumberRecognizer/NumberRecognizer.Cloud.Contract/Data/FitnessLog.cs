@@ -1,14 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿//-----------------------------------------------------------------------
+// <copyright file="FitnessLog.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>FitnessLog DataContract.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Cloud.Contract.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
-    /// 
+    /// FitnessLog Data Contract.
     /// </summary>
     [DataContract]
     public class FitnessLog
@@ -30,17 +38,6 @@ namespace NumberRecognizer.Cloud.Contract.Data
         /// </value>
         [DataMember]
         public IList<double> FitnessTrend { get; set; }
-
-        ///// <summary>
-        ///// Gets or sets the pattern trends.
-        ///// The Key of the dictionary represents the pattern (eg. 0-9)
-        ///// The list of double values the generations from 0 - n.
-        ///// </summary>
-        ///// <value>
-        ///// The pattern trends.
-        ///// </value>
-        //[DataMember]
-        //public Dictionary<string, List<double>> PatternTrends { get; set; }
 
     }
 }

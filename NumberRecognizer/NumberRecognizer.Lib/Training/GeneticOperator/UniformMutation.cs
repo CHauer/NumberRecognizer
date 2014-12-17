@@ -1,13 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NumberRecognizer.Lib.Network;
-using NumberRecognizer.Lib.Training.Contract;
+﻿//-----------------------------------------------------------------------
+// <copyright file="UniformMutation.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>UniformMutation - Genetic Parameter.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Training.GeneticOperator
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using NumberRecognizer.Lib.Network;
+    using NumberRecognizer.Lib.Training.Contract;
+
+    /// <summary>
+    /// UniformMutation - Genetic Parameter.
+    /// </summary>
     public class UniformMutation : IMutation
     {
         /// <summary>
@@ -39,7 +50,7 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
         /// Simple random mutation - Uniform Mutation
         /// </summary>
         /// <param name="network">The network.</param>
-        /// <returns></returns>
+        /// <returns>The modified network.</returns>
         public PatternRecognitionNetwork ExecuteMutation(PatternRecognitionNetwork network)
         {
             ThreadSafeRandom random = new ThreadSafeRandom();
