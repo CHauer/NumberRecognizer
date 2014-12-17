@@ -36,7 +36,7 @@
         <mv:GroupedNetworksPageViewModel/>
     </Page.DataContext>
     <Page.BottomAppBar >
-        <AppBar x:Name="appBar" Background="Orange" IsOpen="{Binding IsAppBarOpen, Mode=TwoWay}" Closed="AppBar_Closed"  >
+        <AppBar x:Name="appBar" Background="Orange" IsOpen="{Binding IsAppBarOpen, Mode=TwoWay}">
             <Grid HorizontalAlignment="Stretch">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
@@ -61,16 +61,16 @@
         * Row 0 contains the back button and page title
         * Row 1 contains the rest of the page layout
     -->
-	<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-		<Grid.ChildrenTransitions>
-			<TransitionCollection>
-				<EntranceThemeTransition/>
-			</TransitionCollection>
-		</Grid.ChildrenTransitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="140"/>
-			<RowDefinition Height="*"/>
-		</Grid.RowDefinitions>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.ChildrenTransitions>
+            <TransitionCollection>
+                <EntranceThemeTransition/>
+            </TransitionCollection>
+        </Grid.ChildrenTransitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="140"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
         <!-- Horizontal scrolling grid -->
         <GridView
@@ -87,12 +87,12 @@
 			IsSwipeEnabled="true"
 			IsItemClickEnabled="True" >
             <GridView.ItemTemplate>
-				<DataTemplate>
-					<Grid HorizontalAlignment="Left" Width="300" Height="300"
+                <DataTemplate>
+                    <Grid HorizontalAlignment="Left" Width="300" Height="300"
 						Background="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}" >
-						<Border VerticalAlignment="Top">
-							<Viewbox Height="200" >
-								<chart:ClusteredColumnChart
+                        <Border VerticalAlignment="Top">
+                            <Viewbox Height="200" >
+                                <chart:ClusteredColumnChart
 									Visibility="{Binding Calculated, Converter={StaticResource booleanVisibiltyConverter}}"
 									Background="Transparent"
 									Style="{StaticResource ChartStyleVariableSize}"
@@ -101,47 +101,47 @@
 									ChartTitleVisibility="Collapsed"
 									ChartLegendVisibility="Collapsed"
 									ChartSubTitle="">
-									<chart:ClusteredColumnChart.Series>
-										<chart:ChartSeries 
+                                    <chart:ClusteredColumnChart.Series>
+                                        <chart:ChartSeries 
 											SeriesTitle="Fitness"
 											ItemsSource="{Binding ChartFitness}" 
 											DisplayMember="Name" 
 											ValueMember="Value" />
-									</chart:ClusteredColumnChart.Series>
-								</chart:ClusteredColumnChart>
-							</Viewbox>
-						</Border>
-						<Border VerticalAlignment="Top">
-							<Image Margin="0,-20,0,0" Source="ms-appx:///Assets/Logo.png"  Visibility="{Binding Calculated, ConverterParameter=true, Converter={StaticResource booleanVisibiltyConverter}}" />
-						</Border>
-						<StackPanel VerticalAlignment="Bottom" Background="{ThemeResource ListViewItemOverlayBackgroundThemeBrush}">
-							<!--<TextBlock Text="{Binding Network.NetworkId}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}" Height="60" Margin="15,0,15,0"/>-->
-							<!--<TextBlock Text="{Binding Network.NetworkName}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}" Height="60" Margin="15,0,15,0"/>-->
-							<StackPanel Orientation="Horizontal" Margin="5">
-								<TextBlock Text="Name:&#x9;" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
-								<TextBlock Text="{Binding NetworkName}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
-							</StackPanel>
-							<StackPanel Orientation="Horizontal" Margin="5" Visibility="{Binding Calculated, Converter={StaticResource booleanVisibiltyConverter}}" >
-								<TextBlock Text="Fitness:&#x9;" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
-								<TextBlock Text="{Binding NetworkFitness}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}"  Style="{StaticResource TitleTextBlockStyle}" />
-							</StackPanel>
-							<StackPanel Orientation="Horizontal" Margin="5" Visibility="{Binding Calculated, Converter={StaticResource booleanVisibiltyConverter}}">
-								<TextBlock Text="Start:&#x9;" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
-								<TextBlock Text="{Binding CalculationStart, Converter={StaticResource dateTimeToStringConverter}}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
-							</StackPanel>
-							<StackPanel Orientation="Horizontal" Margin="5" Visibility="{Binding Calculated, Converter={StaticResource booleanVisibiltyConverter}}" >
-								<TextBlock Text="End:&#x9;" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
-								<TextBlock Text="{Binding CalculationEnd, Converter={StaticResource dateTimeToStringConverter}}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
-							</StackPanel>
-						</StackPanel>
-					</Grid>
-				</DataTemplate>
-			</GridView.ItemTemplate>
-			<GridView.ItemsPanel>
-				<ItemsPanelTemplate>
-					<ItemsWrapGrid GroupPadding="0,0,70,0"/>
-				</ItemsPanelTemplate>
-			</GridView.ItemsPanel>
+                                    </chart:ClusteredColumnChart.Series>
+                                </chart:ClusteredColumnChart>
+                            </Viewbox>
+                        </Border>
+                        <Border VerticalAlignment="Top">
+                            <Image Margin="0,-20,0,0" Source="ms-appx:///Assets/Logo.png"  Visibility="{Binding Calculated, ConverterParameter=true, Converter={StaticResource booleanVisibiltyConverter}}" />
+                        </Border>
+                        <StackPanel VerticalAlignment="Bottom" Background="{ThemeResource ListViewItemOverlayBackgroundThemeBrush}">
+                            <!--<TextBlock Text="{Binding Network.NetworkId}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}" Height="60" Margin="15,0,15,0"/>-->
+                            <!--<TextBlock Text="{Binding Network.NetworkName}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}" Height="60" Margin="15,0,15,0"/>-->
+                            <StackPanel Orientation="Horizontal" Margin="5">
+                                <TextBlock Text="Name:&#x9;" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
+                                <TextBlock Text="{Binding NetworkName}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="5" Visibility="{Binding Calculated, Converter={StaticResource booleanVisibiltyConverter}}" >
+                                <TextBlock Text="Fitness:&#x9;" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
+                                <TextBlock Text="{Binding NetworkFitness}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}"  Style="{StaticResource TitleTextBlockStyle}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="5" Visibility="{Binding Calculated, Converter={StaticResource booleanVisibiltyConverter}}">
+                                <TextBlock Text="Start:&#x9;" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
+                                <TextBlock Text="{Binding CalculationStart, Converter={StaticResource dateTimeToStringConverter}}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="5" Visibility="{Binding Calculated, Converter={StaticResource booleanVisibiltyConverter}}" >
+                                <TextBlock Text="End:&#x9;" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
+                                <TextBlock Text="{Binding CalculationEnd, Converter={StaticResource dateTimeToStringConverter}}" Foreground="{ThemeResource ListViewItemOverlayForegroundThemeBrush}" Style="{StaticResource TitleTextBlockStyle}"/>
+                            </StackPanel>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid GroupPadding="0,0,70,0"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
             <GridView.GroupStyle>
                 <GroupStyle HidesIfEmpty="True">
                     <GroupStyle.HeaderTemplate>
@@ -161,26 +161,26 @@
             </GridView.GroupStyle>
         </GridView>
 
-		<!-- Back button and page title -->
-		<Grid>
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="120"/>
-				<ColumnDefinition Width="Auto"/>
-				<ColumnDefinition Width="Auto"/>
+        <!-- Back button and page title -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="Auto"/>
-			</Grid.ColumnDefinitions>
-			<Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="backButton" Margin="39,59,39,0" Command="{Binding NavigationHelper.GoBackCommand, ElementName=pageRoot}"
 				Style="{StaticResource NavigationBackButtonNormalStyle}"
 				VerticalAlignment="Top"
 				AutomationProperties.Name="Back"
 				AutomationProperties.AutomationId="BackButton"
 				AutomationProperties.ItemType="Navigation Button"/>
-			<Image Grid.Column="1" Width="120" Height="Auto" Source="ms-appx:///Assets/Logo.png" Margin="20,0" />
-			<StackPanel Orientation="Horizontal" Grid.Column="2">
-				<TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource CustomHeaderTextBlockStyle}" />
-			</StackPanel>
+            <Image Grid.Column="1" Width="120" Height="Auto" Source="ms-appx:///Assets/Logo.png" Margin="20,0" />
+            <StackPanel Orientation="Horizontal" Grid.Column="2">
+                <TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource CustomHeaderTextBlockStyle}" />
+            </StackPanel>
             <ProgressRing Grid.Column="3" x:Name="processRingObj" Height="100" Width="100" Foreground="Orange" 
                           IsActive="{Binding IsLoading}" />
-		</Grid>
-	</Grid>
+        </Grid>
+    </Grid>
 </Page>

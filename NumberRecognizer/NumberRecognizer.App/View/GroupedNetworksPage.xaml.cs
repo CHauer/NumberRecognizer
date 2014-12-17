@@ -73,16 +73,5 @@ namespace NumberRecognizer.App.View
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
         }
-
-        /// <summary>
-        /// Applications the bar_ closed.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The e.</param>
-        private void AppBar_Closed(object sender, object e)
-        {
-            //networkGridView.SelectedItem = null;
-        }
-
     }
 }

@@ -5,13 +5,11 @@
 // <author>Markus Zytek</author>
 // <summary>The Supension Manager.</summary>
 //-----------------------------------------------------------------------
-
-using System.Diagnostics;
-
 namespace NumberRecognizer.App.Common
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.IO;
     using System.Runtime.Serialization;
     using System.Threading.Tasks;

@@ -5,9 +5,6 @@
 // <author>Markus Zytek</author>
 // <summary>Item Detail Page.</summary>
 //-----------------------------------------------------------------------
-
-
-
 namespace NumberRecognizer.App.View
 {
     using System;
@@ -88,7 +85,7 @@ namespace NumberRecognizer.App.View
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             this.viewModel = new NetworkDetailPageViewModel(e.NavigationParameter as NetworkInfo);
-            this.DataContext = viewModel;
+            this.DataContext = this.viewModel;
         }
     }
 }

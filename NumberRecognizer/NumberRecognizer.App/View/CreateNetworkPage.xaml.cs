@@ -128,9 +128,9 @@ namespace NumberRecognizer.App.View
                 Button clearButton = new Button()
                 {
                     Content = "\ue107",
-                    Command = viewModel.ClearCanvas,
+                    Command = this.viewModel.ClearCanvas,
                     CommandParameter = inkCanvasRT,
-                    FontFamily= new FontFamily("Segoe UI Symbol"),
+                    FontFamily = new FontFamily("Segoe UI Symbol"),
                     BorderBrush = null,
                     Margin = inkCanvasRT.Margin
                 };

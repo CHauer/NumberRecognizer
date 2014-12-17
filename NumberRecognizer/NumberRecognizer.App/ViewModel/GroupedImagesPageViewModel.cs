@@ -5,22 +5,19 @@
 // <author>Markus Zytek</author>
 // <summary>Grouped Images Page ViewModel.</summary>
 //-----------------------------------------------------------------------
-
-
-using System;
-using System.Diagnostics;
-
 namespace NumberRecognizer.App.ViewModel
 {
+    using System;
     using System.Collections.ObjectModel;
+    using System.Diagnostics;
     using System.Linq;
     using System.Windows.Input;
     using GalaSoft.MvvmLight;
     using Mutzl.MvvmLight;
     using NumberRecognizer.App.DataModel;
-    using NumberRecognizer.Cloud.Contract.Data;
     using NumberRecognizer.App.NumberRecognizerService;
     using NumberRecognizer.App.View;
+    using NumberRecognizer.Cloud.Contract.Data;
     using PropertyChanged;
 
     /// <summary>
@@ -49,8 +46,6 @@ namespace NumberRecognizer.App.ViewModel
             this.InitializeCommands();
         }
 
-
-
         /// <summary>
         /// Initializes a new instance of the <see cref="GroupedImagesPageViewModel" /> class.
         /// </summary>
@@ -59,19 +54,6 @@ namespace NumberRecognizer.App.ViewModel
             : this()
         {
             this.Images = images;
-        }
-
-        /// <summary>
-        /// Initializes the commands.
-        /// </summary>
-        private void InitializeCommands()
-        {
-            this.UploadCommand = new DependentRelayCommand(this.CreateNetwork,
-                                                           () => this.ImageGroups.Count == 10, this,
-                                                           () => this);
-            this.DeleteImageCommand = new DependentRelayCommand(this.DeleteImage,
-                                                           () => this.SelectedImage != null, this,
-                                                           () => this);
         }
 
         /// <summary>
@@ -160,6 +142,15 @@ namespace NumberRecognizer.App.ViewModel
         }
 
         /// <summary>
+        /// Initializes the commands.
+        /// </summary>
+        private void InitializeCommands()
+        {
+            this.UploadCommand = new DependentRelayCommand(this.CreateNetwork, () => this.ImageGroups.Count == 10, this, () => this);
+            this.DeleteImageCommand = new DependentRelayCommand(this.DeleteImage, () => this.SelectedImage != null, this, () => this);
+        }
+
+        /// <summary>
         /// Groups the images.
         /// </summary>
         private void GroupImages()
@@ -201,7 +192,6 @@ namespace NumberRecognizer.App.ViewModel
             {
                 Debug.WriteLine(ex.Message);
             }
-
 
             App.RootFrame.Navigate(typeof(GroupedNetworksPage));
         }

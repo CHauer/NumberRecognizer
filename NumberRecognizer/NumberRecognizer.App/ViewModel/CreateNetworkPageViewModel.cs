@@ -5,35 +5,26 @@
 // <author>Markus Zytek</author>
 // <summary>Create Network Page ViewModel.</summary>
 //-----------------------------------------------------------------------
-
-
-using System.Diagnostics;
-
 namespace NumberRecognizer.App.ViewModel
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Windows.Input;
     using GalaSoft.MvvmLight;
-    using Mutzl.MvvmLight;
+    using GalaSoft.MvvmLight.Command;
     using NumberRecognition.Labeling;
     using NumberRecognizer.App.Control;
     using NumberRecognizer.App.DataModel;
     using NumberRecognizer.App.Help;
-    using NumberRecognizer.App.NumberRecognizerService;
     using NumberRecognizer.App.View;
-    using PropertyChanged;
-    using System;
-    using System.Collections.Generic;
-    using System.Collections.ObjectModel;
-    using System.Runtime.InteropServices.WindowsRuntime;
-    using System.Windows.Input;
-    using Windows.System.UserProfile;
-    using Windows.UI;
-    using Windows.UI.Xaml;
-    using Windows.UI.Xaml.Media;
-    using Windows.UI.Xaml.Media.Imaging;
-    using Windows.UI.Xaml.Shapes;
-    using System.Linq;
-    using GalaSoft.MvvmLight.Command;
     using NumberRecognizer.Cloud.Contract.Data;
+    using PropertyChanged;
+    using Windows.System.UserProfile;
+    using Windows.UI.Xaml.Media.Imaging;
+    using Mutzl.MvvmLight;
 
     /// <summary>
     /// Create Network Page ViewModel.
@@ -104,12 +95,20 @@ namespace NumberRecognizer.App.ViewModel
         public bool IsShowHint { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is loading.
+        /// </summary>
+        /// <value>
+        /// <c>True</c> if this instance is loading; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLoading { get; set; }
+
+        /// <summary>
         /// Initializes the commands.
         /// </summary>
         private void InitializeCommands()
         {
-            this.LabelingCommand = new RelayCommand(this.LabelingAsync);
-            this.NextCommand = new RelayCommand(this.NextPage, this.CanExecuteNextCommand);
+            this.LabelingCommand = new DependentRelayCommand(this.LabelingAsync, () => this.IsLoading == false, this, () => this.IsLoading);
+            this.NextCommand = new DependentRelayCommand(this.NextPage, this.CanExecuteNextCommand, this, () => this.NetworkName, () => this.InkCanvasRTCollection, () => this.IsShowHint);
             this.ClearCanvas = new RelayCommand<InkCanvasRT>((canvas) => canvas.ClearInk());
         }
 
@@ -119,18 +118,18 @@ namespace NumberRecognizer.App.ViewModel
         /// <returns>Can execute next command.</returns>
         private bool CanExecuteNextCommand()
         {
-            if (string.IsNullOrEmpty(NetworkName))
+            if (string.IsNullOrEmpty(this.NetworkName))
             {
                 return false;
             }
 
             if (!this.InkCanvasRTCollection.All(p => p.Labeling.ComponentCount > 0))
             {
-                IsShowHint = true;
+                this.IsShowHint = true;
                 return false;
             }
 
-            IsShowHint = false;
+            this.IsShowHint = false;
             return true;
         }
 
@@ -139,11 +138,11 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private async void LabelingAsync()
         {
+            this.IsLoading = true;
             this.trainingImagesRT = new ObservableCollection<LocalTrainingImage>();
 
             foreach (InkCanvasRT inkCanvas in this.InkCanvasRTCollection)
             {
-
                 await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(inkCanvas);
                 foreach (ConnectedComponent component in inkCanvas.Labeling.ConnectedComponents)
                 {
@@ -169,8 +168,12 @@ namespace NumberRecognizer.App.ViewModel
                     }
                 }
             }
-            NextCommand.RaiseCanExecuteChanged();
-            RaisePropertyChanged(() => IsShowHint);
+
+            this.NextCommand.RaiseCanExecuteChanged();
+            this.RaisePropertyChanged(() => this.IsShowHint);
+            this.RaisePropertyChanged(() => this.InkCanvasRTCollection);
+            this.RaisePropertyChanged(() => this.NetworkName);
+            this.IsLoading = false;
         }
 
         /// <summary>

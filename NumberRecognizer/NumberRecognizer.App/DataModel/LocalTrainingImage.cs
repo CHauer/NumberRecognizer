@@ -5,8 +5,6 @@
 // <author>Markus Zytek</author>
 // <summary>Training Image RT.</summary>
 //-----------------------------------------------------------------------
-
-
 namespace NumberRecognizer.App.DataModel
 {
     using NumberRecognizer.App.NumberRecognizerService;
