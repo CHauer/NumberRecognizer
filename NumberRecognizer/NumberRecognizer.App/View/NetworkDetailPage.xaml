@@ -84,7 +84,7 @@
                                              IndependentValuePath="Name" 
                                              DependentValuePath="Value" 
                                              IsSelectionEnabled="false"/>
-                    <charting:LineSeries Title="Gen Pool 2" 
+                    <charting:LineSeries Title="GenPool 2" 
                                              ItemsSource="{Binding MultiplePoolFitnessTrends[1]}"
                                              Margin="0" 
                                              IndependentValuePath="Name" 
