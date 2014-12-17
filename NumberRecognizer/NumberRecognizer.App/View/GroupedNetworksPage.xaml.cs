@@ -81,7 +81,7 @@ namespace NumberRecognizer.App.View
         /// <param name="e">The e.</param>
         private void AppBar_Closed(object sender, object e)
         {
-            networkGridView.SelectedItem = null;
+            //networkGridView.SelectedItem = null;
         }
 
     }

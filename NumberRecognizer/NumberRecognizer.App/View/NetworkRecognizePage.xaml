@@ -48,6 +48,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
+                    <ColumnDefinition Width="100"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="50"/>
@@ -56,9 +57,11 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="100"/>
                 </Grid.RowDefinitions>
-                <TextBlock Grid.Row="0" Grid.Column="0" Text="Please write your phone number on the canvas." Style="{StaticResource CustomTextBlockStyle}" VerticalAlignment="Center"/>
-                <control:InkCanvasRT x:Name="inkCanvas" Grid.Column="0" Grid.Row="1" />
-                <AppBarButton Command="{Binding RecognizeNumber}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Icon="Globe" 
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Grid.Column="0" Text="Please write your phone number on the canvas." Style="{StaticResource CustomTextBlockStyle}" VerticalAlignment="Center"/>
+                <control:InkCanvasRT x:Name="InkCanvas" Grid.Column="0" Grid.Row="1" />
+                <AppBarButton Command="{Binding ResetInkCanvasCommand}" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Icon="Delete" 
+                              Padding="0" Margin="0" Height="110" Label="Reset Canvas"/>
+                <AppBarButton Command="{Binding RecognizeNumber}" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Icon="Globe" 
                               Padding="0" Margin="0" Height="110" Label="Recognize Number"/>
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Recognized Number" Style="{StaticResource CustomTextBlockStyle}" VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Result.Number}" IsEnabled="False" FontSize="50" Grid.Column="0" Grid.Row="4" TextAlignment="Center" CharacterSpacing="500"/>

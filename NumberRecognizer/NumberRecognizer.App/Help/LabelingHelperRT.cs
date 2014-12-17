@@ -85,7 +85,7 @@ namespace NumberRecognizer.App.Help
                 MinimumBoundingRectangle mbr = connectedComponent.MinBoundingRect;
                 Rectangle rectangle = new Rectangle()
                 {
-                    Stroke = new SolidColorBrush(Colors.OrangeRed),
+                    Stroke = new SolidColorBrush(Colors.Orange),
                     StrokeThickness = 2.0,
                     Width = mbr.Width / scale,
                     Height = mbr.Height / scale,

@@ -86,7 +86,7 @@ namespace NumberRecognizer.App.View
         private void NavigationHelper_LoadState(object sender, LoadStateEventArgs e)
         {
             this.viewModel = new NetworkRecognizeViewModel(e.NavigationParameter as NetworkInfo);
-            this.viewModel.InkCanvas = this.inkCanvas;
+            this.viewModel.InkCanvas = this.InkCanvas;
             this.DataContext = viewModel;
         }
     }
