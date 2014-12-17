@@ -114,16 +114,23 @@ namespace NumberRecognizer.App.ViewModel
             RecognitionImages = new ObservableCollection<RecognitionImage>();
 
             await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(InkCanvas);
-            foreach (ConnectedComponent component in InkCanvas.Labeling.ConnectedComponents)
+            foreach (ConnectedComponent component in InkCanvas.Labeling.ConnectedComponents.OrderBy(p => p.MinBoundingRect.Left).ToList())
             {
-                RecognitionImage recognitionImage = new RecognitionImage
+                try
                 {
-                    Height = (int)ImageHelperRT.ImageHeight,
-                    Width = (int)ImageHelperRT.ImageWidth
-                };
-                recognitionImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
+                    RecognitionImage recognitionImage = new RecognitionImage
+                    {
+                        Height = (int)ImageHelperRT.ImageHeight,
+                        Width = (int)ImageHelperRT.ImageWidth
+                    };
+                    recognitionImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
 
-                this.RecognitionImages.Add(recognitionImage);
+                    this.RecognitionImages.Add(recognitionImage);
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine(ex.Message);
+                }
             }
 
             try

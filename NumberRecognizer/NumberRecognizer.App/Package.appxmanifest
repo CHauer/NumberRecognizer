@@ -15,8 +15,8 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="NumberRecognizer.App.App">
-      <m2:VisualElements DisplayName="Number Recognizer App" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Number Recognizer App" ForegroundText="light" BackgroundColor="#464646" ToastCapable="true">
-        <m2:DefaultTile ShortName="Number Recognizer App">
+      <m2:VisualElements DisplayName="Phone Number Recognizer" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="Phone Number Recognizer" ForegroundText="light" BackgroundColor="#464646" ToastCapable="true">
+        <m2:DefaultTile ShortName="Phone Number Recognizer">
           <m2:ShowNameOnTiles>
             <m2:ShowOn Tile="square150x150Logo" />
           </m2:ShowNameOnTiles>

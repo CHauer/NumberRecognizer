@@ -99,6 +99,8 @@ namespace NumberRecognizer.App.Help
                     scaBytes = ImageHelperRT.GetByteArrayFromRGBAByteArray(scaRGBABytes, inkCanvas.ForegroundColor, inkCanvas.BackgroundColor);
                     connectedComponent.ScaledPixels = ImageHelperRT.Get2DPixelArrayFromByteArray(scaBytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight);
                     connectedComponent.ScaledBytes = scaBytes;
+
+                    await ImageHelperRT.SaveRGBAByteArrayAsBitmapImageAsync(scaRGBABytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight, inkCanvas.Name);
                 }
                 catch (Exception ex)
                 {

@@ -5,6 +5,9 @@
 // <author>Markus Zytek</author>
 // <summary>ImageHelper for RT.</summary>
 //-----------------------------------------------------------------------
+
+using System.Diagnostics;
+
 namespace NumberRecognizer.App.Help
 {
     using System;
@@ -47,6 +50,8 @@ namespace NumberRecognizer.App.Help
         public static byte[] GetByteArrayFromRGBAByteArray(byte[] rgbaByteArray, Color foreground, Color background)
         {
             byte[] byteArray = new byte[rgbaByteArray.Length / RGBA];
+            int counterbefore = 0;
+            int counter = 0; 
 
             for (int i = 0; i < rgbaByteArray.Length; i++)
             {
@@ -58,9 +63,18 @@ namespace NumberRecognizer.App.Help
 
                 if (color.R == foreground.R && color.R == foreground.G && color.R == foreground.B && color.A != 0)
                 {
+                    //byteArray[i / RGBA] = foreground.A;
+                    counter++;
+                }
+
+                if (color.R == foreground.R && color.R == foreground.G && color.R == foreground.B && color.A > 100)
+                {
                     byteArray[i / RGBA] = foreground.A;
+                    counterbefore++;
                 }
             }
+
+            Debug.WriteLine("Before:{0} After:{1}", counterbefore, counter);
 
             return byteArray;
         }
@@ -177,7 +191,7 @@ namespace NumberRecognizer.App.Help
         /// </returns>
         public static async Task SaveRGBAByteArrayAsBitmapImageAsync(byte[] rgbaByteArray, double width, double height, string name)
         {
-            var storageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(name + ".png", CreationCollisionOption.ReplaceExisting);
+            var storageFile = await ApplicationData.Current.LocalFolder.CreateFileAsync(name + ".png", CreationCollisionOption.GenerateUniqueName);
 
             using (var randomAccessStream = await storageFile.OpenAsync(FileAccessMode.ReadWrite))
             {

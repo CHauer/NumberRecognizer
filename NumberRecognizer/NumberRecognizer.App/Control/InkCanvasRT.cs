@@ -61,7 +61,7 @@ namespace NumberRecognizer.App.Control
             this.ForegroundColor = Colors.Black;
             this.BackgroundColor = Colors.White;
             this.Background = new SolidColorBrush(this.BackgroundColor);
-            this.StrokeThickness = 4.0;
+            this.StrokeThickness = 5.0;
             this.Margin = new Thickness(1);
             this.PointerPressed += this.InkCanvasRT_PointerPressed;
             this.PointerReleased += this.InkCanvasRT_PointerReleased;
@@ -247,7 +247,7 @@ namespace NumberRecognizer.App.Control
 
             Path path = new Path();
             path.Stroke = new SolidColorBrush(this.ForegroundColor);
-            path.StrokeThickness = this.StrokeThickness;
+            path.StrokeThickness = this.StrokeThickness * 2;
             path.Data = pathGeometry;
 
             this.Children.Add(path);
