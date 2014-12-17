@@ -154,6 +154,15 @@ namespace NumberRecognizer.App.Control
         /// <param name="e">The <see cref="PointerRoutedEventArgs"/> instance containing the event data.</param>
         private void InkCanvasRT_PointerPressed(object sender, PointerRoutedEventArgs e)
         {
+            inkManager.SetDefaultDrawingAttributes(new InkDrawingAttributes()
+            {
+                FitToCurve = false,
+                IgnorePressure = true,
+                PenTip = PenTipShape.Circle,
+                Color = Colors.Black
+            });
+            this.inkManager.Mode = InkManipulationMode.Inking;
+
             PointerPoint pointerPoint = e.GetCurrentPoint(this);
             this.previousContactPoint = pointerPoint.Position;
             PointerDeviceType pointerDevType = e.Pointer.PointerDeviceType;
@@ -249,6 +258,7 @@ namespace NumberRecognizer.App.Control
             path.Stroke = new SolidColorBrush(this.ForegroundColor);
             path.StrokeThickness = this.StrokeThickness * 2;
             path.Data = pathGeometry;
+            path.Opacity = 1; 
 
             this.Children.Add(path);
         }
@@ -258,6 +268,8 @@ namespace NumberRecognizer.App.Control
         /// </summary>
         private void RenderStrokes()
         {
+            this.Children.Clear();
+
             foreach (var stroke in this.inkManager.GetStrokes())
             {
                 this.RenderStroke(stroke);

@@ -121,10 +121,17 @@ namespace NumberRecognizer.App.Help
             {
                 for (int x = 0; x < width; x++)
                 {
-                    int z = (int)(width * y) + x;
-                    if (byteArray[z] != 0)
+                    try
                     {
-                        pixelArray2D[y, x] = byteArray[z] / 255;
+                        int z = (int) (width*y) + x;
+                        if (byteArray[z] != 0)
+                        {
+                            pixelArray2D[y, x] = byteArray[z]/255;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
                     }
                 }
             }
