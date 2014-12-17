@@ -483,7 +483,7 @@ namespace NumberRecognizer.Lib.Network
 							Propability = outputNeuron.Value.ActivationValue,
 							RecognizedCharacter = outputNeuron.Key
 						})
-                        .OrderBy(i => i.Propability)
+                        .OrderByDescending(i => i.Propability)
                         .ToList();
         }
 

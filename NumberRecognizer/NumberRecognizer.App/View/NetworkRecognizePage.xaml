@@ -11,6 +11,7 @@
     xmlns:control="using:NumberRecognizer.App.Control"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:charting="using:WinRTXamlToolkit.Controls.DataVisualization.Charting"
     mc:Ignorable="d">
 
     <!--<Page.DataContext>
@@ -41,9 +42,9 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            
+
             <!-- Input -->
-            <Grid Grid.Column="0" Margin="20,2,2,2">
+            <Grid Grid.Column="0" Margin="20,2,2,2" VerticalAlignment="Center">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="100"/>
@@ -54,8 +55,6 @@
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="50"/>
                     <RowDefinition Height="100"/>
-                    <RowDefinition Height="110"/>
-                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Please write your phone number on the canvas." Style="{StaticResource CustomTextBlockStyle}" VerticalAlignment="Center"/>
                 <control:InkCanvasRT x:Name="inkCanvas" Grid.Column="0" Grid.Row="1" />
@@ -63,10 +62,12 @@
                               Padding="0" Margin="0" Height="110" Label="Recognize Number"/>
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Recognized Number" Style="{StaticResource CustomTextBlockStyle}" VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Result.Number}" IsEnabled="False" FontSize="50" Grid.Column="0" Grid.Row="4" TextAlignment="Center" CharacterSpacing="500"/>
-                <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center">
+                <!--<StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
                     <AppBarButton Icon="Clear" Command="{Binding ClearPage}"  Label="Clear Result" Height="110"/>
-                    <!--<AppBarButton Icon="Cancel" Foreground="Red"/>-->
-                </StackPanel>
+                    -->
+                <!--<AppBarButton Icon="Cancel" Foreground="Red"/>-->
+                <!--
+                </StackPanel>-->
             </Grid>
 
             <!-- Result View -->
@@ -74,8 +75,10 @@
                 <ListView ItemsSource="{Binding ChartResult}">
                     <ListView.ItemTemplate>
                         <DataTemplate>
-                            <Viewbox Height="300">
-                                <chart:RadialGaugeChart
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontSize="60" Text="{Binding Number}" VerticalAlignment="Center" />
+                                <Viewbox Height="300">
+                                    <chart:ClusteredColumnChart
 									    Background="Transparent"
 									    Style="{StaticResource ChartStyleVariableSize}"
 									    ChartTitle=""
@@ -83,15 +86,16 @@
 									    ChartTitleVisibility="Collapsed"
 									    ChartLegendVisibility="Collapsed"
 									    ChartSubTitle="">
-                                    <chart:RadialGaugeChart.Series>
-                                        <chart:ChartSeries 
+                                        <chart:ClusteredColumnChart.Series>
+                                            <chart:ChartSeries 
 											    SeriesTitle="Fitness"
-											    ItemsSource="{Binding}" 
+											    ItemsSource="{Binding Values}" 
 											    DisplayMember="Name" 
 											    ValueMember="Value" />
-                                    </chart:RadialGaugeChart.Series>
-                                </chart:RadialGaugeChart>
-                            </Viewbox>
+                                        </chart:ClusteredColumnChart.Series>
+                                    </chart:ClusteredColumnChart>
+                                </Viewbox>
+                            </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>
@@ -99,7 +103,7 @@
         </Grid>
 
         <!-- Back button and page title -->
-        <Grid>
+        <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="120"/>
                 <ColumnDefinition Width="*"/>

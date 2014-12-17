@@ -6,9 +6,6 @@
 // <summary>Network Data Source.</summary>
 //-----------------------------------------------------------------------
 
-
-using Windows.UI.Core;
-
 namespace NumberRecognizer.App.ViewModel
 {
     using System;
@@ -29,6 +26,7 @@ namespace NumberRecognizer.App.ViewModel
     using System.Collections.Generic;
     using GalaSoft.MvvmLight.Command;
     using Windows.UI.Xaml;
+    using Windows.UI.Core;
 
     /// <summary>
     /// Grouped Networks Page ViewModel.
@@ -74,7 +72,7 @@ namespace NumberRecognizer.App.ViewModel
         /// <value>
         ///   <c>true</c> if [is loading]; otherwise, <c>false</c>.
         /// </value>
-        public bool IsLoading { get; private set; }
+        public bool IsLoading { get; set; }
 
         /// <summary>
         /// Gets or sets the networks.
@@ -179,7 +177,7 @@ namespace NumberRecognizer.App.ViewModel
 
             this.NetworkGroups = new ObservableCollection<NetworkInfoGroup>();
             NetworkInfoGroup calculated = new NetworkInfoGroup("calculated", "Calculated Networks");
-            foreach (NetworkInfo network in this.Networks.Where(p => p.Calculated))
+            foreach (NetworkInfo network in this.Networks.Where(p => p.Status == NetworkStatusType.Ready))
             {
                 network.ChartFitness = new List<ChartPopulation>();
                 foreach (string key in network.FinalPatternFittness.Keys)
@@ -193,16 +191,24 @@ namespace NumberRecognizer.App.ViewModel
                 calculated.Networks.Add(network);
             }
 
+            NetworkInfoGroup runnning = new NetworkInfoGroup("running", "Calculation Running");
+            foreach (NetworkInfo network in this.Networks.Where(p => p.Status == NetworkStatusType.Running))
+            {
+                runnning.Networks.Add(network);
+            }
+
+
             NetworkInfoGroup uncalculated = new NetworkInfoGroup("uncalculated", "Uncalculated Networks");
-            foreach (NetworkInfo network in this.Networks.Where(p => !p.Calculated))
+            foreach (NetworkInfo network in this.Networks.Where(p => p.Status != NetworkStatusType.Ready && p.Status != NetworkStatusType.Running))
             {
                 uncalculated.Networks.Add(network);
             }
 
             this.NetworkGroups.Add(calculated);
+            this.NetworkGroups.Add(runnning);
             this.NetworkGroups.Add(uncalculated);
 
-            this.IsLoading = true;
+            this.IsLoading = false;
         }
 
         /// <summary>
@@ -218,13 +224,9 @@ namespace NumberRecognizer.App.ViewModel
                                                                   () => this.SelectedNetwork);
             this.RefreshCommand = new RelayCommand(() => LoadNetworksAsync());
             this.NetworkClicked = new RelayCommand<NetworkInfo>((item) => App.RootFrame.Navigate(typeof(NetworkRecognizePage), item));
-            this.NetworkDetails = new DependentRelayCommand(() =>
-            {
-                App.RootFrame.Dispatcher.RunAsync(CoreDispatcherPriority.Normal,
-                            () => App.RootFrame.Navigate(typeof(NetworkDetailPage), SelectedNetwork));
-            },
-            () => this.SelectedNetwork != null && this.SelectedNetwork.Calculated, this,
-            () => this.SelectedNetwork);
+            this.NetworkDetails = new DependentRelayCommand(() =>App.RootFrame.Navigate(typeof(NetworkDetailPage), SelectedNetwork),
+                                                            () => this.SelectedNetwork != null && this.SelectedNetwork.Calculated, this,
+                                                            () => this.SelectedNetwork);
 
             this.SelectionChanged = new RelayCommand<SelectionChangedEventArgs>((args) =>
             {

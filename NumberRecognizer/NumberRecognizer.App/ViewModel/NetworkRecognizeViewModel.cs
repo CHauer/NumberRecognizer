@@ -10,12 +10,13 @@ using Windows.UI.Xaml.Media.Imaging;
 using GalaSoft.MvvmLight;
 using NumberRecognizer.Cloud.Contract.Data;
 using PropertyChanged;
-using GalaSoft.MvvmLight.Command;
 using NumberRecognition.Labeling;
+using NumberRecognizer.App.Common;
 using NumberRecognizer.App.Control;
 using NumberRecognizer.App.DataModel;
 using NumberRecognizer.App.Help;
 using NumberRecognizer.App.NumberRecognizerService;
+using RelayCommand = GalaSoft.MvvmLight.Command.RelayCommand;
 
 namespace NumberRecognizer.App.ViewModel
 {
@@ -90,7 +91,7 @@ namespace NumberRecognizer.App.ViewModel
         /// <value>
         /// The chart result.
         /// </value>
-        public ObservableCollection<ObservableCollection<ChartPopulation>> ChartResult{get; private set;}
+        public ObservableCollection<object> ChartResult { get; set; }
 
         /// <summary>
         /// Gets or sets the recognition images.
@@ -129,6 +130,7 @@ namespace NumberRecognizer.App.ViewModel
             {
                 NumberRecognizerServiceClient serviceProxy = new NumberRecognizerServiceClient();
                 Result = await serviceProxy.RecognizePhoneNumberAsync(Network.NetworkId, RecognitionImages);
+
                 this.CreateChartData();
             }
             catch (Exception ex)
@@ -143,7 +145,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void CreateChartData()
         {
-            ChartResult = new ObservableCollection<ObservableCollection<ChartPopulation>>();
+            ChartResult = new ObservableCollection<object>();
 
             foreach (NumberRecognitionResultItem item in Result.Items)
             {
@@ -152,11 +154,17 @@ namespace NumberRecognizer.App.ViewModel
                 {
                     numberPropabilities.Add(new ChartPopulation(){
                         Name = pair.Key.ToString(),
-                        Value = pair.Value * 100,
+                        Value = pair.Value < 0 ? 0 : pair.Value * 100,
                     });
                 }
-                ChartResult.Add(numberPropabilities);
+                ChartResult.Add(new
+                {
+                    Number = item.NumericCharacter.ToString(),
+                    Values = numberPropabilities
+                });
             }
+
+            RaisePropertyChanged(() => ChartResult); 
         }
 
         /// <summary>

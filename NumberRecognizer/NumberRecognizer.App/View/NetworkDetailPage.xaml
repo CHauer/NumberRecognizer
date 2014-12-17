@@ -44,10 +44,13 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <charting:Chart x:Name="chartFitness" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" >
+            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Grid.Row="0" Margin="20,0">Final GenPool Fitness Trend</TextBlock>
+            <charting:Chart x:Name="chartFitness" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" >
                 <charting:Chart.Series>
                     <charting:LineSeries Title="Fitness" 
                                              ItemsSource="{Binding FinalPoolFitnessTrend}"
@@ -72,7 +75,8 @@
                     </charting:Chart.Palette>-->
             </charting:Chart>
 
-            <charting:Chart x:Name="chartPool" Grid.Row="1" Grid.Column="0" >
+            <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" Grid.Row="2" Margin="20,0" >Multiple GenPool Fitness Trend</TextBlock>
+            <charting:Chart x:Name="chartPool" Grid.Row="3" Grid.Column="0" >
                 <charting:Chart.Series>
                     <charting:LineSeries Title="GenPool 1" 
                                              ItemsSource="{Binding MultiplePoolFitnessTrends[0]}"
@@ -121,7 +125,7 @@
                 </charting:Chart.Palette>-->
             </charting:Chart>
 
-            <Grid Grid.Column="1" Grid.Row="1" Margin="2">
+            <Grid Grid.Column="1" Grid.Row="4" Margin="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -132,19 +136,19 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBlock Style="{StaticResource SubheaderTextBlockStyle}"
+                <TextBlock Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center"
                            Grid.Row="0">Calculatuion Start</TextBlock>
-                <TextBlock  Style="{StaticResource SubheaderTextBlockStyle}"
-                            Grid.Row="1" >Calculatuion End</TextBlock>
-                <TextBlock  Style="{StaticResource SubheaderTextBlockStyle}"
-                            Grid.Row="2" >Final Fitness</TextBlock>
+                <TextBlock  Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center"
+                            Grid.Row="1" Grid.Column="0">Calculatuion End</TextBlock>
+                <TextBlock  Style="{StaticResource SubheaderTextBlockStyle}" VerticalAlignment="Center"
+                            Grid.Row="2" Grid.Column="0">Final Fitness</TextBlock>
 
-                <TextBlock Style="{StaticResource CustomTextBlockStyle}" Margin="5,10"
+                <TextBlock Style="{StaticResource CustomTextBlockStyle}" Margin="15,10"
                            Grid.Row="0" Grid.Column="1" Text="{Binding Network.CalculationStart, Converter={StaticResource dateTimeConverter}}" />
-                <TextBlock  Style="{StaticResource CustomTextBlockStyle}" Margin="5,10"
+                <TextBlock  Style="{StaticResource CustomTextBlockStyle}" Margin="15,10"
                             Grid.Row="1" Grid.Column="1"  Text="{Binding Network.CalculationEnd, Converter={StaticResource dateTimeConverter}}" />
-                <TextBlock  Style="{StaticResource CustomTextBlockStyle}" Margin="5,10"
-                            Grid.Row="2" Grid.Column="1"  Text="{Binding Network.Fitness}" />
+                <TextBlock  Style="{StaticResource CustomTextBlockStyle}" Margin="15,10"
+                            Grid.Row="2" Grid.Column="1"  Text="{Binding Network.NetworkFitness}" />
             </Grid>
         </Grid>
         <!-- Back button and page title -->

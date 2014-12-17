@@ -25,12 +25,12 @@ namespace NumberRecognizer.App.Help
         /// <summary>
         /// The image height.
         /// </summary>
-        public const double ImageHeight = 20;
+        public const double ImageHeight = 16;
 
         /// <summary>
         /// The image width.
         /// </summary>
-        public const double ImageWidth = 20;
+        public const double ImageWidth = 16;
 
         /// <summary>
         /// The RGBA constant.

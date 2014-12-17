@@ -86,6 +86,14 @@ namespace NumberRecognizer.App.ViewModel
         public ICommand LabelingCommand { get; set; }
 
         /// <summary>
+        /// Gets or sets the clear canvas.
+        /// </summary>
+        /// <value>
+        /// The clear canvas.
+        /// </value>
+        public ICommand ClearCanvas { get; set; }
+
+        /// <summary>
         /// Gets or sets a value indicating whether [is error].
         /// </summary>
         /// <value>
@@ -100,6 +108,7 @@ namespace NumberRecognizer.App.ViewModel
         {
             this.LabelingCommand = new RelayCommand(this.LabelingAsync);
             this.NextCommand = new RelayCommand(this.NextPage, this.CanExecuteNextCommand);
+            this.ClearCanvas = new RelayCommand<InkCanvasRT>((canvas) => canvas.ClearInk());
         }
 
         /// <summary>
@@ -150,8 +159,8 @@ namespace NumberRecognizer.App.ViewModel
                     this.trainingImagesRT.Add(localTrainingImage);
                 }
             }
-
             NextCommand.RaiseCanExecuteChanged();
+            RaisePropertyChanged(() => IsShowHint);
         }
 
         /// <summary>

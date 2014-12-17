@@ -39,6 +39,11 @@ namespace NumberRecognizer.App.View
         private ObservableCollection<TextBlock> textBlockCollection = new ObservableCollection<TextBlock>();
 
         /// <summary>
+        /// The text block collection.
+        /// </summary>
+        private ObservableCollection<Button> resetButtonCollection = new ObservableCollection<Button>();
+
+        /// <summary>
         /// The view model.
         /// </summary>
         private CreateNetworkPageViewModel viewModel;
@@ -117,11 +122,22 @@ namespace NumberRecognizer.App.View
                     Text = string.Format("{0} *", inkCanvasRT.Name),
                     FontSize = 28,
                     Foreground = new SolidColorBrush(Colors.OrangeRed),
-                    VerticalAlignment = VerticalAlignment.Bottom,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Margin = inkCanvasRT.Margin
+                };
+                Button clearButton = new Button()
+                {
+                    Content = "\ue107",
+                    Command = viewModel.ClearCanvas,
+                    CommandParameter = inkCanvasRT,
+                    FontFamily= new FontFamily("Segoe UI Symbol"),
+                    BorderBrush = null,
                     Margin = inkCanvasRT.Margin
                 };
                 this.textBlockCollection.Add(textBlock);
                 this.textBlockStackPanel.Children.Add(textBlock);
+                this.resetButtonStackPanel.Children.Add(clearButton);
+                this.resetButtonCollection.Add(clearButton);
             }
         }
 
@@ -144,7 +160,13 @@ namespace NumberRecognizer.App.View
             foreach (TextBlock textBlock in this.textBlockCollection)
             {
                 textBlock.Height = stackPanel.ActualHeight / count;
-                textBlock.Width = stackPanel.ActualWidth;
+                textBlock.Width = textBlockStackPanel.ActualWidth;
+            }
+
+            foreach (Button button in this.resetButtonCollection)
+            {
+                button.Height = stackPanel.ActualHeight / count;
+                button.Width = resetButtonStackPanel.ActualWidth - 10;
             }
 
             this.inkCanvasRTStackPanel.SizeChanged -= this.InkCanvasRTStackPanel_SizeChanged;
