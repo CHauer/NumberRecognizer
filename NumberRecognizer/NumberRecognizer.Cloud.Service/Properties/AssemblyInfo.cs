@@ -1,4 +1,11 @@
-﻿using System.Reflection;
+﻿//-----------------------------------------------------------------------
+// <copyright file="AssemblyInfo.cs" company="FH Wr.Neustadt">
+//     Copyright Markus Zytek. All rights reserved.
+// </copyright>
+// <author>Markus Zytek</author>
+// <summary>AssemblyInfo Data.</summary>
+//-----------------------------------------------------------------------
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 

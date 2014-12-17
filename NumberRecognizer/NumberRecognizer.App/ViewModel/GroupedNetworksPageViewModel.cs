@@ -303,7 +303,7 @@ namespace NumberRecognizer.App.ViewModel
         {
             this.CreateNetworkCommand = new DependentRelayCommand(() => App.RootFrame.Navigate(typeof(CreateNetworkPage)), () => this.SelectedNetwork == null, this, () => this.SelectedNetwork);
             this.DeleteNetworkCommand = new DependentRelayCommand(this.DeleteNetwork, () => this.SelectedNetwork != null, this, () => this.SelectedNetwork);
-            this.RefreshCommand = new DependentRelayCommand(() => this.LoadNetworksAsync(), () => this.IsLoading == false && this.IsSyncEnabled == false, this, () => this.IsLoading, () => this.IsSyncEnabled);
+            this.RefreshCommand = new DependentRelayCommand(async () => await this.LoadNetworksAsync(), () => this.IsLoading == false && this.IsSyncEnabled == false, this, () => this.IsLoading, () => this.IsSyncEnabled);
             this.NetworkClicked = new RelayCommand<NetworkInfo>((item) => App.RootFrame.Navigate(typeof(NetworkRecognizePage), item), (item) => item.Status == NetworkStatusType.Ready);
             this.NetworkDetails = new DependentRelayCommand(() => App.RootFrame.Navigate(typeof(NetworkDetailPage), this.SelectedNetwork), () => this.SelectedNetwork != null && this.SelectedNetwork.Calculated, this, () => this.SelectedNetwork);
             this.ToggleSyncCommand = new RelayCommand(() => this.IsSyncEnabled = !this.IsSyncEnabled);
