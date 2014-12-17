@@ -45,6 +45,14 @@ namespace NumberRecognizer.App.ViewModel
         public NetworkInfo Network { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is loading.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is loading; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLoading { get; set; }
+
+        /// <summary>
         /// Gets or sets the chart fitness trend.
         /// </summary>
         /// <value>
@@ -91,6 +99,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private async void InitializeProperties()
         {
+            this.IsLoading = true;
             this.Network = await this.LoadNetworkDetails();
 
             if (this.Network.Calculated && this.Network.FinalPoolFitnessLog != null)
@@ -115,6 +124,8 @@ namespace NumberRecognizer.App.ViewModel
                     this.MultiplePoolFitnessTrends.Add(list);
                 }
             }
+
+            this.IsLoading = false;
         }
     }
 }

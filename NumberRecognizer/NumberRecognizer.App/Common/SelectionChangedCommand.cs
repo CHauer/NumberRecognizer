@@ -22,14 +22,14 @@ namespace NumberRecognizer.App.Common
     public static class SelectionChangedCommand
     {
         /// <summary>
-        /// The command property
+        /// The command property.
         /// </summary>
         public static readonly DependencyProperty CommandProperty = DependencyProperty.RegisterAttached("Command", typeof(ICommand), typeof(SelectionChangedCommand), new PropertyMetadata(null, OnCommandPropertyChanged));
 
         /// <summary>
         /// Sets the command.
         /// </summary>
-        /// <param name="d">The d.</param>
+        /// <param name="d">The dependent.</param>
         /// <param name="value">The value.</param>
         public static void SetCommand(DependencyObject d, ICommand value)
         {
@@ -49,7 +49,7 @@ namespace NumberRecognizer.App.Common
         /// <summary>
         /// Called when [command property changed].
         /// </summary>
-        /// <param name="d">The d.</param>
+        /// <param name="d">The dependent.</param>
         /// <param name="e">The <see cref="DependencyPropertyChangedEventArgs"/> instance containing the event data.</param>
         private static void OnCommandPropertyChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {

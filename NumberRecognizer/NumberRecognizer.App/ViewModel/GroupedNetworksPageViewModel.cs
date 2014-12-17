@@ -33,7 +33,7 @@ namespace NumberRecognizer.App.ViewModel
     public class GroupedNetworksPageViewModel : ViewModelBase
     {
         /// <summary>
-        /// The is synchronize enabled
+        /// The is synchronize enabled.
         /// </summary>
         private static bool isSyncEnabled = false;
 
@@ -216,8 +216,8 @@ namespace NumberRecognizer.App.ViewModel
         /// <summary>
         /// Dispatchers the timer_ tick.
         /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The e.</param>
+        /// <param name="sender">The sender parameter.</param>
+        /// <param name="e">The event parameter.</param>
         private async void DispatcherTimer_Tick(object sender, object e)
         {
             if (isSyncEnabled && !this.IsLoading)
