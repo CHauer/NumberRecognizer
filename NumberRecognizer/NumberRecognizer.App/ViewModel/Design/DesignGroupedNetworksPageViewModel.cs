@@ -1,31 +1,21 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="GroupedNetworksPageViewModel.cs" company="FH Wr.Neustadt">
-//     Copyright Markus Zytek. All rights reserved.
+// <copyright file="DesignGroupedNetworksPageViewModel.cs" company="FH Wr.Neustadt">
+//     Copyright Hauer Christoph. All rights reserved.
 // </copyright>
 // <author>Christoph Hauer</author>
-// <summary>Network Data Source.</summary>
+// <summary>Design Grouped Networks Page ViewModel.</summary>
 //-----------------------------------------------------------------------
-
-using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace NumberRecognizer.App.ViewModel.Design
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
-    using System.Linq;
-    using System.Threading.Tasks;
     using System.Windows.Input;
     using GalaSoft.MvvmLight;
-    using Mutzl.MvvmLight;
     using NumberRecognizer.App.Common;
     using NumberRecognizer.App.DataModel;
     using NumberRecognizer.Cloud.Contract.Data;
-    using NumberRecognizer.App.NumberRecognizerService;
-    using NumberRecognizer.App.View;
     using PropertyChanged;
-    using Windows.UI.Popups;
-    using Windows.UI.Xaml;
 
     /// <summary>
     /// Grouped Networks Page ViewModel.
@@ -33,23 +23,13 @@ namespace NumberRecognizer.App.ViewModel.Design
     [ImplementPropertyChanged]
     public class DesignGroupedNetworksPageViewModel : ViewModelBase
     {
-        ///// <summary>
-        ///// The is synchronize enabled.
-        ///// </summary>
-        //private static bool isSyncEnabled = false;
-
         /// <summary>
         /// The selected network.
         /// </summary>
         private NetworkInfo selectedLocalNetwork;
 
-        ///// <summary>
-        ///// The dispatcher timer.
-        ///// </summary>
-        //private DispatcherTimer dispatcherTimer;
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="GroupedNetworksPageViewModel"/> class.
+        /// Initializes a new instance of the <see cref="DesignGroupedNetworksPageViewModel"/> class.
         /// </summary>
         public DesignGroupedNetworksPageViewModel()
         {
@@ -124,11 +104,8 @@ namespace NumberRecognizer.App.ViewModel.Design
         }
 
         /// <summary>
-        /// Synchronizes the networks asynchronous.
+        /// Loads the design data networks asynchronous.
         /// </summary>
-        /// <returns>
-        /// The networks asynchronous.
-        /// </returns>
         private void LoadDesignDataNetworksAsync()
         {
             this.NetworkGroups = new ObservableCollection<NetworkInfoGroup>();
@@ -142,36 +119,9 @@ namespace NumberRecognizer.App.ViewModel.Design
                 NetworkFitness = 0.99,
                 NetworkName = "TestCalculated",
                 Status = NetworkStatusType.Ready,
-                 FinalPatternFittness = new Dictionary<string, double>()
-                    {
-                        {"0",0.99},
-                        {"1",0.99},
-                        {"2",0.99},
-                        {"3",0.99},
-                        {"4",0.99},
-                        {"5",0.99},
-                        {"6",0.99},
-                        {"7",0.99},
-                        {"8",0.99},
-                        {"9",0.99}
-                    },
-                FinalPoolFitnessLog = new FitnessLog()
-                {
-                   
-                },
-                ChartFitness = new ObservableCollection<ChartPopulation>()
-                {
-                    new ChartPopulation{Name = "0", Value = 0.96 * 100 },
-                    new ChartPopulation{Name = "1", Value = 0.92 * 100 },
-                    new ChartPopulation{Name = "2", Value = 0.96 * 100 },
-                    new ChartPopulation{Name = "3", Value = 0.34 * 100 },
-                    new ChartPopulation{Name = "4", Value = 0.96 * 100 },
-                    new ChartPopulation{Name = "5", Value = 0.87 * 100 },
-                    new ChartPopulation{Name = "6", Value = 0.76 * 100 },
-                    new ChartPopulation{Name = "7", Value = 0.73 * 100 },
-                    new ChartPopulation{Name = "8", Value = 0.95 * 100 },
-                    new ChartPopulation{Name = "9", Value = 0.98 * 100 }
-                }
+                FinalPatternFittness = new Dictionary<string, double>() { { "0", 0.99 }, { "1", 0.99 }, { "2", 0.99 }, { "3", 0.99 }, { "4", 0.99 }, { "5", 0.99 }, { "6", 0.99 }, { "7", 0.99 }, { "8", 0.99 }, { "9", 0.99 } },
+                FinalPoolFitnessLog = new FitnessLog(),
+                ChartFitness = new ObservableCollection<ChartPopulation>() { new ChartPopulation { Name = "0", Value = 0.96 * 100 }, new ChartPopulation { Name = "1", Value = 0.92 * 100 }, new ChartPopulation { Name = "2", Value = 0.96 * 100 }, new ChartPopulation { Name = "3", Value = 0.34 * 100 }, new ChartPopulation { Name = "4", Value = 0.96 * 100 }, new ChartPopulation { Name = "5", Value = 0.87 * 100 }, new ChartPopulation { Name = "6", Value = 0.76 * 100 }, new ChartPopulation { Name = "7", Value = 0.73 * 100 }, new ChartPopulation { Name = "8", Value = 0.95 * 100 }, new ChartPopulation { Name = "9", Value = 0.98 * 100 } }
             });
 
             calculated.Networks.Add(new NetworkInfo()
@@ -183,36 +133,9 @@ namespace NumberRecognizer.App.ViewModel.Design
                 NetworkFitness = 0.99,
                 NetworkName = "TestCalculated",
                 Status = NetworkStatusType.Ready,
-                FinalPatternFittness = new Dictionary<string, double>()
-                    {
-                        {"0",0.99},
-                        {"1",0.99},
-                        {"2",0.99},
-                        {"3",0.99},
-                        {"4",0.99},
-                        {"5",0.99},
-                        {"6",0.99},
-                        {"7",0.99},
-                        {"8",0.99},
-                        {"9",0.99}
-                    },
-                FinalPoolFitnessLog = new FitnessLog()
-                {
-                    
-                },
-                ChartFitness = new ObservableCollection<ChartPopulation>()
-                {
-                    new ChartPopulation{Name = "0", Value = 0.96 * 100 },
-                    new ChartPopulation{Name = "1", Value = 0.92 * 100 },
-                    new ChartPopulation{Name = "2", Value = 0.96 * 100 },
-                    new ChartPopulation{Name = "3", Value = 0.34 * 100 },
-                    new ChartPopulation{Name = "4", Value = 0.96 * 100 },
-                    new ChartPopulation{Name = "5", Value = 0.87 * 100 },
-                    new ChartPopulation{Name = "6", Value = 0.76 * 100 },
-                    new ChartPopulation{Name = "7", Value = 0.73 * 100 },
-                    new ChartPopulation{Name = "8", Value = 0.95 * 100 },
-                    new ChartPopulation{Name = "9", Value = 0.98 * 100 }
-                }
+                FinalPatternFittness = new Dictionary<string, double>() { { "0", 0.99 }, { "1", 0.99 }, { "2", 0.99 }, { "3", 0.99 }, { "4", 0.99 }, { "5", 0.99 }, { "6", 0.99 }, { "7", 0.99 }, { "8", 0.99 }, { "9", 0.99 } },
+                FinalPoolFitnessLog = new FitnessLog(),
+                ChartFitness = new ObservableCollection<ChartPopulation>() { new ChartPopulation { Name = "0", Value = 0.96 * 100 }, new ChartPopulation { Name = "1", Value = 0.92 * 100 }, new ChartPopulation { Name = "2", Value = 0.96 * 100 }, new ChartPopulation { Name = "3", Value = 0.34 * 100 }, new ChartPopulation { Name = "4", Value = 0.96 * 100 }, new ChartPopulation { Name = "5", Value = 0.87 * 100 }, new ChartPopulation { Name = "6", Value = 0.76 * 100 }, new ChartPopulation { Name = "7", Value = 0.73 * 100 }, new ChartPopulation { Name = "8", Value = 0.95 * 100 }, new ChartPopulation { Name = "9", Value = 0.98 * 100 } }
             });
 
             NetworkInfoGroup uncalculated = new NetworkInfoGroup("uncalculated", "Uncalculated Networks");
@@ -235,7 +158,7 @@ namespace NumberRecognizer.App.ViewModel.Design
         /// </summary>
         private void InitializeCommands()
         {
-            this.RefreshCommand = new RelayCommand(() => LoadDesignDataNetworksAsync());
+            this.RefreshCommand = new RelayCommand(() => this.LoadDesignDataNetworksAsync());
         }
     }
 }

@@ -130,7 +130,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\CreateNetworkPageViewModel.cs" />
-    <Compile Include="ViewModel\Design\DesignGroupedNetworksPageViewModel.cs" />
+    <Compile Include="ViewModel\Design\DesignGroupedNetworksPageViewModel.cs">
+      <ExcludeFromStyleCop>False</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="ViewModel\GroupedImagesPageViewModel.cs" />
     <Compile Include="ViewModel\GroupedNetworksPageViewModel.cs" />
     <Compile Include="ViewModel\NetworkDetailPageViewModel.cs" />

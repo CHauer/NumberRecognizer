@@ -5,24 +5,18 @@
 // <author>Markus Zytek</author>
 // <summary>Labeling Helper for RT.</summary>
 //-----------------------------------------------------------------------
-
-
-using System.Text;
-using Windows.Graphics.Display;
-using Windows.Graphics.Imaging;
-using Windows.Storage;
-using Windows.Storage.Streams;
-
 namespace NumberRecognizer.App.Help
 {
     using System;
-    using System.Collections.ObjectModel;
     using System.Diagnostics;
     using System.Runtime.InteropServices.WindowsRuntime;
     using System.Threading.Tasks;
     using NumberRecognition.Labeling;
     using NumberRecognizer.App.Control;
-    using NumberRecognizer.App.NumberRecognizerService;
+    using Windows.Graphics.Display;
+    using Windows.Graphics.Imaging;
+    using Windows.Storage;
+    using Windows.Storage.Streams;
     using Windows.UI;
     using Windows.UI.Xaml;
     using Windows.UI.Xaml.Media;
@@ -34,7 +28,6 @@ namespace NumberRecognizer.App.Help
     /// </summary>
     public class LabelingHelperRT
     {
-
         /// <summary>
         /// Connected component labeling for canvas.
         /// </summary>
@@ -62,21 +55,7 @@ namespace NumberRecognizer.App.Help
             byte[] canvasRGBABytes = (await renderTargetBitmap.GetPixelsAsync()).ToArray();
             byte[] canvasBytes = ImageHelperRT.GetByteArrayFromRGBAByteArray(canvasRGBABytes, inkCanvas.ForegroundColor, inkCanvas.BackgroundColor);
 
-
             double[,] canvasPixels = ImageHelperRT.Get2DPixelArrayFromByteArray(canvasBytes, canvasWidth, canvasHeight);
-
-            StringBuilder builder = new StringBuilder();
-            for (int y = 0; y < canvasPixels.GetLength(0); y++)
-            {
-                for (int x = 0; x < canvasPixels.GetLength(1); x++)
-                {
-                    builder.Append(canvasPixels[y, x]);
-                }
-                builder.AppendLine();
-            }
-            FileIO.WriteTextAsync(await ApplicationData.Current.LocalFolder.CreateFileAsync("canvasdouble.txt", CreationCollisionOption.ReplaceExisting)
-                                    , builder.ToString());
-
             inkCanvas.Labeling = new ConnectedComponentLabeling();
             inkCanvas.Labeling.TwoPassLabeling(canvasPixels, 0.0);
 
@@ -138,24 +117,24 @@ namespace NumberRecognizer.App.Help
             }
         }
 
-        async static Task SaveVisualElementToFile(RenderTargetBitmap bitmap, StorageFile file)
+        /// <summary>
+        /// Saves the visual element to file.
+        /// </summary>
+        /// <param name="bitmap">The bitmap parameter.</param>
+        /// <param name="file">The file parameter.</param>
+        /// <returns>The visual element to file.</returns>
+        private static async Task SaveVisualElementToFile(RenderTargetBitmap bitmap, StorageFile file)
         {
-
             var pixels = await bitmap.GetPixelsAsync();
 
             using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
             {
-                var encoder = await
-                    BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream);
+                var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream);
                 byte[] bytes = pixels.ToArray();
-                encoder.SetPixelData(BitmapPixelFormat.Bgra8,
-                                     BitmapAlphaMode.Ignore,
-                                     (uint)bitmap.PixelWidth, (uint)bitmap.PixelHeight,
-                                     96, 96, bytes);
+                encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Ignore, (uint)bitmap.PixelWidth, (uint)bitmap.PixelHeight, 96d, 96d, bytes);
 
                 await encoder.FlushAsync();
             }
         }
-
     }
 }

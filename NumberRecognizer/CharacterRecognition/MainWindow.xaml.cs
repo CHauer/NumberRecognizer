@@ -3,100 +3,100 @@ using System.Windows.Media.Imaging;
 
 namespace CharacterRecognition
 {
-	using System;
-	using System.Collections.Concurrent;
-	using System.Collections.Generic;
-	using System.IO;
-	using System.Linq;
-	using System.Threading.Tasks;
-	using System.Windows;
-	using System.Windows.Controls;
-	using System.Windows.Media;
-	using System.Windows.Threading;
-	using NumberRecognizer.Lib.Network;
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.IO;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Controls;
+    using System.Windows.Media;
+    using System.Windows.Threading;
+    using NumberRecognizer.Lib.Network;
 
-	// TODO: Refactor
-	public partial class MainWindow : Window
-	{
-		private const int ImageHeight = 16;
+    // TODO: Refactor
+    public partial class MainWindow : Window
+    {
+        private const int ImageHeight = 16;
 
-		private const int ImageWidth = 16;
+        private const int ImageWidth = 16;
 
-		private const string TrainingDataPath = @".\TrainingData";
+        private const string TrainingDataPath = @".\TrainingData";
 
-		public MainWindow()
-		{
-			InitializeComponent();
-		}
+        public MainWindow()
+        {
+            InitializeComponent();
+        }
 
-		private PatternRecognitionNetwork ResultNetwork { get; set; }
+        private PatternRecognitionNetwork ResultNetwork { get; set; }
 
-		private ConcurrentBag<TrainingImage> TrainingData { get; set; }
+        private ConcurrentBag<TrainingImage> TrainingData { get; set; }
 
-		private void ClearButton_Click(object sender, RoutedEventArgs e)
-		{
-			this.DrawCanvas.Strokes.Clear();
-		}
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.DrawCanvas.Strokes.Clear();
+        }
 
-		private PatternRecognitionNetwork CreateNetwork()
-		{
-			return new PatternRecognitionNetwork(ImageWidth, ImageHeight,
-				TrainingData.Select(x => x.RepresentingInformation).Distinct());
-		}
+        private PatternRecognitionNetwork CreateNetwork()
+        {
+            return new PatternRecognitionNetwork(ImageWidth, ImageHeight,
+                TrainingData.Select(x => x.RepresentingInformation).Distinct());
+        }
 
-		private T FindChild<T>(DependencyObject parent, string childName) where T : DependencyObject
-		{
-			// Confirm parent and childName are valid.
-			if (parent == null)
-			{
-				return null;
-			}
+        private T FindChild<T>(DependencyObject parent, string childName) where T : DependencyObject
+        {
+            // Confirm parent and childName are valid.
+            if (parent == null)
+            {
+                return null;
+            }
 
-			T foundChild = null;
+            T foundChild = null;
 
-			int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
-			for (int i = 0; i < childrenCount; i++)
-			{
-				DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+            int childrenCount = VisualTreeHelper.GetChildrenCount(parent);
+            for (int i = 0; i < childrenCount; i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
 
-				// If the child is not of the request child type child
-				T childType = child as T;
-				if (childType == null)
-				{
-					// recursively drill down the tree
-					foundChild = FindChild<T>(child, childName);
+                // If the child is not of the request child type child
+                T childType = child as T;
+                if (childType == null)
+                {
+                    // recursively drill down the tree
+                    foundChild = FindChild<T>(child, childName);
 
-					// If the child is found, break so we do not overwrite the found child.
-					if (foundChild != null)
-					{
-						break;
-					}
-				}
-				else if (!string.IsNullOrEmpty(childName))
-				{
-					FrameworkElement frameworkElement = child as FrameworkElement;
+                    // If the child is found, break so we do not overwrite the found child.
+                    if (foundChild != null)
+                    {
+                        break;
+                    }
+                }
+                else if (!string.IsNullOrEmpty(childName))
+                {
+                    FrameworkElement frameworkElement = child as FrameworkElement;
 
-					// If the child's name is set for search
-					if (frameworkElement != null && frameworkElement.Name == childName)
-					{
-						// if the child's name is of the request name
-						foundChild = (T)child;
-						break;
-					}
-				}
-				else
-				{
-					// child element found.
-					foundChild = (T)child;
-					break;
-				}
-			}
+                    // If the child's name is set for search
+                    if (frameworkElement != null && frameworkElement.Name == childName)
+                    {
+                        // if the child's name is of the request name
+                        foundChild = (T)child;
+                        break;
+                    }
+                }
+                else
+                {
+                    // child element found.
+                    foundChild = (T)child;
+                    break;
+                }
+            }
 
-			return foundChild;
-		}
+            return foundChild;
+        }
 
-		private void RecognizeButton_Click(object sender, RoutedEventArgs e)
-		{
+        private void RecognizeButton_Click(object sender, RoutedEventArgs e)
+        {
             Bitmap bitmap = ImageHelper.SaveInkCanvasToMemoryStream(this.DrawCanvas, ImageWidth, ImageHeight);
 
             bitmap.Save("test.jpeg");
@@ -110,158 +110,153 @@ namespace CharacterRecognition
             image.EndInit();
 
             ImagePreview.Source = image;
-            
-
-
             double[,] pixelsFromCanvas = ImageHelper.GetPixelsFromCanvas(this.DrawCanvas, ImageWidth, ImageHeight);
+            List<RecognitionResult> recognizeCharacters =
+                ResultNetwork.RecognizeCharacter(pixelsFromCanvas).OrderByDescending(x => x.Propability).ToList();
 
+            this.RecognizedFirstPatternLabel.Content = recognizeCharacters[0].RecognizedCharacter;
+            this.RecognizedFirstPropabilityLabel.Content = recognizeCharacters[0].Propability.ToString("F8");
 
-			List<RecognitionResult> recognizeCharacters =
-				ResultNetwork.RecognizeCharacter(pixelsFromCanvas).OrderByDescending(x => x.Propability).ToList();
+            this.RecognizedSecondPatternLabel.Content = recognizeCharacters[1].RecognizedCharacter;
+            this.RecognizedSecondPropabilityLabel.Content = recognizeCharacters[1].Propability.ToString("F8");
 
-			this.RecognizedFirstPatternLabel.Content = recognizeCharacters[0].RecognizedCharacter;
-			this.RecognizedFirstPropabilityLabel.Content = recognizeCharacters[0].Propability.ToString("F8");
+            this.RecognizedThirdPatternLabel.Content = recognizeCharacters[2].RecognizedCharacter;
+            this.RecognizedThirdPropabilityLabel.Content = recognizeCharacters[2].Propability.ToString("F8");
+        }
 
-			this.RecognizedSecondPatternLabel.Content = recognizeCharacters[1].RecognizedCharacter;
-			this.RecognizedSecondPropabilityLabel.Content = recognizeCharacters[1].Propability.ToString("F8");
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            int index = 0;
 
-			this.RecognizedThirdPatternLabel.Content = recognizeCharacters[2].RecognizedCharacter;
-			this.RecognizedThirdPropabilityLabel.Content = recognizeCharacters[2].Propability.ToString("F8");
-		}
+            string path = Path.Combine(TrainingDataPath, (string)this.SaveAsComboBox.SelectedValue,
+                string.Format("{0}{1}.png", this.SaveAsComboBox.SelectedValue, index));
 
-		private void SaveButton_Click(object sender, RoutedEventArgs e)
-		{
-			int index = 0;
+            while (File.Exists(path))
+            {
+                index++;
+                path = Path.Combine(TrainingDataPath, (string)this.SaveAsComboBox.SelectedValue,
+                    string.Format("{0}{1}.png", this.SaveAsComboBox.SelectedValue, index));
+            }
 
-			string path = Path.Combine(TrainingDataPath, (string)this.SaveAsComboBox.SelectedValue,
-				string.Format("{0}{1}.png", this.SaveAsComboBox.SelectedValue, index));
+            ImageHelper.SaveInkCanvasToPng(this.DrawCanvas, path, ImageWidth, ImageHeight);
+        }
 
-			while (File.Exists(path))
-			{
-				index++;
-				path = Path.Combine(TrainingDataPath, (string)this.SaveAsComboBox.SelectedValue,
-					string.Format("{0}{1}.png", this.SaveAsComboBox.SelectedValue, index));
-			}
+        private IEnumerable<PatternRecognitionNetwork> TrainNetwork()
+        {
+            // Parameters
+            const int populationSize = 100;
+            const int maxGenerations = 100;
 
-			ImageHelper.SaveInkCanvasToPng(this.DrawCanvas, path, ImageWidth, ImageHeight);
-		}
+            const double truncationSelectionPercentage = 0.1;
+            const int truncationSelectionAbsolute = (int)(populationSize * truncationSelectionPercentage);
 
-		private IEnumerable<PatternRecognitionNetwork> TrainNetwork()
-		{
-			// Parameters
-			const int populationSize = 100;
-			const int maxGenerations = 100;
+            // Read Imagedata
+            TrainingData = new ConcurrentBag<TrainingImage>(ImageHelper.ReadTrainingData(TrainingDataPath));
 
-			const double truncationSelectionPercentage = 0.1;
-			const int truncationSelectionAbsolute = (int)(populationSize * truncationSelectionPercentage);
+            // Create initial population
+            ConcurrentBag<PatternRecognitionNetwork> currentGeneration =
+                new ConcurrentBag<PatternRecognitionNetwork>(new List<PatternRecognitionNetwork>());
 
-			// Read Imagedata
-			TrainingData = new ConcurrentBag<TrainingImage>(ImageHelper.ReadTrainingData(TrainingDataPath));
+            if (currentGeneration.Count == 0)
+            {
+                Parallel.For(0, populationSize, i =>
+                {
+                    ThreadSafeRandom random = new ThreadSafeRandom();
 
-			// Create initial population
-			ConcurrentBag<PatternRecognitionNetwork> currentGeneration =
-				new ConcurrentBag<PatternRecognitionNetwork>(new List<PatternRecognitionNetwork>());
+                    PatternRecognitionNetwork patternRecognitionNetwork = CreateNetwork();
+                    patternRecognitionNetwork.Genomes.ForEach(x => x.Weight = (2 * random.NextDouble()) - 1);
 
-			if (currentGeneration.Count == 0)
-			{
-				Parallel.For(0, populationSize, i =>
-				{
-					ThreadSafeRandom random = new ThreadSafeRandom();
+                    currentGeneration.Add(patternRecognitionNetwork);
+                });
+            }
 
-					PatternRecognitionNetwork patternRecognitionNetwork = CreateNetwork();
-					patternRecognitionNetwork.Genomes.ForEach(x => x.Weight = (2 * random.NextDouble()) - 1);
+            List<PatternRecognitionNetwork> networks = currentGeneration.ToList();
 
-					currentGeneration.Add(patternRecognitionNetwork);
-				});
-			}
+            for (int i = 0; i < maxGenerations; i++)
+            {
+                // Calculate Fitness
+                Parallel.ForEach(currentGeneration, individual => individual.CalculateFitness(TrainingData.ToList()));
 
-			List<PatternRecognitionNetwork> networks = currentGeneration.ToList();
+                PatternRecognitionNetwork bestNetwork = currentGeneration.OrderByDescending(x => x.Fitness).First();
 
-			for (int i = 0; i < maxGenerations; i++)
-			{
-				// Calculate Fitness
-				Parallel.ForEach(currentGeneration, individual => individual.CalculateFitness(TrainingData.ToList()));
+                // GUI Update
+                Dictionary<string, double> fitnessDetail = bestNetwork.GetFitnessDetail(TrainingData.ToList());
 
-				PatternRecognitionNetwork bestNetwork = currentGeneration.OrderByDescending(x => x.Fitness).First();
+                Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
+                {
+                    this.CurrentGenerationLabel.Content = i;
+                    this.CurrentFitnessLabel.Content = bestNetwork.Fitness.ToString("F8");
 
-				// GUI Update
-				Dictionary<string, double> fitnessDetail = bestNetwork.GetFitnessDetail(TrainingData.ToList());
+                    for (int j = 0; j < fitnessDetail.Count; j++)
+                    {
+                        Label patternLabel = FindChild<Label>(this, string.Format("CurrentPattern{0}", j));
+                        patternLabel.Content = fitnessDetail.ToList()[j].Key;
 
-				Application.Current.Dispatcher.BeginInvoke(DispatcherPriority.Background, new Action(() =>
-				{
-					this.CurrentGenerationLabel.Content = i;
-					this.CurrentFitnessLabel.Content = bestNetwork.Fitness.ToString("F8");
+                        Label patternScoreLabel = FindChild<Label>(this, string.Format("CurrentPatternScore{0}", j));
+                        patternScoreLabel.Content = fitnessDetail.ToList()[j].Value.ToString("F8");
+                    }
+                }));
 
-					for (int j = 0; j < fitnessDetail.Count; j++)
-					{
-						Label patternLabel = FindChild<Label>(this, string.Format("CurrentPattern{0}", j));
-						patternLabel.Content = fitnessDetail.ToList()[j].Key;
+                ConcurrentBag<PatternRecognitionNetwork> newGeneration = new ConcurrentBag<PatternRecognitionNetwork>();
 
-						Label patternScoreLabel = FindChild<Label>(this, string.Format("CurrentPatternScore{0}", j));
-						patternScoreLabel.Content = fitnessDetail.ToList()[j].Value.ToString("F8");
-					}
-				}));
+                // Specify individuals for recombination (truncation selection)
+                IEnumerable<PatternRecognitionNetwork> patternRecognitionNetworks =
+                    currentGeneration.OrderByDescending(x => x.Fitness).Take(truncationSelectionAbsolute);
 
-				ConcurrentBag<PatternRecognitionNetwork> newGeneration = new ConcurrentBag<PatternRecognitionNetwork>();
+                // TODO: Add recombination / crossover
+                Parallel.For(0, populationSize, x =>
+                {
+                    ThreadSafeRandom random = new ThreadSafeRandom();
 
-				// Specify individuals for recombination (truncation selection)
-				IEnumerable<PatternRecognitionNetwork> patternRecognitionNetworks =
-					currentGeneration.OrderByDescending(x => x.Fitness).Take(truncationSelectionAbsolute);
+                    PatternRecognitionNetwork patternRecognitionNetwork =
+                        patternRecognitionNetworks.ToList().OrderBy(individual => Guid.NewGuid()).First();
 
-				// TODO: Add recombination / crossover
-				Parallel.For(0, populationSize, x =>
-				{
-					ThreadSafeRandom random = new ThreadSafeRandom();
+                    // Create children
+                    PatternRecognitionNetwork firstChild = CreateNetwork();
 
-					PatternRecognitionNetwork patternRecognitionNetwork =
-						patternRecognitionNetworks.ToList().OrderBy(individual => Guid.NewGuid()).First();
+                    // Copy weights
+                    for (int j = 0; j < patternRecognitionNetwork.Genomes.Count; j++)
+                    {
+                        firstChild.Genomes[j].Weight = patternRecognitionNetwork.Genomes[j].Weight;
+                    }
 
-					// Create children
-					PatternRecognitionNetwork firstChild = CreateNetwork();
+                    // Simple random mutation
+                    firstChild.Genomes.ForEach(genome =>
+                    {
+                        if (random.NextDouble() > 0.95)
+                        {
+                            genome.Weight += (random.NextDouble() * 2) - 1;
+                        }
+                    });
 
-					// Copy weights
-					for (int j = 0; j < patternRecognitionNetwork.Genomes.Count; j++)
-					{
-						firstChild.Genomes[j].Weight = patternRecognitionNetwork.Genomes[j].Weight;
-					}
+                    // Add new children
+                    newGeneration.Add(firstChild);
+                });
 
-					// Simple random mutation
-					firstChild.Genomes.ForEach(genome =>
-					{
-						if (random.NextDouble() > 0.95)
-						{
-							genome.Weight += (random.NextDouble() * 2) - 1;
-						}
-					});
+                currentGeneration = newGeneration;
+            }
 
-					// Add new children
-					newGeneration.Add(firstChild);
-				});
+            // Calculate Fitness
+            Parallel.ForEach(currentGeneration, individual => individual.CalculateFitness(TrainingData.ToList()));
 
-				currentGeneration = newGeneration;
-			}
+            return currentGeneration.ToList();
+        }
 
-			// Calculate Fitness
-			Parallel.ForEach(currentGeneration, individual => individual.CalculateFitness(TrainingData.ToList()));
+        private void TrainNetworkButton_Click(object sender, RoutedEventArgs e)
+        {
+            Task.Factory.StartNew(() => { ResultNetwork = TrainNetwork().OrderBy(x => x.Fitness).First(); });
+        }
 
-			return currentGeneration.ToList();
-		}
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            DirectoryInfo directoryInfo = new DirectoryInfo(TrainingDataPath);
 
-		private void TrainNetworkButton_Click(object sender, RoutedEventArgs e)
-		{
-			Task.Factory.StartNew(() => { ResultNetwork = TrainNetwork().OrderBy(x => x.Fitness).First(); });
-		}
+            foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
+            {
+                this.SaveAsComboBox.Items.Add(directory.Name);
+            }
 
-		private void Window_Loaded(object sender, RoutedEventArgs e)
-		{
-			DirectoryInfo directoryInfo = new DirectoryInfo(TrainingDataPath);
-
-			foreach (DirectoryInfo directory in directoryInfo.GetDirectories())
-			{
-				this.SaveAsComboBox.Items.Add(directory.Name);
-			}
-
-			this.SaveAsComboBox.SelectedIndex = 0;
-		}
-	}
+            this.SaveAsComboBox.SelectedIndex = 0;
+        }
+    }
 }

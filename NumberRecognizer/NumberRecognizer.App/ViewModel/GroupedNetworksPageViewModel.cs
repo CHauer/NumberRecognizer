@@ -224,9 +224,12 @@ namespace NumberRecognizer.App.ViewModel
         /// <param name="e">The e.</param>
         private async void DispatcherTimer_Tick(object sender, object e)
         {
-            if (isSyncEnabled && !this.IsLoading){
+            if (isSyncEnabled && !this.IsLoading)
+            {
                 await this.LoadNetworksAsync();
-            }else if (this.dispatcherTimer.IsEnabled && !isSyncEnabled){
+            }
+            else if (this.dispatcherTimer.IsEnabled && !isSyncEnabled)
+            {
                 this.dispatcherTimer.Stop();
             }
 
@@ -251,10 +254,10 @@ namespace NumberRecognizer.App.ViewModel
                 return;
             }
 
-            CreateNetworkGroups();
+            this.CreateNetworkGroups();
 
             this.IsLoading = false;
-            RaisePropertyChanged(() => IsLoading);
+            this.RaisePropertyChanged(() => IsLoading);
         }
 
         private void CreateNetworkGroups()
@@ -269,7 +272,7 @@ namespace NumberRecognizer.App.ViewModel
                     network.ChartFitness.Add(new ChartPopulation()
                     {
                         Name = key,
-                        Value = network.FinalPatternFittness[key]*100
+                        Value = network.FinalPatternFittness[key] * 100
                     });
                 }
                 calculated.Networks.Add(network);
@@ -306,7 +309,7 @@ namespace NumberRecognizer.App.ViewModel
             this.DeleteNetworkCommand = new DependentRelayCommand(this.DeleteNetwork,
                                                                   () => this.SelectedNetwork != null, this,
                                                                   () => this.SelectedNetwork);
-            this.RefreshCommand = new DependentRelayCommand(() => LoadNetworksAsync(), () => this.IsLoading == false && this.IsSyncEnabled == false, this, ()=> this.IsLoading, ()=> this.IsSyncEnabled );
+            this.RefreshCommand = new DependentRelayCommand(() => this.LoadNetworksAsync(), () => this.IsLoading == false && this.IsSyncEnabled == false, this, () => this.IsLoading, () => this.IsSyncEnabled);
             this.NetworkClicked = new RelayCommand<NetworkInfo>((item) => App.RootFrame.Navigate(typeof(NetworkRecognizePage), item), (item) => item.Status == NetworkStatusType.Ready);
             this.NetworkDetails = new DependentRelayCommand(() => App.RootFrame.Navigate(typeof(NetworkDetailPage), SelectedNetwork),
                                                             () => this.SelectedNetwork != null && this.SelectedNetwork.Calculated, this,
