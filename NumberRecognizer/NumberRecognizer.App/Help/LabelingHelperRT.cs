@@ -7,6 +7,10 @@
 //-----------------------------------------------------------------------
 
 
+using Windows.Graphics.Imaging;
+using Windows.Storage;
+using Windows.Storage.Streams;
+
 namespace NumberRecognizer.App.Help
 {
     using System;
@@ -38,7 +42,9 @@ namespace NumberRecognizer.App.Help
             inkCanvas.RefreshCanvas();
             var renderTargetBitmap = new RenderTargetBitmap();
             await renderTargetBitmap.RenderAsync(inkCanvas);
-
+            
+            await SaveVisualElementToFile(renderTargetBitmap, await Windows.Storage.ApplicationData.Current.LocalFolder.CreateFileAsync("testimage.png", CreationCollisionOption.ReplaceExisting));
+            
             byte[] canvasRGBABytes = (await renderTargetBitmap.GetPixelsAsync()).ToArray();
             byte[] canvasBytes = ImageHelperRT.GetByteArrayFromRGBAByteArray(canvasRGBABytes, inkCanvas.ForegroundColor, inkCanvas.BackgroundColor);
 
@@ -100,5 +106,25 @@ namespace NumberRecognizer.App.Help
                 }
             }
         }
+
+        async static Task SaveVisualElementToFile(RenderTargetBitmap bitmap, StorageFile file)
+        {
+
+            var pixels = await bitmap.GetPixelsAsync();
+
+            using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                var encoder = await
+                    BitmapEncoder.CreateAsync(BitmapEncoder.JpegEncoderId, stream);
+                byte[] bytes = pixels.ToArray();
+                encoder.SetPixelData(BitmapPixelFormat.Bgra8,
+                                     BitmapAlphaMode.Ignore,
+                                     (uint)bitmap.PixelWidth, (uint)bitmap.PixelHeight,
+                                     96, 96, bytes);
+
+                await encoder.FlushAsync();
+            }
+        }
+
     }
 }
