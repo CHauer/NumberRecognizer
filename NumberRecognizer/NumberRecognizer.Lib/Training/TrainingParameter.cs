@@ -1,16 +1,24 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NumberRecognizer.Lib.Network;
-using NumberRecognizer.Lib.Training.Contract;
-using NumberRecognizer.Lib.Training.GeneticOperator;
+﻿//-----------------------------------------------------------------------
+// <copyright file="TrainingParameter.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>TrainingParameter - Random Helper.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Training
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using NumberRecognizer.Lib.Network;
+    using NumberRecognizer.Lib.Training.Contract;
+    using NumberRecognizer.Lib.Training.GeneticOperator;
+
     /// <summary>
-    /// 
+    /// TrainingParameter Class.
     /// </summary>
     public class TrainingParameter
     {
@@ -29,7 +37,7 @@ namespace NumberRecognizer.Lib.Training
         private void InitializeParameters()
         {
             GenPoolTrainingMode = GenPoolType.MultipleGenPool;
-            
+
             SingleGenPoolPopulationSize = 100;
             SingleGenPoolMaxGenerations = 100;
 
@@ -48,10 +56,7 @@ namespace NumberRecognizer.Lib.Training
         {
             CrossoverInstance = new UniformCrossover();
 
-            MutationInstances = new List<IMutation>() { 
-                new GaussMutation(){ MinNetworkFitness = 0.95},
-                new UniformMutation(){ MinNetworkFitness = 0.0}
-            };
+            MutationInstances = new List<IMutation>() { new GaussMutation() { MinNetworkFitness = 0.95 }, new UniformMutation() { MinNetworkFitness = 0.0 } };
 
             SelectionInstance = new TruncationSelection()
             {
@@ -129,7 +134,7 @@ namespace NumberRecognizer.Lib.Training
 
         /// <summary>
         /// Gets or sets a value indicating whether elitism method is used.
-        /// Fittest Network survives without genetic mutation/recombiniation.
+        /// Fittest Network survives without genetic mutation/recombination.
         /// </summary>
         /// <value>
         ///   <c>true</c> if use elitism; otherwise, <c>false</c>.
@@ -179,10 +184,10 @@ namespace NumberRecognizer.Lib.Training
         /// <summary>
         /// Chooses the mutation instance based on the current network fitness.
         /// Search for the instances where the fitness is greater than the minNetworkFitness 
-        /// of the instance and take the instance with the maximun minNetworkFitness.
+        /// of the instance and take the instance with the maximum minNetworkFitness.
         /// </summary>
         /// <param name="networkFitness">The network fitness.</param>
-        /// <returns></returns>
+        /// <returns>Mutation Instance.</returns>
         public IMutation ChooseMutation(double networkFitness)
         {
             return MutationInstances.Where(mi => networkFitness > mi.MinNetworkFitness)

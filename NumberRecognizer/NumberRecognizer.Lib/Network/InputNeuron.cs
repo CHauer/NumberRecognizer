@@ -1,7 +1,18 @@
-﻿using System;
+﻿//-----------------------------------------------------------------------
+// <copyright file="InputNeuron.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>InputNeuron Classes.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Network
 {
+    using System;
+
+    /// <summary>
+    /// The Input Neuron for a neuronal network.
+    /// </summary>
     [Serializable]
 	public class InputNeuron : INeuron
 	{

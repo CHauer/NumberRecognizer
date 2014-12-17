@@ -77,28 +77,48 @@
 
             <!-- Result View -->
             <Grid Grid.Column="1">
-                <ListView ItemsSource="{Binding ChartResult}">
+                <ListView ItemsSource="{Binding ChartResult}" >
                     <ListView.ItemTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock FontSize="60" Text="{Binding Number}" VerticalAlignment="Center" />
                                 <Viewbox Height="300">
-                                    <chart:ClusteredColumnChart
-									    Background="Transparent"
-									    Style="{StaticResource ChartStyleVariableSize}"
-									    ChartTitle=""
-                                        Palette="{StaticResource CustomColors}"
-									    ChartTitleVisibility="Collapsed"
-									    ChartLegendVisibility="Collapsed"
-									    ChartSubTitle="">
-                                        <chart:ClusteredColumnChart.Series>
-                                            <chart:ChartSeries 
-											    SeriesTitle="Fitness"
+                                    <StackPanel Orientation="Horizontal">
+                                        <chart:ClusteredColumnChart
+									        Background="Transparent"
+									        Style="{StaticResource ChartStyleVariableSize}"
+									        ChartTitle=""
+                                            Palette="{StaticResource CustomColors}"
+									        ChartTitleVisibility="Collapsed"
+									        ChartLegendVisibility="Collapsed"
+									        ChartSubTitle="">
+                                            <chart:ClusteredColumnChart.Series>
+                                                <chart:ChartSeries 
+											    SeriesTitle="Positive Patterns"
 											    ItemsSource="{Binding Values}" 
 											    DisplayMember="Name" 
 											    ValueMember="Value" />
-                                        </chart:ClusteredColumnChart.Series>
-                                    </chart:ClusteredColumnChart>
+                                               
+                                            </chart:ClusteredColumnChart.Series>
+                                        </chart:ClusteredColumnChart>
+                                        <chart:ClusteredColumnChart
+									        Background="Transparent"
+									        Style="{StaticResource ChartStyleVariableSize}"
+									        ChartTitle=""
+                                            Palette="{StaticResource CustomNegativColors}"
+									        ChartTitleVisibility="Visible"
+									        ChartLegendVisibility="Collapsed"
+									        ChartSubTitle="">
+                                            <chart:ClusteredColumnChart.Series>
+                                                <chart:ChartSeries 
+											    SeriesTitle="Negative Patterns"
+											    ItemsSource="{Binding NegValues}" 
+											    DisplayMember="Name" 
+											    ValueMember="Value" 
+                                                />
+                                            </chart:ClusteredColumnChart.Series>
+                                        </chart:ClusteredColumnChart>
+                                    </StackPanel>
                                 </Viewbox>
                             </StackPanel>
                         </DataTemplate>

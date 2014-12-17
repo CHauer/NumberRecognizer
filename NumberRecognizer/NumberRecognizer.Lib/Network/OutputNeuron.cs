@@ -1,12 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿////-----------------------------------------------------------------------
+//// <copyright file="OutputNeuron.cs" company="FH Wr.Neustadt">
+////     Copyright Christoph Hauer. All rights reserved.
+//// </copyright>
+//// <author>Christoph Hauer</author>
+//// <summary>Output Neuron Class.</summary>
+////-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Network
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
 
     /// <summary>
-    /// 
+    /// Output Neuron for Neuronal network.
     /// </summary>
     [Serializable]
 	public class OutputNeuron : INeuron, ICacheable

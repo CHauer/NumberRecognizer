@@ -1,7 +1,14 @@
-﻿namespace NumberRecognizer.Cloud.Contract.Data
+﻿//-----------------------------------------------------------------------
+// <copyright file="ChartPopulation.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>ChartPopulation DataContract.</summary>
+//-----------------------------------------------------------------------
+namespace NumberRecognizer.Cloud.Contract.Data
 {
     /// <summary>
-    /// 
+    /// ChartPopulation DataContract
     /// </summary>
     public class ChartPopulation
     {

@@ -1,14 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using NumberRecognizer.Lib.Network;
+﻿//-----------------------------------------------------------------------
+// <copyright file="MultiplePoolGenerationChangedEventArgs.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>MultiplePoolGenerationChangedEventArgs for EventHandler.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Training.Events
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using NumberRecognizer.Lib.Network;
 
     /// <summary>
-    /// 
+    /// MultiplePoolGenerationChangedEventArgs for EventHandler.
     /// </summary>
     public class MultipleGenPoolGenerationChangedEventArgs : GenerationChangedEventArgs
     {
@@ -23,7 +30,7 @@ namespace NumberRecognizer.Lib.Training.Events
         public MultipleGenPoolGenerationChangedEventArgs(int generation, PatternRecognitionNetwork network, Dictionary<string, double> patternFitness, int multipleGenPoolIdentifier)
             : base(generation, network, patternFitness)
         {
-            MultipleGenPoolIdentifier = multipleGenPoolIdentifier;
+            this.MultipleGenPoolIdentifier = multipleGenPoolIdentifier;
         }
 
         /// <summary>
@@ -34,7 +41,7 @@ namespace NumberRecognizer.Lib.Training.Events
         public MultipleGenPoolGenerationChangedEventArgs(GenerationChangedEventArgs args, int multipleGenPoolIdentifier)
             : base(args.Generation, args.CurrentFittestNetwork, args.PatternFitness)
         {
-            MultipleGenPoolIdentifier = multipleGenPoolIdentifier;
+            this.MultipleGenPoolIdentifier = multipleGenPoolIdentifier;
         }
 
         /// <summary>

@@ -1,14 +1,25 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using NumberRecognizer.Lib.Network;
-using NumberRecognizer.Lib.Training.Contract;
+﻿//-----------------------------------------------------------------------
+// <copyright file="TruncationSelection.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>TruncationSelection - Genetic Parameter.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Lib.Training.GeneticOperator
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using System.Threading.Tasks;
+    using NumberRecognizer.Lib.Network;
+    using NumberRecognizer.Lib.Training.Contract;
+
+    /// <summary>
+    /// TruncationSelection - Genetic Parameter.
+    /// </summary>
     public class TruncationSelection : ISelection
     {
         /// <summary>
@@ -25,7 +36,7 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
         /// <param name="populationSize">Size of the population.</param>
         public TruncationSelection(double truncationSelectionPercentage, int populationSize)
         {
-            this.PopulationSize = populationSize; 
+            this.PopulationSize = populationSize;
             this.TruncationSelectionPercentage = truncationSelectionPercentage;
         }
 
@@ -64,7 +75,7 @@ namespace NumberRecognizer.Lib.Training.GeneticOperator
         /// Specifies individuals for recombination (truncation selection)
         /// </summary>
         /// <param name="currentGeneration">The current generation.</param>
-        /// <returns></returns>
+        /// <returns>The modified networks.</returns>
         public IEnumerable<PatternRecognitionNetwork> ExecuteSelection(ConcurrentBag<PatternRecognitionNetwork> currentGeneration)
         {
             PopulationSize = currentGeneration.Count;
