@@ -41,6 +41,11 @@ namespace NumberRecognizer.App.Help
         private const int RGBA = 4;
 
         /// <summary>
+        /// The threshold.
+        /// </summary>
+        private const int Threshold = 100;
+
+        /// <summary>
         /// Gets the byte array from red, green, blue, alpha byte array.
         /// </summary>
         /// <param name="rgbaByteArray">The red, green, blue, alpha byte array.</param>
@@ -50,8 +55,6 @@ namespace NumberRecognizer.App.Help
         public static byte[] GetByteArrayFromRGBAByteArray(byte[] rgbaByteArray, Color foreground, Color background)
         {
             byte[] byteArray = new byte[rgbaByteArray.Length / RGBA];
-            int counterbefore = 0;
-            int counter = 0; 
 
             for (int i = 0; i < rgbaByteArray.Length; i++)
             {
@@ -61,20 +64,11 @@ namespace NumberRecognizer.App.Help
                 color.B = rgbaByteArray[++i];
                 color.A = rgbaByteArray[++i];
 
-                if (color.R == foreground.R && color.R == foreground.G && color.R == foreground.B && color.A != 0)
-                {
-                    //byteArray[i / RGBA] = foreground.A;
-                    counter++;
-                }
-
-                if (color.R == foreground.R && color.R == foreground.G && color.R == foreground.B && color.A > 100)
+                if (color.R == foreground.R && color.R == foreground.G && color.R == foreground.B && color.A > Threshold)
                 {
                     byteArray[i / RGBA] = foreground.A;
-                    counterbefore++;
                 }
             }
-
-            Debug.WriteLine("Before:{0} After:{1}", counterbefore, counter);
 
             return byteArray;
         }
@@ -123,10 +117,10 @@ namespace NumberRecognizer.App.Help
                 {
                     try
                     {
-                        int z = (int) (width*y) + x;
+                        int z = (int)(width * y) + x;
                         if (byteArray[z] != 0)
                         {
-                            pixelArray2D[y, x] = byteArray[z]/255;
+                            pixelArray2D[y, x] = byteArray[z] / 255;
                         }
                     }
                     catch (Exception ex)

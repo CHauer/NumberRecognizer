@@ -5,6 +5,9 @@
 // <author>Markus Zytek</author>
 // <summary>The Supension Manager.</summary>
 //-----------------------------------------------------------------------
+
+using System.Diagnostics;
+
 namespace NumberRecognizer.App.Common
 {
     using System;
@@ -123,7 +126,7 @@ namespace NumberRecognizer.App.Common
             }
             catch (Exception e)
             {
-                throw new SuspensionManagerException(e);
+                Debug.WriteLine(e.Message);
             }
         }
 

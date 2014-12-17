@@ -119,7 +119,7 @@ namespace NumberRecognizer.App.ViewModel
         /// <returns>Can execute next command.</returns>
         private bool CanExecuteNextCommand()
         {
-            if(String.IsNullOrEmpty(NetworkName))
+            if (string.IsNullOrEmpty(NetworkName))
             {
                 return false;
             }
@@ -143,7 +143,7 @@ namespace NumberRecognizer.App.ViewModel
 
             foreach (InkCanvasRT inkCanvas in this.InkCanvasRTCollection)
             {
-                
+
                 await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(inkCanvas);
                 foreach (ConnectedComponent component in inkCanvas.Labeling.ConnectedComponents)
                 {
