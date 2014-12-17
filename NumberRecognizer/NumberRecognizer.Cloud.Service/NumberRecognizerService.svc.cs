@@ -25,7 +25,6 @@ namespace NumberRecognizer.Cloud.Service
     using NumberRecognizer.Cloud.Data;
     using NumberRecognizer.Lib.DataManagement;
     using NumberRecognizer.Lib.Network;
-    using NumberRecognizer.Cloud.Contract.Data;
 
     /// <summary>
     /// NumberRecognizerService - Service Role.

@@ -1,23 +1,31 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using Microsoft.ServiceBus;
-using Microsoft.ServiceBus.Messaging;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using NumberRecognizer.Cloud.Data;
-using NumberRecognizer.Lib.DataManagement;
-using NumberRecognizer.Lib.Network;
-using NumberRecognizer.Lib.Training;
-using NumberRecognizer.Lib.Training.Events;
+﻿//-----------------------------------------------------------------------
+// <copyright file="WorkerRole.cs" company="FH Wr.Neustadt">
+//     Copyright (c) Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>WorkerRole for Network Calculation.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Cloud.Worker
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Threading;
+    using Microsoft.ServiceBus;
+    using Microsoft.ServiceBus.Messaging;
+    using Microsoft.WindowsAzure;
+    using Microsoft.WindowsAzure.ServiceRuntime;
+    using NumberRecognizer.Cloud.Data;
+    using NumberRecognizer.Lib.DataManagement;
+    using NumberRecognizer.Lib.Network;
+    using NumberRecognizer.Lib.Training;
+    using NumberRecognizer.Lib.Training.Events;
+
     /// <summary>
-    /// The Azure Worker Role for calculating/traning 
+    /// The Azure Worker Role for calculating/training 
     /// new added of network.
     /// </summary>
     public class WorkerRole : RoleEntryPoint
@@ -28,9 +36,7 @@ namespace NumberRecognizer.Cloud.Worker
         public string QueueName { get; set; }
 
         /// <summary>
-        /// QueueClient ist threadsicher. Es wird empfohlen, den QueueClient im Zwischenspeicher abzulegen 
-        ///  statt ihn bei jeder Anforderung erneut zu erstellen
-        /// The client
+        /// The queue client.
         /// </summary>
         private QueueClient client;
 
@@ -44,11 +50,11 @@ namespace NumberRecognizer.Cloud.Worker
         /// <summary>
         /// Called when the worker role gets started.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Role Status</returns>
         public override bool OnStart()
         {
             //get queuename from Settings
-            QueueName = CloudConfigurationManager.GetSetting("QueueName");
+            this.QueueName = CloudConfigurationManager.GetSetting("QueueName");
 
             // Die maximale Anzahl gleichzeitiger Verbindungen setzen 
             ServicePointManager.DefaultConnectionLimit = 12;
@@ -57,13 +63,13 @@ namespace NumberRecognizer.Cloud.Worker
             string connectionString = CloudConfigurationManager.GetSetting("Microsoft.ServiceBus.ConnectionString");
 
             var namespaceManager = NamespaceManager.CreateFromConnectionString(connectionString);
-            if (!namespaceManager.QueueExists(QueueName))
+            if (!namespaceManager.QueueExists(this.QueueName))
             {
-                namespaceManager.CreateQueue(QueueName);
+                namespaceManager.CreateQueue(this.QueueName);
             }
 
             // Die Verbindung zur Service Bus-Warteschlange initialisieren
-            client = QueueClient.CreateFromConnectionString(connectionString, QueueName);
+            this.client = QueueClient.CreateFromConnectionString(connectionString, this.QueueName);
 
             return base.OnStart();
         }
@@ -74,8 +80,8 @@ namespace NumberRecognizer.Cloud.Worker
         public override void OnStop()
         {
             // Die Verbindung zur Service Bus-Warteschlange schließen
-            client.Close();
-            completedEvent.Set();
+            this.client.Close();
+            this.completedEvent.Set();
             base.OnStop();
         }
 
@@ -93,7 +99,7 @@ namespace NumberRecognizer.Cloud.Worker
 
             // Initiiert das Nachrichtensystem und für jede erhaltene Nachricht wird der Rückruf aufgerufen;
             // ein Aufruf von „Close“ auf dem Client beendet das Nachrichtensystem.
-            client.OnMessage((receivedMessage) =>
+            this.client.OnMessage((receivedMessage) =>
                 {
                     try
                     {
@@ -123,21 +129,20 @@ namespace NumberRecognizer.Cloud.Worker
                     }
                 });
 
-            completedEvent.WaitOne();
+            this.completedEvent.WaitOne();
         }
 
         /// <summary>
-        /// Trains the network with the received networkid.
+        /// Trains the network with the received network id.
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
         /// <param name="reTrainNetwork">if set to <c>true</c> the network is prepared 
-        ///                              for repeating the trainig.</param>
+        ///                              for repeating the training.</param>
         private void TrainNetwork(int networkId, bool reTrainNetwork = false)
         {
             NetworkDataSerializer networkDataSerializer = new NetworkDataSerializer();
             DataSerializer<double[,]> arrayDataSerializer = new DataSerializer<double[,]>();
 
-            PatternRecognitionNetwork network;
             NetworkTrainer trainer;
 
             using (var db = new NetworkDataModelContainer())
@@ -155,7 +160,7 @@ namespace NumberRecognizer.Cloud.Worker
                 if (reTrainNetwork)
                 {
                     //prepare network for new training (delete logs)
-                    if (!PrepareNetworkForReTraining(networkId, dbNetwork, db)) return;
+                    if (!this.PrepareNetworkForReTraining(networkId, dbNetwork, db)) return;
                 }
                 else
                 {
@@ -195,8 +200,8 @@ namespace NumberRecognizer.Cloud.Worker
                 }
             }
 
-            trainer.MultipleGenPoolGenerationChanged += (sender, e) => Trainer_GenerationChanged(sender, e, networkId);
-            trainer.GenerationChanged += (sender, e) => Trainer_GenerationChanged(sender, e, networkId);
+            trainer.MultipleGenPoolGenerationChanged += (sender, e) => this.Trainer_GenerationChanged(sender, e, networkId);
+            trainer.GenerationChanged += (sender, e) => this.Trainer_GenerationChanged(sender, e, networkId);
 
             //Train the network and save final network instance
             PatternRecognitionNetwork finalNetwork = trainer.TrainNetwork().First();
@@ -230,7 +235,7 @@ namespace NumberRecognizer.Cloud.Worker
         /// <param name="networkId">The network identifier.</param>
         /// <param name="dbNetwork">The database network.</param>
         /// <param name="db">The database.</param>
-        /// <returns></returns>
+        /// <returns>Role Status</returns>
         private bool PrepareNetworkForReTraining(int networkId, Network dbNetwork, NetworkDataModelContainer db)
         {
             if (dbNetwork.Calculated == CalculationType.Ready)

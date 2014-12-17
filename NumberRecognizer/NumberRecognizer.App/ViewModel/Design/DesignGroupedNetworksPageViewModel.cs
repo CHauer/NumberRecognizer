@@ -98,7 +98,7 @@ namespace NumberRecognizer.App.ViewModel.Design
         /// <summary>
         /// Initializes the properties.
         /// </summary>
-        private async void Initialize()
+        private void Initialize()
         {
             this.LoadDesignDataNetworksAsync();
         }
