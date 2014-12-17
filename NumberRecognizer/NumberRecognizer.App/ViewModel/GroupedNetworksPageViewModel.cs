@@ -331,6 +331,7 @@ namespace NumberRecognizer.App.ViewModel
             UICommand ok = new UICommand("OK");
             ok.Invoked = async delegate(IUICommand command)
             {
+                this.IsLoading = true;
                 int delnetworkid = this.SelectedNetwork.NetworkId;
                 this.SelectedNetwork.Calculated = false;
                 this.SelectedNetwork.Status = NetworkStatusType.NotStarted;
@@ -338,6 +339,7 @@ namespace NumberRecognizer.App.ViewModel
                 NumberRecognizerServiceClient serviceClient = new NumberRecognizerServiceClient();
                 await serviceClient.DeleteNetworkAsync(delnetworkid);
                 this.SelectedNetwork = null;
+                this.IsLoading = false;
 
                 ////refresh data
                 await this.LoadNetworksAsync();
