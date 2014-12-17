@@ -71,6 +71,14 @@ namespace NumberRecognizer.App.ViewModel
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is loading.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is loading; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLoading { get; set; }
+
+        /// <summary>
         /// Gets or sets the name of the network.
         /// </summary>
         /// <value>
@@ -146,8 +154,8 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void InitializeCommands()
         {
-            this.UploadCommand = new DependentRelayCommand(this.CreateNetwork, () => this.ImageGroups.Count == 10, this, () => this);
-            this.DeleteImageCommand = new DependentRelayCommand(this.DeleteImage, () => this.SelectedImage != null, this, () => this);
+            this.UploadCommand = new DependentRelayCommand(this.CreateNetwork, () => this.ImageGroups.Count == 10 && this.IsLoading == false, this, () => this.ImageGroups, () => this.IsLoading);
+            this.DeleteImageCommand = new DependentRelayCommand(this.DeleteImage, () => this.SelectedImage != null && this.IsLoading == false, this, () => this.selectedImage, () => this.IsLoading);
         }
 
         /// <summary>
@@ -174,6 +182,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private async void CreateNetwork()
         {
+            this.IsLoading = true;
             ObservableCollection<TrainingImage> trainingImages = new ObservableCollection<TrainingImage>();
 
             foreach (LocalTrainingImage trainingImageRT in this.Images)
@@ -193,6 +202,7 @@ namespace NumberRecognizer.App.ViewModel
                 Debug.WriteLine(ex.Message);
             }
 
+            this.IsLoading = false;
             App.RootFrame.Navigate(typeof(GroupedNetworksPage));
         }
 
@@ -201,9 +211,11 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void DeleteImage()
         {
+            this.IsLoading = true;
             this.Images.Remove(this.SelectedImage);
             this.selectedImage = null;
             this.GroupImages();
+            this.IsLoading = false;
         }
     }
 }

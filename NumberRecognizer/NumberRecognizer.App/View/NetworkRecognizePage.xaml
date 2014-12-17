@@ -63,6 +63,8 @@
                               Padding="0" Margin="0" Height="110" Label="Reset Canvas"/>
                 <AppBarButton Command="{Binding RecognizeNumber}" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" Icon="Globe" 
                               Padding="0" Margin="0" Height="110" Label="Recognize Number"/>
+                <ProgressRing IsActive="{Binding IsLoading}" Foreground="Orange" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2"  
+                              Padding="0" Margin="0" Height="110" VerticalAlignment="Top" Width="100"/>
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="Recognized Number" Style="{StaticResource CustomTextBlockStyle}" VerticalAlignment="Center"/>
                 <TextBox Text="{Binding Result.Number}" IsEnabled="False" FontSize="50" Grid.Column="0" Grid.Row="4" TextAlignment="Center" CharacterSpacing="500"/>
                 <!--<StackPanel Grid.Row="5" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">

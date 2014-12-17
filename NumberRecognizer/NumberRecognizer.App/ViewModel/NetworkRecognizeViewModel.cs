@@ -14,6 +14,7 @@ namespace NumberRecognizer.App.ViewModel
     using System.Linq;
     using System.Windows.Input;
     using GalaSoft.MvvmLight;
+    using Mutzl.MvvmLight;
     using NumberRecognition.Labeling;
     using NumberRecognizer.App.Control;
     using NumberRecognizer.App.Help;
@@ -63,6 +64,14 @@ namespace NumberRecognizer.App.ViewModel
         public NumberRecognitionResult Result { get; private set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether this instance is loading.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is loading; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsLoading { get; set; }
+
+        /// <summary>
         /// Gets or sets the recognize number.
         /// </summary>
         /// <value>
@@ -107,7 +116,7 @@ namespace NumberRecognizer.App.ViewModel
         /// </summary>
         private void InitializeCommands()
         {
-            this.RecognizeNumber = new RelayCommand(this.ExecuteRecognizeNumber);
+            this.RecognizeNumber = new DependentRelayCommand(this.ExecuteRecognizeNumber, () => this.IsLoading == false, this, () => this.IsLoading);
             this.ClearResult = new RelayCommand(this.ClearPage);
             this.ResetInkCanvasCommand = new RelayCommand(this.ResetInkCanvas);
         }
@@ -132,39 +141,44 @@ namespace NumberRecognizer.App.ViewModel
             {
                 return;
             }
-
-            this.RecognitionImages = new ObservableCollection<RecognitionImage>();
-
-            await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(this.InkCanvas);
-            foreach (ConnectedComponent component in this.InkCanvas.Labeling.ConnectedComponents.OrderBy(p => p.MinBoundingRect.Left).ToList())
+            else
             {
+                this.IsLoading = true;
+                this.RecognitionImages = new ObservableCollection<RecognitionImage>();
+
+                await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(this.InkCanvas);
+                foreach (ConnectedComponent component in this.InkCanvas.Labeling.ConnectedComponents.OrderBy(p => p.MinBoundingRect.Left).ToList())
+                {
+                    try
+                    {
+                        RecognitionImage recognitionImage = new RecognitionImage
+                        {
+                            Height = (int)ImageHelperRT.ImageHeight,
+                            Width = (int)ImageHelperRT.ImageWidth
+                        };
+                        recognitionImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
+
+                        this.RecognitionImages.Add(recognitionImage);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
+                }
+
                 try
                 {
-                    RecognitionImage recognitionImage = new RecognitionImage
-                    {
-                        Height = (int)ImageHelperRT.ImageHeight,
-                        Width = (int)ImageHelperRT.ImageWidth
-                    };
-                    recognitionImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
+                    NumberRecognizerServiceClient serviceProxy = new NumberRecognizerServiceClient();
+                    this.Result = await serviceProxy.RecognizePhoneNumberAsync(this.Network.NetworkId, this.RecognitionImages);
 
-                    this.RecognitionImages.Add(recognitionImage);
+                    this.CreateChartData();
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine(ex.Message);
                 }
-            }
 
-            try
-            {
-                NumberRecognizerServiceClient serviceProxy = new NumberRecognizerServiceClient();
-                this.Result = await serviceProxy.RecognizePhoneNumberAsync(this.Network.NetworkId, this.RecognitionImages);
-
-                this.CreateChartData();
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
+                this.IsLoading = false;
             }
         }
 

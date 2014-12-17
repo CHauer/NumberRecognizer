@@ -24,7 +24,7 @@
             Source="{Binding ImageGroups}"
             IsSourceGrouped="true"
             ItemsPath="Images"/>
-        
+
     </Page.Resources>
 
     <!--
@@ -106,8 +106,9 @@
                 <TextBlock x:Name="pageSubtitle" Text="- Training Images" Style="{StaticResource CustomSecondaryHeaderTextBlockStyle}" />
             </StackPanel>
             <AppBarButton Grid.Column="2" Command="{Binding UploadCommand}"  HorizontalAlignment="Center"
-                          VerticalAlignment="Center" Icon="Accept" Label="Create Network">
-            </AppBarButton>
+                          VerticalAlignment="Center" Icon="Accept" Label="Create Network"/>
+            <ProgressRing Grid.Column="2" IsActive="{Binding IsLoading}"  HorizontalAlignment="Center"
+                          VerticalAlignment="Center" Width="100" Height="100" Foreground="Orange"/>
         </Grid>
     </Grid>
     <Page.BottomAppBar>

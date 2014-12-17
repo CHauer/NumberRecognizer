@@ -33,7 +33,7 @@
             <RowDefinition Height="140"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
+        <ProgressRing IsActive="{Binding IsLoading}" Foreground="Orange" Grid.RowSpan="2" Height="100" Width="100"/>
         <!--
             TODO: Content should be placed within the following grid 
                   to show details for the current item

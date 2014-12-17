@@ -15,6 +15,7 @@ namespace NumberRecognizer.App.ViewModel
     using System.Windows.Input;
     using GalaSoft.MvvmLight;
     using GalaSoft.MvvmLight.Command;
+    using Mutzl.MvvmLight;
     using NumberRecognition.Labeling;
     using NumberRecognizer.App.Control;
     using NumberRecognizer.App.DataModel;
@@ -24,7 +25,6 @@ namespace NumberRecognizer.App.ViewModel
     using PropertyChanged;
     using Windows.System.UserProfile;
     using Windows.UI.Xaml.Media.Imaging;
-    using Mutzl.MvvmLight;
 
     /// <summary>
     /// Create Network Page ViewModel.
