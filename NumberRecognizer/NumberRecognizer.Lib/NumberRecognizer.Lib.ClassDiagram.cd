@@ -19,7 +19,7 @@
   <Class Name="NumberRecognizer.Lib.Network.PatternRecognitionNetwork">
     <Position X="6.25" Y="0.5" Width="2.25" />
     <TypeIdentifier>
-      <HashCode>AgBgACBCIAABgAABABAAAA4MAACEQgQAAwAAgAIAAAA=</HashCode>
+      <HashCode>AgBgACBCIAABgACBABAAAA4MAACEQgQAAwBAgAIAAAA=</HashCode>
       <FileName>Network\PatternRecognitionNetwork.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -30,11 +30,11 @@
       <FileName>Network\RecognitionResult.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="NumberRecognizer.Lib.Network.TrainingImage">
+  <Class Name="NumberRecognizer.Lib.Network.PatternTrainingImage">
     <Position X="0.75" Y="4.25" Width="2.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAACAAAAAAA=</HashCode>
-      <FileName>Network\TrainingImage.cs</FileName>
+      <FileName>Network\PatternTrainingImage.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Network.WeightedLink">
@@ -62,15 +62,8 @@
   <Class Name="NumberRecognizer.Lib.Training.ThreadSafeRandom" Collapsed="true">
     <Position X="8.75" Y="5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AgEAAAAAAAAAAAAAAAAAAAAAEAAAAAAAQAAAAAAACAA=</HashCode>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAQAAAAAABCAA=</HashCode>
       <FileName>Training\ThreadSafeRandom.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="NumberRecognizer.Lib.DataManagement.NetworkDataManager">
-    <Position X="16" Y="2.5" Width="2" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
-      <FileName>DataManagement\NetworkDataManager.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Training.GeneticOperator.OnePointCrossover" Collapsed="true" BaseTypeListCollapsed="true">
@@ -105,11 +98,11 @@
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
-  <Class Name="NumberRecognizer.Lib.DataManagement.DataManager&lt;T&gt;">
+  <Class Name="NumberRecognizer.Lib.DataManagement.DataSerializer&lt;T&gt;">
     <Position X="16" Y="0.5" Width="2" />
     <TypeIdentifier>
       <HashCode>AAAAAAAgAAAAAAIAAAAAAAAAAAAgAAAAAAAAAAAAEAA=</HashCode>
-      <FileName>DataManagement\DataManager.cs</FileName>
+      <FileName>DataManagement\DataSerializer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="NumberRecognizer.Lib.Training.GenPool">
@@ -137,7 +130,7 @@
   <Class Name="NumberRecognizer.Lib.Training.Events.GenerationChangedEventArgs" Collapsed="true">
     <Position X="16" Y="4.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
+      <HashCode>AABAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAABA=</HashCode>
       <FileName>Training\Events\GenerationChangedEventArgs.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -186,7 +179,7 @@
   <Enum Name="NumberRecognizer.Lib.Network.HiddenLayerType">
     <Position X="8.75" Y="3.25" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAAAAAQIAAAAAAAAAAAAAAAAAAAAAAAAAAQAAACAAAA=</HashCode>
+      <HashCode>AAACAAQIAAAAAAAAAAAAAAAAAAAAAAAAAAQAAACAAAA=</HashCode>
       <FileName>Network\HiddenLayerType.cs</FileName>
     </TypeIdentifier>
   </Enum>
