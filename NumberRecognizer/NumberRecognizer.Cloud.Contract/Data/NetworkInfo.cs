@@ -1,13 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿//-----------------------------------------------------------------------
+// <copyright file="NetworkInfo.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>NetworkInfo Data Contract.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Cloud.Contract.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Text;
+    using System.Threading.Tasks;
+
     /// <summary>
     /// The network info class represents the information of one available network.
     /// </summary>
@@ -112,21 +120,21 @@ namespace NumberRecognizer.Cloud.Contract.Data
         public bool MultipleGenPool { get; set; }
 
         /// <summary>
-        /// Gets or sets the final pattern fittness.
-        /// The key represents the pattern (eg. 0-9)
-        /// The value represents the fittness for the final generation of the network.
+        /// Gets or sets the final pattern fitness.
+        /// The key represents the pattern (e.g. 0-9)
+        /// The value represents the fitness for the final generation of the network.
         /// </summary>
         /// <value>
-        /// The final pattern fittness.
+        /// The final pattern fitness.
         /// </value>
         [DataMember]
         public Dictionary<string, double> FinalPatternFittness { get; set; }
 
         /// <summary>
-        /// Gets or sets the chart fittness.
+        /// Gets or sets the chart fitness.
         /// </summary>
         /// <value>
-        /// The chart fittness.
+        /// The chart fitness.
         /// </value>
         [IgnoreDataMember]
         public IList<ChartPopulation> ChartFitness { get; set; }

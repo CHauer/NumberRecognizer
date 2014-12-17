@@ -1,26 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Runtime.Serialization;
-using System.ServiceModel;
-using System.ServiceModel.Web;
-using System.Text;
-using Microsoft.ServiceBus;
-using Microsoft.ServiceBus.Messaging;
-using Microsoft.WindowsAzure;
-using NumberRecognizer.Cloud.Contract;
-using NumberRecognizer.Cloud.Contract.Data;
-using NumberRecognizer.Cloud.Data;
-using NumberRecognizer.Lib.DataManagement;
-using NumberRecognizer.Lib.Network;
-using NumberRecognizer.Cloud.Contract.Data;
+﻿//-----------------------------------------------------------------------
+// <copyright file="NumberRecognizerService.svc.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>NumberRecognizerService.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Cloud.Service
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Diagnostics;
+    using System.Linq;
+    using System.Net;
+    using System.Runtime.Serialization;
+    using System.ServiceModel;
+    using System.ServiceModel.Web;
+    using System.Text;
+    using Microsoft.ServiceBus;
+    using Microsoft.ServiceBus.Messaging;
+    using Microsoft.WindowsAzure;
+    using NumberRecognizer.Cloud.Contract;
+    using NumberRecognizer.Cloud.Contract.Data;
+    using NumberRecognizer.Cloud.Data;
+    using NumberRecognizer.Lib.DataManagement;
+    using NumberRecognizer.Lib.Network;
+    using NumberRecognizer.Cloud.Contract.Data;
+
     /// <summary>
-    /// 
+    /// NumberRecognizerService - Service Role.
     /// </summary>
     public class NumberRecognizerService : INumberRecognizerService
     {
@@ -86,7 +94,6 @@ namespace NumberRecognizer.Cloud.Service
 
                 }).ToList();
 
-
                 foreach (var network in networks.Where(network => network.Calculated))
                 {
                     var dbNetwork = db.NetworkSet.First(n => n.NetworkId == network.NetworkId);
@@ -129,8 +136,7 @@ namespace NumberRecognizer.Cloud.Service
 
                 if (detailNetwork == null)
                 {
-                    throw new FaultException<ArgumentException>
-                        (new ArgumentException(String.Format("The network with the ID {0} was not found!", networkId)));
+                    throw new FaultException<ArgumentException>(new ArgumentException(String.Format("The network with the ID {0} was not found!", networkId)));
                 }
 
                 int maxGeneration = detailNetwork.TrainLogs
@@ -172,7 +178,9 @@ namespace NumberRecognizer.Cloud.Service
         /// </summary>
         /// <param name="networkName">Name of the network.</param>
         /// <param name="individualTrainingsData">The individual trainings data.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Status Flag.
+        /// </returns>
         public bool CreateNetwork(string networkName, IEnumerable<TrainingImage> individualTrainingsData)
         {
             bool status = true;
@@ -244,8 +252,10 @@ namespace NumberRecognizer.Cloud.Service
         /// </summary>
         /// <param name="networkName">Name of the network.</param>
         /// <param name="individualTrainingsData">The individual trainings data.</param>
-        /// <param name="copyTraindataFromNetworkId">The copy traindata from network identifier.</param>
-        /// <returns></returns>
+        /// <param name="copyTraindataFromNetworkId">The copy training data from network identifier.</param>
+        /// <returns>
+        /// Status
+        /// </returns>
         public bool CreateNetworkWithTrainingDataCopy(string networkName, IEnumerable<TrainingImage> individualTrainingsData, int copyTraindataFromNetworkId)
         {
             bool status = true;
@@ -307,7 +317,11 @@ namespace NumberRecognizer.Cloud.Service
         /// Deletes the network.
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Status
+        /// </returns>
+        /// <exception cref="System.ArgumentException">
+        /// </exception>
         public bool DeleteNetwork(int networkId)
         {
             using (var db = new NetworkDataModelContainer())
@@ -316,8 +330,7 @@ namespace NumberRecognizer.Cloud.Service
 
                 if (delNetwork == null)
                 {
-                    throw new FaultException<ArgumentException>
-                        (new ArgumentException(String.Format("The network with the ID {0} was not found!", networkId)));
+                    throw new FaultException<ArgumentException>(new ArgumentException(String.Format("The network with the ID {0} was not found!", networkId)));
                 }
 
                 db.PatternFitnessSet.RemoveRange(db.PatternFitnessSet.Where(pfs => pfs.TrainLog.Network.NetworkId == networkId));
@@ -343,7 +356,11 @@ namespace NumberRecognizer.Cloud.Service
         /// Res the train network.
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Status
+        /// </returns>
+        /// <exception cref="System.ArgumentException">
+        /// </exception>
         public bool ReTrainNetwork(int networkId)
         {
             bool status = true;
@@ -354,8 +371,7 @@ namespace NumberRecognizer.Cloud.Service
 
                 if (delNetwork == null)
                 {
-                    throw new FaultException<ArgumentException>
-                        (new ArgumentException(String.Format("The network with the ID {0} was not found!", networkId)));
+                    throw new FaultException<ArgumentException>(new ArgumentException(String.Format("The network with the ID {0} was not found!", networkId)));
                 }
             }
 
@@ -380,7 +396,11 @@ namespace NumberRecognizer.Cloud.Service
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
         /// <param name="imageData">The image data.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Recognition Result.
+        /// </returns>
+        /// <exception cref="System.ArgumentException">
+        /// </exception>
         public NumberRecognitionResult RecognizePhoneNumber(int networkId, IList<RecognitionImage> imageData)
         {
             NetworkDataSerializer dataSerializer = new NetworkDataSerializer();
@@ -397,8 +417,7 @@ namespace NumberRecognizer.Cloud.Service
 
                 if (networkFromDb == null)
                 {
-                    throw new FaultException<ArgumentException>
-                        (new ArgumentException(String.Format("The network with the ID {0} was not found!", networkId)));
+                    throw new FaultException<ArgumentException>(new ArgumentException(String.Format("The network with the ID {0} was not found!", networkId)));
                 }
 
                 patternRecognitionNetwork = dataSerializer.TransformFromBinary(networkFromDb.NetworkData);
@@ -426,7 +445,10 @@ namespace NumberRecognizer.Cloud.Service
         /// Gets the multiple pool fitness log.
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
-        /// <returns></returns>
+        /// <param name="db">The database.</param>
+        /// <returns>
+        /// FitnessLog.
+        /// </returns>
         private Dictionary<string, FitnessLog> GetMultiplePoolFitnessLog(int networkId, NetworkDataModelContainer db)
         {
             var network = db.NetworkSet.First(n => n.NetworkId == networkId);
@@ -448,7 +470,8 @@ namespace NumberRecognizer.Cloud.Service
         /// </summary>
         /// <param name="networkId">The network identifier.</param>
         /// <param name="poolId">The pool identifier.</param>
-        /// <returns></returns>
+        /// <param name="db">The database.</param>
+        /// <returns>FitnessLog</returns>
         private FitnessLog GetFitnessLog(int networkId, string poolId, NetworkDataModelContainer db)
         {
             //load network
@@ -466,10 +489,12 @@ namespace NumberRecognizer.Cloud.Service
                 {
                     return tl.MultipleGenPoolIdentifier == null;
                 }
+
                 if (!String.IsNullOrEmpty(tl.MultipleGenPoolIdentifier))
                 {
                     return tl.MultipleGenPoolIdentifier.Equals(poolId);
                 }
+
                 return false;
             };
 

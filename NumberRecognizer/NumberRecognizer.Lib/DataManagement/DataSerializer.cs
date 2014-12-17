@@ -79,14 +79,17 @@ namespace NumberRecognizer.Lib.DataManagement
             }
             catch (SerializationException seEx)
             {
+                Debug.WriteLine(seEx.Message);
                 return false;
             }
             catch (IOException ioEx)
             {
+                Debug.WriteLine(ioEx.Message);
                 return false;
             }
             catch (Exception ex)
             {
+                Debug.WriteLine(ex.Message);
                 return false;
             }
 

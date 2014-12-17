@@ -1,13 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+﻿//-----------------------------------------------------------------------
+// <copyright file="NumberRecognitionResult.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>NumberRecognitionResult Data Contract.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Cloud.Contract.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Text;
+
     /// <summary>
-    /// 
+    /// NumberRecognitionResult Data Contract.
     /// </summary>
     [DataContract]
     public class NumberRecognitionResult

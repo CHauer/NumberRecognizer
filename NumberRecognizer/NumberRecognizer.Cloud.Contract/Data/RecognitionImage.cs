@@ -1,13 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
+﻿//-----------------------------------------------------------------------
+// <copyright file="RecognitionImage.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>RecognitionImage Data Contract.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Cloud.Contract.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Text;
+
     /// <summary>
-    /// 
+    /// RecognitionImage Data Contract.
     /// </summary>
     [DataContract]
     public class RecognitionImage
@@ -37,7 +45,7 @@ namespace NumberRecognizer.Cloud.Contract.Data
         /// The width.
         /// </value>
         [DataMember]
-        public int Width{ get; set; }
+        public int Width { get; set; }
 
         /// <summary>
         /// Transforms the from2 d array to image data.
@@ -63,7 +71,7 @@ namespace NumberRecognizer.Cloud.Contract.Data
         /// <summary>
         /// Transforms the to2 d array from image data.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Double Array.</returns>
         public double[,] TransformTo2DArrayFromImageData()
         {
             int index = 0;
