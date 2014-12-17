@@ -7,6 +7,8 @@
 //-----------------------------------------------------------------------
 
 
+using System.Diagnostics;
+
 namespace NumberRecognizer.App.ViewModel
 {
     using GalaSoft.MvvmLight;
@@ -141,22 +143,30 @@ namespace NumberRecognizer.App.ViewModel
 
             foreach (InkCanvasRT inkCanvas in this.InkCanvasRTCollection)
             {
+                
                 await LabelingHelperRT.ConnectedComponentLabelingForInkCanvasRT(inkCanvas);
                 foreach (ConnectedComponent component in inkCanvas.Labeling.ConnectedComponents)
                 {
-                    TrainingImage trainingImage = new TrainingImage();
-                    trainingImage.Height = (int)ImageHelperRT.ImageHeight;
-                    trainingImage.Width = (int)ImageHelperRT.ImageWidth;
-                    trainingImage.Pattern = inkCanvas.Name;
-                    trainingImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
+                    try
+                    {
+                        TrainingImage trainingImage = new TrainingImage();
+                        trainingImage.Height = (int)ImageHelperRT.ImageHeight;
+                        trainingImage.Width = (int)ImageHelperRT.ImageWidth;
+                        trainingImage.Pattern = inkCanvas.Name;
+                        trainingImage.TransformFrom2DArrayToImageData(component.ScaledPixels);
 
-                    LocalTrainingImage localTrainingImage = new LocalTrainingImage(trainingImage);
-                    var scaRGBABytes = ImageHelperRT.GetRGBAByteArrayFromByteArrayAsync(component.ScaledBytes, inkCanvas.ForegroundColor);
-                    var memoryStream = await ImageHelperRT.SaveRGBAByteArrayAsMemoryStream(scaRGBABytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight);
-                    localTrainingImage.Bitmap = new WriteableBitmap((int)ImageHelperRT.ImageWidth, (int)ImageHelperRT.ImageHeight);
-                    await localTrainingImage.Bitmap.SetSourceAsync(memoryStream);
+                        LocalTrainingImage localTrainingImage = new LocalTrainingImage(trainingImage);
+                        var scaRGBABytes = ImageHelperRT.GetRGBAByteArrayFromByteArrayAsync(component.ScaledBytes, inkCanvas.ForegroundColor);
+                        var memoryStream = await ImageHelperRT.SaveRGBAByteArrayAsMemoryStream(scaRGBABytes, ImageHelperRT.ImageWidth, ImageHelperRT.ImageHeight);
+                        localTrainingImage.Bitmap = new WriteableBitmap((int)ImageHelperRT.ImageWidth, (int)ImageHelperRT.ImageHeight);
+                        await localTrainingImage.Bitmap.SetSourceAsync(memoryStream);
 
-                    this.trainingImagesRT.Add(localTrainingImage);
+                        this.trainingImagesRT.Add(localTrainingImage);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine(ex.Message);
+                    }
                 }
             }
             NextCommand.RaiseCanExecuteChanged();

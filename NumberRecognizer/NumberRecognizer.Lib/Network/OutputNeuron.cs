@@ -5,6 +5,9 @@ using System.Linq;
 namespace NumberRecognizer.Lib.Network
 {
 
+    /// <summary>
+    /// 
+    /// </summary>
     [Serializable]
 	public class OutputNeuron : INeuron, ICacheable
 	{

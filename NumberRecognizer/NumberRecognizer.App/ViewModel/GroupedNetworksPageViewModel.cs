@@ -209,6 +209,7 @@ namespace NumberRecognizer.App.ViewModel
             this.NetworkGroups.Add(uncalculated);
 
             this.IsLoading = false;
+            RaisePropertyChanged(() => IsLoading);
         }
 
         /// <summary>

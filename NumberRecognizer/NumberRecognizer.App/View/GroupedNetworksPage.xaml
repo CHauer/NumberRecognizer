@@ -178,8 +178,7 @@
 			<StackPanel Orientation="Horizontal" Grid.Column="2">
 				<TextBlock x:Name="pageTitle" Text="{StaticResource AppName}" Style="{StaticResource CustomHeaderTextBlockStyle}" />
 			</StackPanel>
-            <ProgressRing Grid.Column="2" x:Name="processRingObj" Height="100" Width="100" Foreground="Orange" 
-                          Visibility="{Binding IsLoading, Converter={StaticResource booleanVisibiltyConverter}, ConverterParameter=False}"  
+            <ProgressRing Grid.Column="3" x:Name="processRingObj" Height="100" Width="100" Foreground="Orange" 
                           IsActive="{Binding IsLoading}" />
 		</Grid>
 	</Grid>
