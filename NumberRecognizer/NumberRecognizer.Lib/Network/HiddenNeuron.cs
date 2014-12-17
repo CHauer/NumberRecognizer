@@ -30,7 +30,7 @@ namespace NumberRecognizer.Lib.Network
         /// </summary>
         public HiddenNeuron()
         {
-            InputLayer = new List<WeightedLink>();
+            this.InputLayer = new List<WeightedLink>();
         }
 
         /// <summary>
@@ -43,11 +43,11 @@ namespace NumberRecognizer.Lib.Network
         {
             get
             {
-                if (!cachedActivationValue.HasValue)
+                if (!this.cachedActivationValue.HasValue)
                 {
-                    //double sum = InputLayer.Sum(x => x.Neuron.ActivationValue * x.Weight);
-                    
-                    //performance better than LINQ Sum
+                    ////double sum = InputLayer.Sum(x => x.Neuron.ActivationValue * x.Weight);
+
+                    ////performance better than LINQ Sum
                     double sum = 0.0;
 
                     foreach (WeightedLink link in InputLayer)
@@ -55,12 +55,12 @@ namespace NumberRecognizer.Lib.Network
                         sum += link.Neuron.ActivationValue * link.Weight;
                     }
 
-                    //Sigmoid
-                    //return ((1 / (1 + Math.Pow(Math.E, sum * -1))) * 2) - 1;
-                    cachedActivationValue = ((1 / (1 + Math.Exp(sum * -1))) * 2) - 1;
+                    ////Sigmoid
+                    ////return ((1 / (1 + Math.Pow(Math.E, sum * -1))) * 2) - 1;
+                    this.cachedActivationValue = ((1 / (1 + Math.Exp(sum * -1))) * 2) - 1;
                 }
 
-                return cachedActivationValue.Value;
+                return this.cachedActivationValue.Value;
             }
         }
 
@@ -77,7 +77,7 @@ namespace NumberRecognizer.Lib.Network
         /// </summary>
         public void ResetCachedValue()
         {
-            cachedActivationValue = null;
+            this.cachedActivationValue = null;
         }
     }
 }
