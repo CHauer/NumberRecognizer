@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -34,9 +35,18 @@ namespace NumberRecognizer.Lib.DataManagement
                     return (T)serializationBinFormatter.Deserialize(fileStream);
                 }
             }
-            catch (SerializationException seEx) { ;}
-            catch (IOException ioex) { ;}
-            catch (Exception ex){;}
+            catch (SerializationException seEx)
+            {
+                Debug.WriteLine(seEx.Message);
+            }
+            catch (IOException ioex)
+            {
+                Debug.WriteLine(ioex.Message);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
 
             return null;
         }
@@ -95,8 +105,14 @@ namespace NumberRecognizer.Lib.DataManagement
                     return stream.ToArray();
                 }
             }
-            catch (SerializationException seEx) { ;}
-            catch (Exception ex) { ;}
+            catch (SerializationException seEx)
+            {
+                Debug.WriteLine(seEx.Message);
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message);
+            }
 
             return null;
         }

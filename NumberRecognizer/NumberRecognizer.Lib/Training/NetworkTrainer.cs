@@ -141,7 +141,7 @@ namespace NumberRecognizer.Lib.Training
         /// Validates the training data.
         /// </summary>
         /// <param name="checkTrainDataExists">if set to <c>true</c> [check train data exists].</param>
-        /// <exception cref="System.ArgumentException">There is no valid TrainigData for the network training process.</exception>
+        /// <exception cref="System.ArgumentException">There is no valid TrainingData for the network training process.</exception>
         /// <exception cref="System.ArgumentOutOfRangeException">The image height or width values of the
         /// training images do have differnt values.</exception>
         private void ValidateTrainingData(bool checkTrainDataExists = false)

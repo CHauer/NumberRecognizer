@@ -473,28 +473,6 @@ namespace NumberRecognizer.Cloud.Service
                 return false;
             };
 
-            //Func<PatternFitness, bool> funcPatternPoolCompare = pf =>
-            //{
-            //    if (String.IsNullOrEmpty(poolId) || String.IsNullOrEmpty(pf.TrainLog.MultipleGenPoolIdentifier))
-            //    {
-            //        return pf.TrainLog.MultipleGenPoolIdentifier == null;
-            //    }
-
-            //    return pf.TrainLog.MultipleGenPoolIdentifier.Equals(poolId);
-            //};
-
-            //load max training generation of network
-            //maxGeneration = network.TrainLogs
-            //                         .Where(funcPoolCompare)
-            //                         .Max(n => n.GenerationNr);
-
-            //load distinct patterns
-            //List<string> patterns = network.TrainLogs.First()
-            //                               .PatternFitnessSet
-            //                               .Select(p => p.Pattern)
-            //                               .Distinct()
-            //                               .ToList();
-
             try
             {
                 return new FitnessLog()

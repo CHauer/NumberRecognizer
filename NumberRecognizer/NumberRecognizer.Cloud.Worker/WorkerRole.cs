@@ -180,7 +180,9 @@ namespace NumberRecognizer.Cloud.Worker
                 //Create network trainer instance
                 trainer = new NetworkTrainer(trainData);
 
-                dbNetwork.CalculationStart = DateTime.Now;
+                TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+
+                dbNetwork.CalculationStart = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
                 dbNetwork.Calculated = CalculationType.Running;
 
                 try
@@ -203,8 +205,10 @@ namespace NumberRecognizer.Cloud.Worker
             {
                 var dbNetwork = db.NetworkSet.First(n => n.NetworkId == networkId);
 
+                TimeZoneInfo timeZone = TimeZoneInfo.FindSystemTimeZoneById("W. Europe Standard Time");
+
                 dbNetwork.NetworkData = networkDataSerializer.TransformToBinary(finalNetwork);
-                dbNetwork.CalculationEnd = DateTime.Now;
+                dbNetwork.CalculationEnd = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, timeZone);
                 dbNetwork.Calculated = CalculationType.Ready;
                 dbNetwork.Fitness = finalNetwork.Fitness;
 
