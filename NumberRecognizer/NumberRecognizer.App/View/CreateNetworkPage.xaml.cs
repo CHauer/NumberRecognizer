@@ -121,7 +121,7 @@ namespace NumberRecognizer.App.View
                 {
                     Text = string.Format("{0} *", inkCanvasRT.Name),
                     FontSize = 28,
-                    Foreground = new SolidColorBrush(Colors.OrangeRed),
+                    Foreground = new SolidColorBrush(Colors.Orange),
                     VerticalAlignment = VerticalAlignment.Center,
                     Margin = inkCanvasRT.Margin
                 };

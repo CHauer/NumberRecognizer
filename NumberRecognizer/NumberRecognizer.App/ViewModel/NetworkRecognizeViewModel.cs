@@ -43,6 +43,7 @@ namespace NumberRecognizer.App.ViewModel
         {
             this.RecognizeNumber = new RelayCommand(this.ExecuteRecognizeNumber);
             this.ClearResult = new RelayCommand(this.ClearPage);
+            this.ResetInkCanvasCommand = new RelayCommand(this.ResetInkCanvas);
         }
 
         /// <summary>
@@ -78,6 +79,14 @@ namespace NumberRecognizer.App.ViewModel
         public ICommand RecognizeNumber { get; set; }
 
         /// <summary>
+        /// Gets or sets the reset ink canvas command.
+        /// </summary>
+        /// <value>
+        /// The reset ink canvas command.
+        /// </value>
+        public ICommand ResetInkCanvasCommand { get; set; }
+
+        /// <summary>
         /// Gets or sets the clear result.
         /// </summary>
         /// <value>
@@ -100,6 +109,17 @@ namespace NumberRecognizer.App.ViewModel
         /// The recognition images.
         /// </value>
         public ObservableCollection<RecognitionImage> RecognitionImages { get; set; }
+
+        /// <summary>
+        /// Resets the ink canvas.
+        /// </summary>
+        private void ResetInkCanvas()
+        {
+            if (this.InkCanvas != null)
+            {
+                this.InkCanvas.ClearInk();
+            }
+        }
 
         /// <summary>
         /// Executes the recognize number.
@@ -159,7 +179,8 @@ namespace NumberRecognizer.App.ViewModel
                 var numberPropabilities = new ObservableCollection<ChartPopulation>();
                 foreach (KeyValuePair<char, double> pair in item.Probabilities)
                 {
-                    numberPropabilities.Add(new ChartPopulation(){
+                    numberPropabilities.Add(new ChartPopulation()
+                    {
                         Name = pair.Key.ToString(),
                         Value = pair.Value < 0 ? 0 : pair.Value * 100,
                     });
@@ -171,7 +192,7 @@ namespace NumberRecognizer.App.ViewModel
                 });
             }
 
-            RaisePropertyChanged(() => ChartResult); 
+            RaisePropertyChanged(() => ChartResult);
         }
 
         /// <summary>

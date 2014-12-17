@@ -34,6 +34,13 @@ namespace NumberRecognizer.App.ViewModel
     [ImplementPropertyChanged]
     public class GroupedNetworksPageViewModel : ViewModelBase
     {
+        /// <summary>
+        /// Gets or sets a value indicating whether [is synchronize enabled].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [is synchronize enabled]; otherwise, <c>false</c>.
+        /// </value>
+        public static bool isSyncEnabled = false;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="GroupedNetworksPageViewModel"/> class.
@@ -99,6 +106,14 @@ namespace NumberRecognizer.App.ViewModel
         public ICommand CreateNetworkCommand { get; private set; }
 
         /// <summary>
+        /// Gets the toggle synchronize command.
+        /// </summary>
+        /// <value>
+        /// The toggle synchronize command.
+        /// </value>
+        public ICommand ToggleSyncCommand { get; private set; }
+
+        /// <summary>
         /// Gets the delete network command.
         /// </summary>
         /// <value>
@@ -148,12 +163,73 @@ namespace NumberRecognizer.App.ViewModel
         public NetworkInfo SelectedNetwork { get; set; }
 
         /// <summary>
+        /// Gets or sets a value indicating whether [is synchronize enabled].
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if [is synchronize enabled]; otherwise, <c>false</c>.
+        /// </value>
+        public bool IsSyncEnabled
+        {
+            get
+            {
+                return isSyncEnabled;
+            }
+            set
+            {
+                isSyncEnabled = value;
+                if (isSyncEnabled)
+                {
+                    this.dispatcherTimer.Start();
+                }
+                else if (this.dispatcherTimer.IsEnabled)
+                {
+                    this.dispatcherTimer.Stop();
+                }
+            }
+        }
+
+        /// <summary>
+        /// The dispatcher timer.
+        /// </summary>
+        private DispatcherTimer dispatcherTimer;
+
+        /// <summary>
         /// Initializes the properties.
         /// </summary>
         private async void InitializeProperties()
         {
             await this.LoadNetworksAsync();
+            this.InitializeDispatcherTimer();
             this.SelectedNetwork = null;
+        }
+
+        /// <summary>
+        /// Initializes the dispatcher timer.
+        /// </summary>
+        private void InitializeDispatcherTimer()
+        {
+            this.dispatcherTimer = new DispatcherTimer();
+            this.dispatcherTimer.Tick += this.DispatcherTimer_Tick;
+            this.dispatcherTimer.Interval = new TimeSpan(0, 0, 20);
+            if (isSyncEnabled)
+            {
+                this.dispatcherTimer.Start();
+            }
+        }
+
+        /// <summary>
+        /// Dispatchers the timer_ tick.
+        /// </summary>
+        /// <param name="sender">The sender.</param>
+        /// <param name="e">The e.</param>
+        private async void DispatcherTimer_Tick(object sender, object e)
+        {
+            if (isSyncEnabled && !this.IsLoading){
+                await this.LoadNetworksAsync();
+            }else if (this.dispatcherTimer.IsEnabled && !isSyncEnabled){
+                this.dispatcherTimer.Stop();
+            }
+
         }
 
         /// <summary>
@@ -175,6 +251,14 @@ namespace NumberRecognizer.App.ViewModel
                 return;
             }
 
+            CreateNetworkGroups();
+
+            this.IsLoading = false;
+            RaisePropertyChanged(() => IsLoading);
+        }
+
+        private void CreateNetworkGroups()
+        {
             this.NetworkGroups = new ObservableCollection<NetworkInfoGroup>();
             NetworkInfoGroup calculated = new NetworkInfoGroup("calculated", "Calculated Networks");
             foreach (NetworkInfo network in this.Networks.Where(p => p.Status == NetworkStatusType.Ready))
@@ -185,7 +269,7 @@ namespace NumberRecognizer.App.ViewModel
                     network.ChartFitness.Add(new ChartPopulation()
                     {
                         Name = key,
-                        Value = network.FinalPatternFittness[key] * 100
+                        Value = network.FinalPatternFittness[key]*100
                     });
                 }
                 calculated.Networks.Add(network);
@@ -199,7 +283,9 @@ namespace NumberRecognizer.App.ViewModel
 
 
             NetworkInfoGroup uncalculated = new NetworkInfoGroup("uncalculated", "Uncalculated Networks");
-            foreach (NetworkInfo network in this.Networks.Where(p => p.Status != NetworkStatusType.Ready && p.Status != NetworkStatusType.Running))
+            foreach (
+                NetworkInfo network in
+                    this.Networks.Where(p => p.Status != NetworkStatusType.Ready && p.Status != NetworkStatusType.Running))
             {
                 uncalculated.Networks.Add(network);
             }
@@ -207,9 +293,6 @@ namespace NumberRecognizer.App.ViewModel
             this.NetworkGroups.Add(calculated);
             this.NetworkGroups.Add(runnning);
             this.NetworkGroups.Add(uncalculated);
-
-            this.IsLoading = false;
-            RaisePropertyChanged(() => IsLoading);
         }
 
         /// <summary>
@@ -223,12 +306,12 @@ namespace NumberRecognizer.App.ViewModel
             this.DeleteNetworkCommand = new DependentRelayCommand(this.DeleteNetwork,
                                                                   () => this.SelectedNetwork != null, this,
                                                                   () => this.SelectedNetwork);
-            this.RefreshCommand = new RelayCommand(() => LoadNetworksAsync());
-            this.NetworkClicked = new RelayCommand<NetworkInfo>((item) => App.RootFrame.Navigate(typeof(NetworkRecognizePage), item));
-            this.NetworkDetails = new DependentRelayCommand(() =>App.RootFrame.Navigate(typeof(NetworkDetailPage), SelectedNetwork),
+            this.RefreshCommand = new DependentRelayCommand(() => LoadNetworksAsync(), () => this.IsLoading == false && this.IsSyncEnabled == false, this, ()=> this.IsLoading, ()=> this.IsSyncEnabled );
+            this.NetworkClicked = new RelayCommand<NetworkInfo>((item) => App.RootFrame.Navigate(typeof(NetworkRecognizePage), item), (item) => item.Status == NetworkStatusType.Ready);
+            this.NetworkDetails = new DependentRelayCommand(() => App.RootFrame.Navigate(typeof(NetworkDetailPage), SelectedNetwork),
                                                             () => this.SelectedNetwork != null && this.SelectedNetwork.Calculated, this,
                                                             () => this.SelectedNetwork);
-
+            this.ToggleSyncCommand = new RelayCommand(() => this.IsSyncEnabled = !this.IsSyncEnabled);
             this.SelectionChanged = new RelayCommand<SelectionChangedEventArgs>((args) =>
             {
                 if (args.AddedItems.Count > 0)
@@ -252,8 +335,12 @@ namespace NumberRecognizer.App.ViewModel
             UICommand ok = new UICommand("OK");
             ok.Invoked = async delegate(IUICommand command)
             {
+                int delnetworkid = this.SelectedNetwork.NetworkId;
+                this.SelectedNetwork.Calculated = false;
+                this.SelectedNetwork.Status = NetworkStatusType.NotStarted;
+                CreateNetworkGroups();
                 NumberRecognizerServiceClient serviceClient = new NumberRecognizerServiceClient();
-                await serviceClient.DeleteNetworkAsync(this.SelectedNetwork.NetworkId);
+                await serviceClient.DeleteNetworkAsync(delnetworkid);
                 this.SelectedNetwork = null;
 
                 //refresh data
