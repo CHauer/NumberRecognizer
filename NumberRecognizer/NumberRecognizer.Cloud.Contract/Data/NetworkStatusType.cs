@@ -1,12 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
+﻿//-----------------------------------------------------------------------
+// <copyright file="NetworkStatusType.cs" company="FH Wr.Neustadt">
+//     Copyright Christoph Hauer. All rights reserved.
+// </copyright>
+// <author>Christoph Hauer</author>
+// <summary>NetworkStatusType Data Contract.</summary>
+//-----------------------------------------------------------------------
 
 namespace NumberRecognizer.Cloud.Contract.Data
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Runtime.Serialization;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// NetworkStatusType Enumeration.
+    /// </summary>
     [DataContract]
     public enum NetworkStatusType : int
     {
